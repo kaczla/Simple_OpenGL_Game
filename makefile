@@ -2,7 +2,7 @@
 SOURCE_DIR = ./src
 MAIN = $(SOURCE_DIR)/main.cpp
 CXXFLAGS = -std=c++11
-LFLAGS = -lSDL2 -lGL
+LFLAGS = -lSDL2 -lGL -lGLEW
 APP_NAME = game.app
 
 all:

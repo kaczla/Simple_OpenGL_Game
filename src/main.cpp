@@ -21,7 +21,6 @@ public:
    void Start();
    void Update();
    void Stop();
-   friend void GlobalStop( Game game );
 private:
    //Init:
    void LoadSettings();

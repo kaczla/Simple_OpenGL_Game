@@ -10,7 +10,7 @@ g++ (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 
 ### Wymagania:
 1) **Zaktualizaowane sterowniki graficzne**</br>
-2) **[SDL 2](www.libsdl.org)**</br>
+2) **[SDL2](www.libsdl.org)**</br>
 3) **[GLEW](www.glew.sourceforge.net)**</br>
 4) **[GLM](www.glm.g-truc.net)**</br>
 

@@ -5,14 +5,12 @@
 #include <GL/glew.h>
 //SDL:
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h> //SDL_SysWMinfo
 #include <SDL2/SDL_opengl.h>
 //CaughtSignal:
 #include <signal.h>
 
 using namespace std;
-
-#define MIN_WindowWidth 640
-#define MIN_WindowHeight 480
 
 void CaughtSignal( int signal );
 
@@ -32,23 +30,32 @@ private:
    void InitWindow();
    void InitContent();
    void SetIcon();
+   //Min/Max resolution:
+   int WindowMinWidth = 640;
+   int WindowMinHeight = 480;
+   int WindowMaxWidth = 640;
+   int WindowMaxHeight = 480;
+   //Window:
    SDL_Window *Window = NULL;
    bool CheckInit = true;
    bool FullScreen = false;
    string Title = "Simple OpenGL Game";
    int WindowPositionX = SDL_WINDOWPOS_CENTERED;
    int WindowPositionY = SDL_WINDOWPOS_CENTERED;
-   int WindowWidth = MIN_WindowWidth;
-   int WindowHeight = MIN_WindowHeight;
+   int WindowWidth = 640;
+   int WindowHeight = 480;
    bool WindowResizable = false;
    bool WindowBorderless = false;
    Uint32 WindowFlag = SDL_WINDOW_OPENGL;
    SDL_GLContext WindowGLContext = NULL;
+   int WindowDisplayIndex = 0;
+   SDL_DisplayMode CurrentDisplayMode;
    //Game:
    bool Exit = true;
    SDL_Event Event;
    //Other:
    fstream SettingsFile;
+   int i,j;
 };
 
 Game * PointerGame = NULL;
@@ -151,12 +158,12 @@ void Game::LoadSettings(){
             }
          }
          else if( InputString == "width" ){
-            if( InputInt >= MIN_WindowWidth ){
+            if( InputInt >= 0 ){
                this->WindowWidth = InputInt;
             }
          }
          else if( InputString == "height" ){
-            if( InputInt >= MIN_WindowHeight ){
+            if( InputInt >= 0 ){
                this->WindowHeight = InputInt;
             }
          }
@@ -276,8 +283,55 @@ void Game::InitSDL(){
    }
    else{
       SDL_Log( "SDL_Init: SUCCESS\n" );
+      SDL_version compiled, linked;
+      SDL_VERSION( &compiled );
+      SDL_Log( "Compiled with SDL version: %d.%d.%d\n",
+         compiled.major,
+         compiled.minor,
+         compiled.patch
+      );
+      SDL_GetVersion( &linked );
+      SDL_Log( "Linked with SDL version:   %d.%d.%d\n",
+         linked.major,
+         linked.minor,
+         linked.patch
+      );
+      if( compiled.major < 2 or linked.major < 2  ){
+         return;
+      }
       //Check max resolution:
-
+      SDL_Log( "Video and Mode Display info:\n" );
+      SDL_Log( "SDL_GetCurrentVideoDriver: %s\n", SDL_GetCurrentVideoDriver() );
+      SDL_Log( "SDL_GetNumVideoDisplays %i\n", SDL_GetNumVideoDisplays() );
+      for( this->i = 0; this->i < SDL_GetNumVideoDisplays() ; ++this->i ){
+         if( SDL_GetCurrentDisplayMode( this->i, &this->CurrentDisplayMode ) != 0 ){
+            SDL_Log( "Could not get display mode for video display #%d: %s\n", this->i, SDL_GetError() );
+         }
+         else{
+            SDL_Log( " VideoDisplays #%i:\n", this->i );
+            if( SDL_GetDisplayName( this->i ) == NULL ){
+               SDL_Log( "SDL_GetDisplayName: %s\n", SDL_GetError() );
+            }
+            else{
+               SDL_Log( "\tSDL_GetDisplayName: %s\n", SDL_GetDisplayName( this->i ) );
+            }
+            SDL_Log( "\tSDL_GetNumDisplayModes: %i\n", SDL_GetNumDisplayModes( this->i ) );
+            for( this->j = 0; this->j < SDL_GetNumDisplayModes( this->i ); ++this->j ){
+               if( SDL_GetDisplayMode( this->i, this->j, &this->CurrentDisplayMode ) != 0 ){
+                  SDL_Log( "\t\t\tSDL_GetDisplayMode: %s\n", SDL_GetError() );
+               }
+               else{
+                  SDL_Log( "\t   DisplayMode #%i:\t%s = %ibpp\t%iHz\t%ix%i\n", j,
+                     SDL_GetPixelFormatName( this->CurrentDisplayMode.format ),
+                     SDL_BITSPERPIXEL( this->CurrentDisplayMode.format ),
+                     this->CurrentDisplayMode.refresh_rate,
+                     this->CurrentDisplayMode.w,
+                     this->CurrentDisplayMode.h
+                  );
+               }
+            }
+         }
+      }
    }
 }
 
@@ -310,6 +364,89 @@ void Game::InitWindow(){
          this->CheckInit = false;
       }
       else{
+      {
+         SDL_Log( "Window info:\n" );
+         string subsystem = "unknown system";
+         SDL_SysWMinfo info;
+         SDL_VERSION( &info.version );
+         if( SDL_GetWindowWMInfo( this->Window, &info ) ){
+            switch( info.subsystem ){
+               case SDL_SYSWM_UNKNOWN:
+                  break;
+               case SDL_SYSWM_WINDOWS:
+                  subsystem = "Windows";
+                  break;
+               case SDL_SYSWM_X11:
+                  subsystem = "X Window System";
+                  break;
+            #if SDL_VERSION_ATLEAST(2, 0, 3)
+                  case SDL_SYSWM_WINRT:
+                     subsystem = "WinRT";
+                     break;
+            #endif
+               case SDL_SYSWM_DIRECTFB:
+                  subsystem = "DirectFB";
+                  break;
+               case SDL_SYSWM_COCOA:
+                  subsystem = "Apple OS X";
+                  break;
+               case SDL_SYSWM_UIKIT:
+                  subsystem = "UIKit";
+                  break;
+            #if SDL_VERSION_ATLEAST(2, 0, 3)
+               case SDL_SYSWM_WAYLAND:
+                  subsystem = "Wayland";
+                  break;
+               case SDL_SYSWM_MIR:
+                  subsystem = "Mir";
+                  break;
+            #endif
+            #if SDL_VERSION_ATLEAST(2, 0, 3)
+               case SDL_SYSWM_ANDROID:
+                  subsystem = "Android";
+                  break;
+            #endif
+               default:
+                  break;
+            }
+            SDL_Log( "SDL_GetWindowWMInfo: %s\n", subsystem.c_str() );
+         }
+         else{
+            SDL_Log( "SDL_GetWindowWMInfo: %s\n", SDL_GetError() );
+         }
+      }
+         this->WindowDisplayIndex = SDL_GetWindowDisplayIndex( this->Window );
+         SDL_Log( "SDL_GetWindowDisplayIndex: %i\n", this->WindowDisplayIndex );
+         SDL_Log( "SDL_GetWindowID: %i\n", SDL_GetWindowID( this->Window ) );
+         SDL_Log( "SDL_GetWindowBrightness: %f\n", SDL_GetWindowBrightness( this->Window ) );
+         //Min resolution
+         if( SDL_GetDisplayMode(
+            this->WindowDisplayIndex,
+            SDL_GetNumDisplayModes( this->WindowDisplayIndex ) - 1,
+            &this->CurrentDisplayMode
+         ) == 0 ){
+            this->WindowMinWidth = this->CurrentDisplayMode.w;
+            this->WindowMinHeight = this->CurrentDisplayMode.h;
+         }
+         else{
+            SDL_Log( "SDL_GetDisplayMode: %s\n", SDL_GetError() );
+         }
+         //Max resolution
+         if( SDL_GetDisplayMode(
+            this->WindowDisplayIndex,
+            0,
+            &this->CurrentDisplayMode
+         ) == 0 ){
+            this->WindowMaxWidth = this->CurrentDisplayMode.w;
+            this->WindowMaxHeight = this->CurrentDisplayMode.h;
+         }
+         else{
+            SDL_Log( "SDL_GetDisplayMode: %s\n", SDL_GetError() );
+         }
+         SDL_SetWindowMinimumSize( this->Window, WindowMinWidth, WindowMinHeight );
+         SDL_Log( "WindowMinimumSize: %ix%i", WindowMinWidth, WindowMinHeight );
+         SDL_SetWindowMaximumSize( this->Window, WindowMaxWidth, WindowMaxHeight );
+         SDL_Log( "WindowMaximumSize: %ix%i", WindowMaxWidth, WindowMaxHeight );
          SDL_Log( "SDL_CreateWindow: SUCCESS\n" );
       }
    }

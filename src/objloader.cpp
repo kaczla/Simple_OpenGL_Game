@@ -28,6 +28,8 @@ bool LoadOBJ( const char* obj_path_file,
       while( getline( OBJStream ,Line ) ){
          if( Line.substr( 0, 2 ) == "v " ){
             Line = Line.substr( 2 );
+            iss.str( "" );
+            iss.clear();
             iss.str( Line );
             iss>>vertex.x;
             iss>>vertex.y;
@@ -36,6 +38,8 @@ bool LoadOBJ( const char* obj_path_file,
          }
          else if( Line.substr( 0, 2 ) == "vt" ){
             Line = Line.substr( 3 );
+            iss.str( "" );
+            iss.clear();
             iss.str( Line );
             iss>>uv.x;
             iss>>uv.y;
@@ -43,6 +47,8 @@ bool LoadOBJ( const char* obj_path_file,
          }
          else if( Line.substr( 0, 2 ) == "vn" ){
             Line = Line.substr( 3 );
+            iss.str( "" );
+            iss.clear();
             iss.str( Line );
             iss>>normal.x;
             iss>>normal.y;
@@ -51,6 +57,7 @@ bool LoadOBJ( const char* obj_path_file,
          }
          else if( Line.substr( 0, 2 ) == "f " ){
             iss.str( "" );
+            iss.clear();
             Line = Line.substr( 2 );
             for( it = Line.begin(); it != Line.end(); ++it ){
                if( *it == '/' ){
@@ -79,7 +86,7 @@ bool LoadOBJ( const char* obj_path_file,
             iss>>tmp_indices;
             uvs_indices.push_back( tmp_indices );
             iss>>tmp_indices;
-            normals_indices.push_back( tmp_indices );;
+            normals_indices.push_back( tmp_indices );
          }
          else if( Line.front() == '#' ){
             //ignore comment

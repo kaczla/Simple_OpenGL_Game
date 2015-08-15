@@ -96,21 +96,48 @@ bool LoadOBJ( const char* obj_path_file,
          }
       }
       OBJStream.close();
+      bool print_error = true;
       std::vector <glm::vec3>::iterator it_vec3;
       std::vector <glm::vec3>::iterator it_vec2;
       std::vector <unsigned int>::iterator it_uint;
 
       for( it_uint = vertices_indices.begin(); it_uint != vertices_indices.end(); ++it_uint ){
          tmp_indices = *it_uint;
-         vertices.push_back( vertices_tmp.at( tmp_indices -1 ) );
+         if( tmp_indices > 0 and tmp_indices and
+             tmp_indices < vertices_indices.size()
+          ){
+            vertices.push_back( vertices_tmp.at( tmp_indices -1 ) );
+         }
+         else if( print_error ){
+            SDL_Log( "Something wrong with: indices of vertices\n" );
+            print_error = false;
+         }
       }
+      print_error = true;
       for( it_uint = uvs_indices.begin(); it_uint != uvs_indices.end(); ++it_uint ){
          tmp_indices = *it_uint;
-         uvs.push_back( uvs_tmp.at( tmp_indices -1 ) );
+         if( tmp_indices > 0 and tmp_indices and
+             tmp_indices < vertices_indices.size()
+         ){
+            uvs.push_back( uvs_tmp.at( tmp_indices -1 ) );
+         }
+         else if( print_error ){
+            SDL_Log( "Something wrong with: indices of uvs\n" );
+            print_error = false;
+         }
       }
+      print_error = true;
       for( it_uint = normals_indices.begin(); it_uint != normals_indices.end(); ++it_uint ){
          tmp_indices = *it_uint;
-         normals.push_back( normals_tmp.at( tmp_indices -1 ) );
+         if( tmp_indices > 0 and tmp_indices and
+             tmp_indices < vertices_indices.size()
+         ){
+            normals.push_back( normals_tmp.at( tmp_indices -1 ) );
+         }
+         else if( print_error ){
+            SDL_Log( "Something wrong with: indices of normals\n" );
+            print_error = false;
+         }
       }
    }
    else{

@@ -1,6 +1,8 @@
 #ifndef camera_hpp
 #define camera_hpp
+#include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtx/vec1.hpp>
 
 using namespace glm;
 
@@ -9,6 +11,11 @@ public:
    Camera();
    ~Camera();
    mat4 getModelToViewMatrix() const;
+   mat4 getProjectionMatrix() const;
+   void SetVOF( vec1 &vof );
+   void SetAspect( vec1 &aspect );
+   void SetNear( vec1 &near );
+   void SetFar( vec1 &far );
    void MouseUpdate( const vec2 &Mouse );
    void MoveUp();
    void MoveDown();
@@ -17,16 +24,23 @@ public:
    void MoveLeft();
    void MoveRight();
 private:
-   vec3 Position = vec3( 1.0f, 1.0f, 1.0f );
-   vec3 ViewDirection = vec3( 0.0f, 0.0f, 0.0f );
+   void UpdateProjectionMatrix();
+   vec3 Position = vec3( 0.0f, 1.0f, 0.0f );
+   vec3 ViewDirection = vec3( 0.0f, 0.0f, -1.0f );
    vec3 Up = vec3( 0.0f, 1.0f, 0.0f );
    //Rotation:
-   float RotationSpeed = 1.0f;
+   vec1 RotationSpeed = 0.0005f;
    vec3 RotationAround;
    mat4 Rotation;
    //Movement:
-   float MovementSpeed = 0.5f;
+   vec1 MovementSpeed = 0.1f;
    vec3 MovementDirection;
+   //ProjectionMatrix:
+   mat4 ProjectionMatrix;
+   vec1 VOF = 45.0f;
+   vec1 Aspect = 4.0f / 3.0f;
+   vec1 Near = 0.1;
+   vec1 Far = 100.0f;
 };
 
 #endif

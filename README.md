@@ -13,9 +13,10 @@ g++ (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 2) **[SDL2](www.libsdl.org)**</br>
 3) **[GLEW](www.glew.sourceforge.net)**</br>
 4) **[GLM](www.glm.g-truc.net)**</br>
+5) **[DevIL](www.openil.sourceforge.net)**</br>
 
 #### Pakiety dla Ubuntu:
-sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev
+sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev libdevil-dev
 </br>
 </br>
 

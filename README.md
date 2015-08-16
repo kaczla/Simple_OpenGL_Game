@@ -10,10 +10,10 @@ g++ (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 
 ### Wymagania:
 1) **Zaktualizaowane sterowniki graficzne**</br>
-2) **[SDL2](www.libsdl.org)**</br>
-3) **[GLEW](www.glew.sourceforge.net)**</br>
-4) **[GLM](www.glm.g-truc.net)**</br>
-5) **[DevIL](www.openil.sourceforge.net)**</br>
+2) **[SDL2](https://www.libsdl.org)**</br>
+3) **[GLEW](http://www.glew.sourceforge.net)**</br>
+4) **[GLM](http://www.glm.g-truc.net)**</br>
+5) **[DevIL](http://www.openil.sourceforge.net)**</br>
 
 #### Pakiety dla Ubuntu:
 sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev libdevil-dev

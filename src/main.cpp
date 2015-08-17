@@ -7,8 +7,17 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h> //SDL_SysWMinfo
 #include <SDL2/SDL_opengl.h>
+//glm:
+#include <glm/glm.hpp>
+#include <glm/gtx/vec1.hpp>
+//DevIL:
+#include <IL/il.h>
+#include <IL/ilu.h>
 //CaughtSignal:
 #include <signal.h>
+//User include
+#include "shader.hpp"
+#include "camera.hpp"
 
 using namespace std;
 
@@ -19,7 +28,6 @@ public:
    Game();
    ~Game();
    void Start();
-   void Update();
    void Stop();
 private:
    //Init:
@@ -28,6 +36,7 @@ private:
    void InitOpenGL();
    void InitWindow();
    void InitContent();
+   void InitDevIL();
    void SetIcon();
    //Min/Max resolution:
    int WindowMinWidth = 640;
@@ -50,11 +59,18 @@ private:
    int WindowDisplayIndex = 0;
    SDL_DisplayMode CurrentDisplayMode;
    //Game:
+   inline void Loop();
+   inline void Update();
    bool Exit = true;
    SDL_Event Event;
    //Other:
    fstream SettingsFile;
    int i,j;
+   GLenum GL_Error;
+   ILenum IL_Error;
+   //Camera:
+   vec2 Mouse;
+   Camera camera;
 };
 
 Game * PointerGame = NULL;
@@ -105,6 +121,7 @@ Game::Game(){
    this->InitWindow();
    this->SetIcon();
    this->InitContent();
+   this->InitDevIL();
    this->Exit = this->CheckInit;
 }
 
@@ -212,6 +229,11 @@ void Game::LoadSettings(){
 }
 
 void Game::Start(){
+
+}
+
+void Game::Loop(){
+   SDL_Log( "" );
    SDL_Log( "Game: BEGIN\n" );
    while( this->Exit ){
       while( SDL_PollEvent( &this->Event ) ){
@@ -221,13 +243,27 @@ void Game::Start(){
                SDL_Log( "Window closed\n" );
                break;
             case SDL_MOUSEMOTION:
-
+               this->Mouse.x = -this->Event.motion.xrel;
+               this->Mouse.y = -this->Event.motion.yrel;
+               this->camera.MouseUpdate( this->Mouse );
                break;
             case SDL_KEYDOWN:
                switch( this->Event.key.keysym.sym ){
                   case SDLK_ESCAPE:
                      this->Exit = false;
                      SDL_Log( "Window closed\n" );
+                     break;
+                  case SDLK_w:
+                     this->camera.MoveForward();
+                     break;
+                  case SDLK_s:
+                     this->camera.MoveBackward();
+                     break;
+                  case SDLK_a:
+                     this->camera.MoveLeft();
+                     break;
+                  case SDLK_d:
+                     this->camera.MoveRight();
                      break;
                   default:
                      break;
@@ -344,6 +380,7 @@ void Game::InitOpenGL(){
    if( this->CheckInit ){
       SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
       SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
+      SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
       glewExperimental = true;
    }
 }
@@ -364,6 +401,7 @@ void Game::InitWindow(){
       }
       else{
       {
+         SDL_Log( "" );
          SDL_Log( "Window info:\n" );
          string subsystem = "unknown system";
          SDL_SysWMinfo info;
@@ -446,6 +484,7 @@ void Game::InitWindow(){
          SDL_Log( "WindowMinimumSize: %ix%i", WindowMinWidth, WindowMinHeight );
          SDL_SetWindowMaximumSize( this->Window, WindowMaxWidth, WindowMaxHeight );
          SDL_Log( "WindowMaximumSize: %ix%i", WindowMaxWidth, WindowMaxHeight );
+         SDL_SetRelativeMouseMode( SDL_TRUE );
          SDL_Log( "SDL_CreateWindow: SUCCESS\n" );
       }
    }
@@ -475,6 +514,8 @@ void Game::SetIcon(){
       surface = SDL_CreateRGBSurfaceFrom( pixels, 16, 16, 16, 16*2, 0x0f00, 0x00f0, 0x000f, 0xf000 );
       if( surface == NULL ){
          SDL_Log( "SDL_SetWindowIcon: %s\n", SDL_GetError() );
+         this->CheckInit = false;
+         return;
       }
       else{
          SDL_Log( "SDL_SetWindowIcon: SUCCESS\n" );
@@ -493,9 +534,44 @@ void Game::InitContent(){
          return;
       }
       SDL_Log( "SDL_GL_CreateContext: SUCCESS\n" );
+      this->GL_Error = glewInit();
+      if( this->GL_Error != GLEW_OK ){
+         SDL_Log( "glewInit: %s\n", glewGetErrorString( this->GL_Error ) );
+         this->CheckInit = false;
+         return;
+      }
+      else{
+         SDL_Log( "glewInit: SUCCESS\n");
+      }
       glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
       glClear( GL_COLOR_BUFFER_BIT );
+      glEnable( GL_DEPTH_TEST );
+      glDepthFunc( GL_LESS );
       SDL_GL_SwapWindow( this->Window );
       SDL_Log( "OpenGL version: %s", glGetString( GL_VERSION ) );
+   }
+}
+
+void Game::InitDevIL(){
+   if( this->CheckInit ){
+      if( ( ilGetInteger( IL_VERSION_NUM ) < IL_VERSION ) ||
+          ( ilGetInteger( ILU_VERSION_NUM ) < ILU_VERSION )
+      ){
+         SDL_Log( "DevIL: version problem!\n" );
+         this->CheckInit = false;
+         return;
+      }
+      else{
+         ilInit();
+         iluInit();
+         this->IL_Error = IL_NO_ERROR;
+         while( ( this->IL_Error = ilGetError() ) != IL_NO_ERROR ){
+            SDL_Log( "DevIL: %s\n", iluErrorString( this->IL_Error ) );
+         }
+         if( this->IL_Error == IL_NO_ERROR ){
+            SDL_Log( "ilInit : SUCCESS\n" );
+            SDL_Log( "iluInit: SUCCESS\n" );
+         }
+      }
    }
 }

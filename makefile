@@ -5,6 +5,9 @@ CXXFLAGS = -std=c++11
 LFLAGS = -lSDL2 -lGL -lGLEW
 APP_NAME = game.app
 
+.PHONY: all clean
+.DELETE_ON_ERROR: clean
+
 all: pre_build main_build post_build
 pre_build:
 	@echo '*** START BUILDING ***'
@@ -14,12 +17,12 @@ post_build:
 main_build: $(SOURCE)
 	@echo ' '
 	@echo 'Building application $(APP_NAME)'
-	$(CXX) $(CXXFLAGS) $(MAIN) -o $(APP_NAME) $(LFLAGS)
+	$(CXX) $(CXXFLAGS) $(MAIN) $(SOURCE) -o $(APP_NAME) $(LFLAGS)
 	@echo 'Finished building application $(APP_NAME)'
 	@echo ' '
 	@echo ' '
 	@echo 'Cleaning'
-	$(RM) *o
+	$(RM) *.o
 	@echo 'Cleaned'
 	@echo ' '
 

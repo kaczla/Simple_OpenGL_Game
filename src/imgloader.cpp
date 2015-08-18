@@ -1,5 +1,6 @@
 #include "imgloader.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #include <IL/il.h>
 #include <IL/ilu.h>
 /* for include ilut.h:

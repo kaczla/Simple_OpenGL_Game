@@ -8,7 +8,9 @@
 #include <SDL2/SDL_syswm.h> //SDL_SysWMinfo
 #include <SDL2/SDL_opengl.h>
 //glm:
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/vec1.hpp>
 //DevIL:
 #include <IL/il.h>
@@ -18,6 +20,7 @@
 //User include
 #include "shader.hpp"
 #include "camera.hpp"
+#include "model.hpp"
 
 using namespace std;
 
@@ -52,6 +55,8 @@ private:
    int WindowPositionY = SDL_WINDOWPOS_CENTERED;
    int WindowWidth = 640;
    int WindowHeight = 480;
+   int WindowWidthHalf = this->WindowWidth / 2;
+   int WindowHeightHalf = this->WindowHeight / 2;
    bool WindowResizable = false;
    bool WindowBorderless = false;
    Uint32 WindowFlag = SDL_WINDOW_OPENGL;
@@ -71,6 +76,11 @@ private:
    //Camera:
    vec2 Mouse;
    Camera camera;
+   //For change settings camera:
+   vec1 Aspect;
+   vec1 FOV;
+   vec1 Near;
+   vec1 Far;
 };
 
 Game * PointerGame = NULL;
@@ -246,6 +256,7 @@ void Game::Loop(){
                this->Mouse.x = -this->Event.motion.xrel;
                this->Mouse.y = -this->Event.motion.yrel;
                this->camera.MouseUpdate( this->Mouse );
+               SDL_WarpMouseInWindow( this->Window, this->WindowWidthHalf, this->WindowHeightHalf );
                break;
             case SDL_KEYDOWN:
                switch( this->Event.key.keysym.sym ){
@@ -265,6 +276,27 @@ void Game::Loop(){
                   case SDLK_d:
                      this->camera.MoveRight();
                      break;
+                  //Numpad camera:
+                  case SDLK_KP_8:
+                     this->Mouse.x = 0;
+                     this->Mouse.y = 10;
+                     this->camera.MouseUpdate( this->Mouse );
+                     break;
+                  case SDLK_KP_2:
+                     this->Mouse.x = 0;
+                     this->Mouse.y = -10;
+                     this->camera.MouseUpdate( this->Mouse );
+                     break;
+                  case SDLK_KP_4:
+                     this->Mouse.x = 10;
+                     this->Mouse.y = 0;
+                     this->camera.MouseUpdate( this->Mouse );
+                     break;
+                  case SDLK_KP_6:
+                     this->Mouse.x = -10;
+                     this->Mouse.y = 0;
+                     this->camera.MouseUpdate( this->Mouse );
+                     break;
                   default:
                      break;
                }
@@ -282,6 +314,13 @@ void Game::Loop(){
                         this->Event.window.data1,
                         this->Event.window.data2
                      );
+                     this->WindowWidth = this->Event.window.data1;
+                     this->WindowHeight = this->Event.window.data2;
+                     this->WindowWidthHalf = this->WindowWidth / 2;
+                     this->WindowHeightHalf = this->WindowHeight / 2;
+                     this->Aspect = float( this->WindowWidthHalf ) / float( this->WindowHeightHalf );
+                     glViewport( 0, 0, (GLsizei)this->WindowWidth, (GLsizei)this->WindowHeight );
+                     camera.SetAspect( this->Aspect );
                      break;
                   case SDL_WINDOWEVENT_MINIMIZED:
                      SDL_Log( "Window minimized\n" );

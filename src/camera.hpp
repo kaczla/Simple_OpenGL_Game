@@ -10,7 +10,7 @@ class Camera{
 public:
    Camera();
    ~Camera();
-   mat4 getModelToViewMatrix() const;
+   mat4 getViewMatrix() const;
    mat4 getProjectionMatrix() const;
    void SetVOF( vec1 &vof );
    void SetAspect( vec1 &aspect );
@@ -23,6 +23,7 @@ public:
    void MoveBackward();
    void MoveLeft();
    void MoveRight();
+   void Log() const;
 private:
    void UpdateProjectionMatrix();
    vec3 Position = vec3( 0.0f, 1.0f, 0.0f );

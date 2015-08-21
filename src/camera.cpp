@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include <SDL2/SDL.h>
 #define GLM_FORCE_RADIANS
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,7 +12,7 @@ Camera::~Camera(){
 
 }
 
-mat4 Camera::getModelToViewMatrix() const{
+mat4 Camera::getViewMatrix() const{
    return lookAt( this->Position, this->Position + this->ViewDirection, this->Up );
 }
 
@@ -81,4 +82,14 @@ void Camera::MoveLeft(){
 void Camera::MoveRight(){
    this->MovementDirection = cross( this->ViewDirection, this->Up );//normalize( cross( this->ViewDirection, this->Up ) );
    this->Position += this->MovementSpeed.x * this->MovementDirection;
+}
+
+void Camera::Log() const{
+   SDL_Log( "Camera:\n\tPosition: %f %f %f\n\tTarger  : %f %f %f\n\tUp      : %f %f %f\n\tVOF   : %f\tAspect: %f\tNear  : %f\tFar   : %f\n\tRotationSpeed: %f\tMovementSpeed: %f\n",
+            this->Position.x, this->Position.y, this->Position.z,
+            this->ViewDirection.x, this->ViewDirection.y, this->ViewDirection.z,
+            this->Up.x, this->Up.y, this->Up.z,
+            this->VOF.x, this->Aspect.x, this->Near.x, this->Far.x,
+            this->RotationSpeed.x, this->MovementSpeed.x
+   );
 }

@@ -2,7 +2,7 @@ SOURCE_DIR = ./src/
 SOURCE = camera.o shader.o model.o
 MAIN = $(SOURCE_DIR)main.cpp
 CXXFLAGS = -std=c++11
-LFLAGS = -lSDL2 -lGL -lGLU -lGLEW -lIL -lILU
+LFLAGS = -lSDL2 -lGL -lGLU -lGLEW -lIL -lILU -lassimp
 APP_NAME = game.app
 
 .PHONY: all clean

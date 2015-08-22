@@ -8,8 +8,42 @@ Camera::Camera(){
    this->ProjectionMatrix = glm::perspective( this->VOF.x, this->Aspect.x, this->Near.x, this->Far.x );
 }
 
+Camera::Camera( const Camera &camera ){
+   this->Position = camera.Position;
+   this->ViewDirection = camera.ViewDirection;
+   this->Up = camera.Up;
+
+   this->RotationSpeed = camera.RotationSpeed;
+   this->MovementSpeed = camera.MovementSpeed;
+
+   this->ProjectionMatrix = camera.ProjectionMatrix;
+
+   this->VOF = camera.VOF;
+   this->Aspect = camera.Aspect;
+   this->Near = camera.Near;
+   this->Far = camera.Far;
+}
+
 Camera::~Camera(){
 
+}
+
+Camera & Camera::operator=( const Camera &camera ){
+   this->Position = camera.Position;
+   this->ViewDirection = camera.ViewDirection;
+   this->Up = camera.Up;
+
+   this->RotationSpeed = camera.RotationSpeed;
+   this->MovementSpeed = camera.MovementSpeed;
+
+   this->ProjectionMatrix = camera.ProjectionMatrix;
+
+   this->VOF = camera.VOF;
+   this->Aspect = camera.Aspect;
+   this->Near = camera.Near;
+   this->Far = camera.Far;
+   
+   return *this;
 }
 
 mat4 Camera::getViewMatrix() const{

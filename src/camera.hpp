@@ -9,7 +9,9 @@ using namespace glm;
 class Camera{
 public:
    Camera();
+   Camera( const Camera &camera );
    ~Camera();
+   Camera & operator=( const Camera &camera );
    mat4 getViewMatrix() const;
    mat4 getProjectionMatrix() const;
    void SetVOF( vec1 &vof );

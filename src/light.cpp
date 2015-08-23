@@ -86,6 +86,10 @@ void Light::SetPath( const char *path_obj ){
    this->OBJPathFile = path_obj;
 }
 
+void Light::SetColor( glm::vec3 &color ){
+   this->Color = color;
+}
+
 void Light::Load(){
    SDL_Log( "\n" );
    this->Init = LoadAssimp( this->OBJPathFile.c_str(), this->Vertices, this->Uvs, this->Normals, this->Indices );
@@ -137,4 +141,12 @@ void Light::Draw(){
 
 void Light::Translate( glm::vec3 &in ){
    this->ModelMatrix = glm::translate( this->ModelMatrix, in );
+}
+
+void Light::Rotate( GLfloat angle, glm::vec3 &in ){
+   this->ModelMatrix = glm::rotate( this->ModelMatrix, glm::radians( angle ), in );
+}
+
+void Light::Scale( glm::vec3 &in ){
+   this->ModelMatrix = glm::scale( this->ModelMatrix, in );
 }

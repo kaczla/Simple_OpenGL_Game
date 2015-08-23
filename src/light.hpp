@@ -16,10 +16,13 @@ public:
    void SetOBJPathFile( const char *path );
    void SetPath( std::string path_obj );
    void SetPath( const char *path_obj );
+   void SetColor( glm::vec3 &color );
    void Load();
    void BindVAO();
    void Draw();
    void Translate( glm::vec3 &in );
+   void Rotate( GLfloat angle, glm::vec3 &in );
+   void Scale( glm::vec3 &in );
    //Uniform:
    static GLuint * ModelUniformLight;
    static GLuint * UniformColorLight;

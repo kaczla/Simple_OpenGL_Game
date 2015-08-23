@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <sstream>
 //OpenGL:
 #include <GL/glew.h>
 //SDL:
@@ -21,6 +22,7 @@
 #include "shader.hpp"
 #include "camera.hpp"
 #include "model.hpp"
+#include "light.hpp"
 
 using namespace std;
 
@@ -41,6 +43,8 @@ private:
    void InitContent();
    void InitDevIL();
    void SetIcon();
+   void InitShaders();
+   void LoadData();
    //Min/Max resolution:
    int WindowMinWidth = 640;
    int WindowMinHeight = 480;
@@ -63,6 +67,7 @@ private:
    SDL_GLContext WindowGLContext = NULL;
    int WindowDisplayIndex = 0;
    SDL_DisplayMode CurrentDisplayMode;
+   bool Focus = true;
    //Game:
    inline void Loop();
    inline void Update();
@@ -81,6 +86,30 @@ private:
    vec1 FOV;
    vec1 Near;
    vec1 Far;
+//Shaders:
+   GLuint ProgramID = 0;
+   //Uniforms:
+   GLuint ModelUniformId = 0;
+   GLuint ViewUniformId = 0;
+   GLuint ProjectionUniformId = 0;
+   GLuint TextureUniformId = 0;
+//second for drawing light object:
+   GLuint LightID = 0;
+   //Uniforms:
+   GLuint ViewUniformLight = 0;
+   GLuint ProjectionUniformLight = 0;
+   GLuint ModelUniformLight = 0;
+   GLuint UniformColorLight = 0;
+//Matrix:
+   mat4 ProjectionMatrix;
+   mat4 ViewMatrix;
+//Models:
+   vector <Model> Models;
+   vector <Model>::iterator It;
+//Light:
+   Light Sun;
+//tmp:
+   vec3 tmp_vector;
 };
 
 Game * PointerGame = NULL;
@@ -137,6 +166,13 @@ Game::Game(){
 
 Game::~Game(){
    SDL_Log( "Destructor: CLEANING\n" );
+   Model::ModelUniformId = NULL;
+   Model::TextureUniformId = NULL;
+   Light::ModelUniformLight = NULL;
+   Light::UniformColorLight = NULL;
+   glDeleteProgram( this->ProgramID );
+   glDeleteProgram( this->LightID );
+   SDL_SetRelativeMouseMode( SDL_FALSE );
    SDL_GL_DeleteContext( this->WindowGLContext );
    SDL_DestroyWindow( this->Window );
    SDL_Quit();
@@ -239,11 +275,15 @@ void Game::LoadSettings(){
 }
 
 void Game::Start(){
+   this->InitShaders();
 
+   this->LoadData();
+
+   this->Loop();
 }
 
 void Game::Loop(){
-   SDL_Log( "" );
+   SDL_Log( "\n" );
    SDL_Log( "Game: BEGIN\n" );
    while( this->Exit ){
       while( SDL_PollEvent( &this->Event ) ){
@@ -331,6 +371,18 @@ void Game::Loop(){
                   case SDL_WINDOWEVENT_RESTORED:
                      SDL_Log( "Window restored\n" );
                      break;
+                  case SDL_WINDOWEVENT_FOCUS_GAINED:
+                     SDL_Log( "Window %d gained keyboard focus\n", this->Event.window.windowID );
+                     SDL_SetRelativeMouseMode( SDL_TRUE );
+                     this->Focus = true;
+                     break;
+                  case SDL_WINDOWEVENT_FOCUS_LOST:
+                     SDL_Log( "Window %d lost keyboard focus\n", this->Event.window.windowID );
+                     SDL_SetRelativeMouseMode( SDL_FALSE );
+                     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+                     SDL_GL_SwapWindow( this->Window );
+                     this->Focus = false;
+                     break;
                   default:
                      break;
                }
@@ -345,9 +397,15 @@ void Game::Loop(){
 }
 
 void Game::Update(){
-   glClear( GL_COLOR_BUFFER_BIT );
+   if( this->Focus ){
+      glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-   SDL_GL_SwapWindow( this->Window );
+      this->ProjectionMatrix = this->camera.getProjectionMatrix();
+      this->ViewMatrix = this->camera.getViewMatrix();
+
+      glUseProgram( 0 );
+      SDL_GL_SwapWindow( this->Window );
+   }
 }
 
 void Game::InitSDL(){
@@ -420,6 +478,7 @@ void Game::InitOpenGL(){
       SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
       SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
       SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
+      SDL_GL_SetAttribute( SDL_GL_MULTISAMPLESAMPLES, 2 );
       glewExperimental = true;
    }
 }
@@ -440,7 +499,7 @@ void Game::InitWindow(){
       }
       else{
       {
-         SDL_Log( "" );
+         SDL_Log( "\n" );
          SDL_Log( "Window info:\n" );
          string subsystem = "unknown system";
          SDL_SysWMinfo info;
@@ -612,5 +671,51 @@ void Game::InitDevIL(){
             SDL_Log( "iluInit: SUCCESS\n" );
          }
       }
+   }
+}
+
+void Game::InitShaders(){
+   if( this->CheckInit ){
+      SDL_Log( "\n" );
+      SDL_Log( "SHADERS:\n" );
+      this->ProgramID = LoadShader( "./data/Shader.vert", "./data/Shader.frag" );
+      if( this->ProgramID == 0 ){
+         SDL_Log( "Something wrong with program shaders!\n" );
+         this->CheckInit = false;
+         return;
+      }
+      SDL_Log( "\n" );
+      this->LightID = LoadShader( "./data/Light.vert", "./data/Light.frag" );
+      if( this->LightID == 0 ){
+         SDL_Log( "Something wrong with light shaders!\n" );
+         this->CheckInit = false;
+         return;
+      }
+
+      //Uniforms:
+      this->ViewUniformId = glGetUniformLocation( this->ProgramID, "view" );
+      this->ProjectionUniformId = glGetUniformLocation( this->ProgramID, "projection" );
+      this->ModelUniformId = glGetUniformLocation( this->ProgramID, "model" );
+   	this->TextureUniformId  = glGetUniformLocation( this->ProgramID, "texture" );
+
+      this->ViewUniformLight = glGetUniformLocation( this->LightID, "view" );
+      this->ProjectionUniformLight = glGetUniformLocation( this->LightID, "projection" );
+      this->ModelUniformLight = glGetUniformLocation( this->LightID, "model" );
+      this->UniformColorLight = glGetUniformLocation( this->LightID, "Color" );
+
+
+      //Set pointer for Model:
+      Model::ModelUniformId = & this->ModelUniformId;
+      Model::TextureUniformId = & this->TextureUniformId;
+
+      Light::ModelUniformLight = & this->ModelUniformLight;
+      Light::UniformColorLight = & this->UniformColorLight;
+
+   }
+}
+
+void Game::LoadData(){
+   SDL_Log( "\n" );
+   if( this->CheckInit ){
    }
 }

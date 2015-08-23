@@ -16,6 +16,8 @@ public:
    void SetOBJPathFile( const char *path );
    void SetImgPathFile( std::string path );
    void SetImgPathFile( const char *path );
+   void SetMTLPathFile( std::string path );
+   void SetMTLPathFile( const char *path );
    void SetPath( std::string path_obj, std::string path_img );
    void SetPath( const char *path_obj, const char *path_img );
    void Load_OBJ();
@@ -27,6 +29,9 @@ public:
    void Draw();
    void DrawNoTexture();
    GLuint ReturnTexture();
+   void Translate( glm::vec3 &in );
+   void Rotate( GLfloat angle, glm::vec3 &in );
+   void Scale( glm::vec3 &in );
    //Uniforms:
    static GLuint * ModelUniformId;
    static GLuint * TextureUniformId;
@@ -48,6 +53,7 @@ private:
    //String path files:
    std::string OBJPathFile;
    std::string ImgPathFile;
+   std::string MTLPathFile;
    //Global position model:
    glm::mat4 ModelMatrix = glm::mat4( 1.0f );
    //Check:

@@ -1,6 +1,8 @@
 #include "model.hpp"
 #include <SDL2/SDL.h>
 #define GLM_FORCE_RADIANS
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "objloader.cpp"
 #include "imgloader.cpp"
@@ -18,6 +20,13 @@ Model::Model(){
 }
 
 Model::Model( std::string path_obj, std::string path_img ){
+   this->VAO = 0;
+   this->VertexBuffer = 0;
+   this->UvBuffer = 0;
+   this->NormalBuffer = 0;
+   this->IndicesBuffer = 0;
+   this->Texture = 0;
+
    this->OBJPathFile = path_obj;
    this->ImgPathFile = path_img;
    this->Load();
@@ -92,6 +101,14 @@ void Model::SetImgPathFile( std::string path ){
 
 void Model::SetImgPathFile( const char *path ){
    this->ImgPathFile = path;
+}
+
+void Model::SetMTLPathFile( std::string path ){
+   this->MTLPathFile = path;
+}
+
+void Model::SetMTLPathFile( const char *path ){
+   this->MTLPathFile = path;
 }
 
 void Model::SetPath( std::string path_obj, std::string path_img ){
@@ -214,4 +231,16 @@ void Model::DrawNoTexture(){
    glBindVertexArray( this->VAO );
    glDrawElements( GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, (GLvoid *)0 );
    glBindVertexArray( 0 );
+}
+
+void Model::Translate( glm::vec3 &in ){
+   this->ModelMatrix = glm::translate( this->ModelMatrix, in );
+}
+
+void Model::Rotate( GLfloat angle, glm::vec3 &in ){
+   this->ModelMatrix = glm::rotate( this->ModelMatrix, glm::radians( angle ), in );
+}
+
+void Model::Scale( glm::vec3 &in ){
+   this->ModelMatrix = glm::scale( this->ModelMatrix, in );
 }

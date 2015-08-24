@@ -25,6 +25,7 @@ public:
    void MoveBackward();
    void MoveLeft();
    void MoveRight();
+   vec3 ReturnPosition() const;
    void Log() const;
 private:
    void UpdateProjectionMatrix();

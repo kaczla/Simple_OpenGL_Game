@@ -42,7 +42,7 @@ Camera & Camera::operator=( const Camera &camera ){
    this->Aspect = camera.Aspect;
    this->Near = camera.Near;
    this->Far = camera.Far;
-   
+
    return *this;
 }
 
@@ -116,6 +116,10 @@ void Camera::MoveLeft(){
 void Camera::MoveRight(){
    this->MovementDirection = cross( this->ViewDirection, this->Up );//normalize( cross( this->ViewDirection, this->Up ) );
    this->Position += this->MovementSpeed.x * this->MovementDirection;
+}
+
+vec3 Camera::ReturnPosition() const{
+   return this->Position;
 }
 
 void Camera::Log() const{

@@ -20,6 +20,7 @@ public:
    void Load();
    void BindVAO();
    void Draw();
+   glm::vec3 ReturnPosition();
    void Translate( glm::vec3 &in );
    void Rotate( GLfloat angle, glm::vec3 &in );
    void Scale( glm::vec3 &in );

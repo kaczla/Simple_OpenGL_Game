@@ -139,6 +139,10 @@ void Light::Draw(){
 
 }
 
+glm::vec3 Light::ReturnPosition(){
+   return glm::vec3( this->ModelMatrix[3][0], this->ModelMatrix[3][1], this->ModelMatrix[3][2] );
+}
+
 void Light::Translate( glm::vec3 &in ){
    this->ModelMatrix = glm::translate( this->ModelMatrix, in );
 }

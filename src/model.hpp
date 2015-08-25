@@ -16,6 +16,8 @@ public:
    void SetOBJPathFile( const char *path );
    void SetImgPathFile( std::string path );
    void SetImgPathFile( const char *path );
+   void SetImgSpecPathFile( const char* path );
+   void SetImgSpecPathFile( std::string path );
    void SetMTLPathFile( std::string path );
    void SetMTLPathFile( const char *path );
    void SetPath( std::string path_obj, std::string path_img );
@@ -35,6 +37,11 @@ public:
    //Uniforms:
    static GLuint * ModelUniformId;
    static GLuint * TextureUniformId;
+   static GLuint * TextureSpecularUniformId;
+   static GLuint * AmbientUniformId;
+   static GLuint * DiffuseUniformId;
+   static GLuint * SpecularUniformId;
+   static GLuint * ShininessUniformId;
 private:
    //VAO:
    GLuint VAO;
@@ -50,12 +57,19 @@ private:
    GLuint IndicesBuffer;
    //Texture:
    GLuint Texture;
+   GLuint TextureSpecular;
    //String path files:
    std::string OBJPathFile;
    std::string ImgPathFile;
+   std::string ImgSpecPathFile;
    std::string MTLPathFile;
    //Global position model:
    glm::mat4 ModelMatrix = glm::mat4( 1.0f );
+   //for light:
+   glm::vec3 Ambient = glm::vec3( 0.2f );
+   glm::vec3 Diffuse = glm::vec3( 0.5f );
+   glm::vec3 Specular = glm::vec3( 0.5f );
+   GLfloat Shininess = 32.0f;
    //Check:
    bool Init = false;
 };

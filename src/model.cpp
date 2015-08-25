@@ -9,6 +9,11 @@
 
 GLuint * Model::ModelUniformId = NULL;
 GLuint * Model::TextureUniformId = NULL;
+GLuint * Model::TextureSpecularUniformId = NULL;
+GLuint * Model::AmbientUniformId = NULL;
+GLuint * Model::DiffuseUniformId = NULL;
+GLuint * Model::SpecularUniformId = NULL;
+GLuint * Model::ShininessUniformId = NULL;
 
 Model::Model(){
    this->VAO = 0;
@@ -46,9 +51,17 @@ Model::Model( const Model &model ){
    this->IndicesBuffer = model.IndicesBuffer;
 
    this->Texture = model.Texture;
+   this->TextureSpecular = model.TextureSpecular;
 
    this->OBJPathFile = model.OBJPathFile;
    this->ImgPathFile = model.ImgPathFile;
+   this->ImgSpecPathFile = model.ImgSpecPathFile;
+   this->MTLPathFile = model.MTLPathFile;
+
+   this->Ambient = model.Ambient;
+   this->Diffuse = model.Diffuse;
+   this->Specular = model.Specular;
+   this->Shininess = model.Shininess;
 
    this->ModelMatrix = model.ModelMatrix;
    this->Init = model.Init;
@@ -68,9 +81,17 @@ Model & Model::operator=( const Model &model ){
    this->IndicesBuffer = model.IndicesBuffer;
 
    this->Texture = model.Texture;
+   this->TextureSpecular = model.TextureSpecular;
 
    this->OBJPathFile = model.OBJPathFile;
    this->ImgPathFile = model.ImgPathFile;
+   this->ImgSpecPathFile = model.ImgSpecPathFile;
+   this->MTLPathFile = model.MTLPathFile;
+
+   this->Ambient = model.Ambient;
+   this->Diffuse = model.Diffuse;
+   this->Specular = model.Specular;
+   this->Shininess = model.Shininess;
 
    this->ModelMatrix = model.ModelMatrix;
    this->Init = model.Init;
@@ -101,6 +122,14 @@ void Model::SetImgPathFile( std::string path ){
 
 void Model::SetImgPathFile( const char *path ){
    this->ImgPathFile = path;
+}
+
+void Model::SetImgSpecPathFile( const char* path ){
+   this->ImgSpecPathFile = path;
+}
+
+void Model::SetImgSpecPathFile( std::string path ){
+   this->ImgSpecPathFile = path;
 }
 
 void Model::SetMTLPathFile( std::string path ){
@@ -137,10 +166,12 @@ void Model::Load_OBJ(){
    //faster
    //with Assimp:
    this->Init = LoadAssimp( this->OBJPathFile.c_str(), this->Vertices, this->Uvs, this->Normals, this->Indices );
+   LoadMTL( this->MTLPathFile.c_str(), this->Ambient, this->Diffuse, this->Specular, this->Shininess );
 }
 
 void Model::Load_Img(){
    this->Texture = LoadImg( this->ImgPathFile.c_str() );
+   this->TextureSpecular = LoadImg( this->ImgSpecPathFile.c_str() );
 }
 
 void Model::Load(){
@@ -198,12 +229,24 @@ void Model::BindVAO(){
 
 void Model::BindTexture(){
    glUniformMatrix4fv( *Model::ModelUniformId, 1, GL_FALSE, glm::value_ptr( this->ModelMatrix ) );
-   glActiveTexture( GL_TEXTURE0 );
+   glUniform3fv( *Model::AmbientUniformId, 1, glm::value_ptr( this->Ambient ) );
+   glUniform3fv( *Model::DiffuseUniformId, 1, glm::value_ptr( this->Diffuse ) );
+   glUniform3fv( *Model::SpecularUniformId, 1, glm::value_ptr( this->Specular ) );
+   glUniform1f( *Model::ShininessUniformId, this->Shininess );
+
    glUniform1i( *Model::TextureUniformId, 0 );
+   glUniform1i( *Model::TextureSpecularUniformId, 1 );
+
+   glActiveTexture( GL_TEXTURE0 );
    glBindTexture( GL_TEXTURE_2D, this->Texture );
+
+   glActiveTexture( GL_TEXTURE1 );
+   glBindTexture( GL_TEXTURE_2D, this->TextureSpecular );
 }
 
 void Model::UnbindTexture(){
+   glActiveTexture( GL_TEXTURE1 );
+   glBindTexture( GL_TEXTURE_2D, 0 );
    glActiveTexture( GL_TEXTURE0 );
    glBindTexture( GL_TEXTURE_2D, 0 );
 }
@@ -211,9 +254,19 @@ void Model::UnbindTexture(){
 void Model::Draw(){
    //Bind Texture into Uniform:
    glUniformMatrix4fv( *Model::ModelUniformId, 1, GL_FALSE, glm::value_ptr( this->ModelMatrix ) );
-   glActiveTexture( GL_TEXTURE0 );
+   glUniform3fv( *Model::AmbientUniformId, 1, glm::value_ptr( this->Ambient ) );
+   glUniform3fv( *Model::DiffuseUniformId, 1, glm::value_ptr( this->Diffuse ) );
+   glUniform3fv( *Model::SpecularUniformId, 1, glm::value_ptr( this->Specular ) );
+   glUniform1f( *Model::ShininessUniformId, this->Shininess );
+
    glUniform1i( *Model::TextureUniformId, 0 );
+   glUniform1i( *Model::TextureSpecularUniformId, 1 );
+
+   glActiveTexture( GL_TEXTURE0 );
    glBindTexture( GL_TEXTURE_2D, this->Texture );
+
+   glActiveTexture( GL_TEXTURE1 );
+   glBindTexture( GL_TEXTURE_2D, this->TextureSpecular );
 
    //Bind VAO:
    glBindVertexArray( this->VAO );
@@ -223,6 +276,8 @@ void Model::Draw(){
    glBindVertexArray( 0 );
 
    //Unbind Texture:
+   glActiveTexture( GL_TEXTURE1 );
+   glBindTexture( GL_TEXTURE_2D, 0 );
    glActiveTexture( GL_TEXTURE0 );
    glBindTexture( GL_TEXTURE_2D, 0 );
 }

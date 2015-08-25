@@ -25,4 +25,11 @@ void IndexVBO( std::vector <glm::vec3> &in_vertices,
    std::vector <glm::vec3> &out_normals
 );
 
+void LoadMTL( const char *path_file,
+   glm::vec3 &ambient,
+   glm::vec3 &diffuse,
+   glm::vec3 &specular,
+   GLfloat &shininess
+);
+
 #endif

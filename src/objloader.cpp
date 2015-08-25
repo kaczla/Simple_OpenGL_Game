@@ -259,3 +259,53 @@ bool LoadAssimp( const char *path_file,
    SDL_Log( "Loaded file: %s\n", path_file );
    return true;
 }
+
+void LoadMTL( const char *path_file,
+   glm::vec3 &ambient,
+   glm::vec3 &diffuse,
+   glm::vec3 &specular,
+   GLfloat &shininess
+){
+   std::ifstream MTLStream( path_file, std::ios::in );
+   SDL_Log( "Loading file: %s\n", path_file );
+   if( MTLStream.good() ){
+      std::string Line, Word;
+      std::istringstream iss;
+      while( getline( MTLStream, Line ) ){
+         iss.str( "" );
+         iss.clear();
+         iss.str( Line );
+         iss>>Word;
+         if( Word == "Ka" ){
+            iss>>ambient.x;
+            iss>>ambient.y;
+            iss>>ambient.z;
+         }
+         else if( Word == "Kd" ){
+            iss>>diffuse.x;
+            iss>>diffuse.y;
+            iss>>diffuse.z;
+         }
+         else if( Word == "Ks" ){
+            iss>>specular.x;
+            iss>>specular.y;
+            iss>>specular.z;
+         }
+         else{
+
+         }
+      }
+      MTLStream.close();
+   }
+   else{
+      SDL_Log( "Can't find file: %s\n", path_file );
+      return;
+   }
+   SDL_Log( "Ambient: %f %f %f   Diffuse: %f %f %f   Specular: %f %f %f\n",
+               ambient.x, ambient.y, ambient.z,
+               diffuse.x, diffuse.y, diffuse.z,
+               specular.x, specular.y, specular.z
+          );
+   SDL_Log( "Loaded file: %s\n", path_file );
+   return;
+}

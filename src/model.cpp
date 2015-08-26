@@ -34,10 +34,13 @@ Model::Model( std::string path_obj, std::string path_img ){
 
    this->OBJPathFile = path_obj;
    this->ImgPathFile = path_img;
+   this->ImgSpecPathFile = path_img;
    this->Load();
 }
 
 Model::Model( const Model &model ){
+   this->Name = model.Name;
+
    this->VAO = model.VAO;
 
    this->Vertices = model.Vertices;
@@ -68,6 +71,8 @@ Model::Model( const Model &model ){
 }
 
 Model & Model::operator=( const Model &model ){
+   this->Name = model.Name;
+
    this->VAO = model.VAO;
 
    this->Vertices = model.Vertices;
@@ -106,6 +111,10 @@ Model::~Model(){
    glDeleteBuffers( 1, &this->NormalBuffer );
    glDeleteBuffers( 1, &this->IndicesBuffer );
    glDeleteVertexArrays( 1, &this->VAO );
+}
+
+void Model::SetName( std::string &in ){
+   this->Name = in;
 }
 
 void Model::SetOBJPathFile( std::string path ){
@@ -150,8 +159,25 @@ void Model::SetPath( const char *path_obj, const char *path_img ){
    this->ImgPathFile = path_img;
 }
 
+void Model::SetAmbient( glm::vec3 &in ){
+   this->Ambient = in;
+}
+
+void Model::SetDiffuse( glm::vec3 &in ){
+   this->Diffuse = in;
+}
+
+void Model::SetSpecular( glm::vec3 &in ){
+   this->Specular = in;
+}
+
+void Model::SetShininess( float &in ){
+   this->Shininess = in;
+}
+
 void Model::Load_OBJ(){
    SDL_Log( "\n" );
+   SDL_Log( "%s:", this->Name.c_str() );
    /*
    //With LoadOBJ( ):
    this->Init = LoadOBJ( this->OBJPathFile.c_str(), this->Vertices, this->Uvs, this->Normals );
@@ -167,6 +193,9 @@ void Model::Load_OBJ(){
    //with Assimp:
    this->Init = LoadAssimp( this->OBJPathFile.c_str(), this->Vertices, this->Uvs, this->Normals, this->Indices );
    LoadMTL( this->MTLPathFile.c_str(), this->Ambient, this->Diffuse, this->Specular, this->Shininess );
+   if( this->Ambient.x == 0.0f and this->Ambient.y == 0.0f and this->Ambient.z == 0.0f ){
+      this->Ambient = glm::vec3( 0.2f );
+   }
 }
 
 void Model::Load_Img(){
@@ -178,6 +207,9 @@ void Model::Load(){
    this->Load_OBJ();
    this->Load_Img();
    this->BindVAO();
+   if( this->Init and this->ModelMatrix.empty() ){
+      this->ModelMatrix.push_back( glm::mat4( 1.0f ) );
+   }
 }
 
 void Model::BindVAO(){
@@ -228,7 +260,6 @@ void Model::BindVAO(){
 }
 
 void Model::BindTexture(){
-   glUniformMatrix4fv( *Model::ModelUniformId, 1, GL_FALSE, glm::value_ptr( this->ModelMatrix ) );
    glUniform3fv( *Model::AmbientUniformId, 1, glm::value_ptr( this->Ambient ) );
    glUniform3fv( *Model::DiffuseUniformId, 1, glm::value_ptr( this->Diffuse ) );
    glUniform3fv( *Model::SpecularUniformId, 1, glm::value_ptr( this->Specular ) );
@@ -253,7 +284,6 @@ void Model::UnbindTexture(){
 
 void Model::Draw(){
    //Bind Texture into Uniform:
-   glUniformMatrix4fv( *Model::ModelUniformId, 1, GL_FALSE, glm::value_ptr( this->ModelMatrix ) );
    glUniform3fv( *Model::AmbientUniformId, 1, glm::value_ptr( this->Ambient ) );
    glUniform3fv( *Model::DiffuseUniformId, 1, glm::value_ptr( this->Diffuse ) );
    glUniform3fv( *Model::SpecularUniformId, 1, glm::value_ptr( this->Specular ) );
@@ -270,8 +300,14 @@ void Model::Draw(){
 
    //Bind VAO:
    glBindVertexArray( this->VAO );
-   //Draw:
-   glDrawElements( GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, (GLvoid *)0 );
+
+   for( this->It = this->ModelMatrix.begin(); this->It != this->ModelMatrix.end(); ++this->It ){
+      //Bind all ModelMatrix into Uniform:
+      glUniformMatrix4fv( *Model::ModelUniformId, 1, GL_FALSE, glm::value_ptr( *this->It ) );
+      //Draw:
+      glDrawElements( GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, (GLvoid *)0 );
+   }
+
    //Unbind VAO:
    glBindVertexArray( 0 );
 
@@ -284,18 +320,51 @@ void Model::Draw(){
 
 void Model::DrawNoTexture(){
    glBindVertexArray( this->VAO );
-   glDrawElements( GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, (GLvoid *)0 );
+   for( this->It = this->ModelMatrix.begin(); this->It != this->ModelMatrix.end(); ++this->It ){
+      glUniformMatrix4fv( *Model::ModelUniformId, 1, GL_FALSE, glm::value_ptr( *this->It ) );
+      glDrawElements( GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, (GLvoid *)0 );
+   }
    glBindVertexArray( 0 );
 }
 
 void Model::Translate( glm::vec3 &in ){
-   this->ModelMatrix = glm::translate( this->ModelMatrix, in );
+   for( this->It = this->ModelMatrix.begin(); this->It != this->ModelMatrix.end(); ++this->It ){
+      *this->It =  glm::translate( *this->It, in );
+   }
+}
+
+void Model::Translate( unsigned int i, glm::vec3 &in ){
+   this->ModelMatrix.at( i ) = glm::translate( this->ModelMatrix.at( i ), in );
 }
 
 void Model::Rotate( GLfloat angle, glm::vec3 &in ){
-   this->ModelMatrix = glm::rotate( this->ModelMatrix, glm::radians( angle ), in );
+   for( this->It = this->ModelMatrix.begin(); this->It != this->ModelMatrix.end(); ++this->It ){
+      *this->It =  glm::rotate( *this->It, glm::radians( angle ), in );
+   }
+}
+
+void Model::Rotate( unsigned int i, GLfloat angle, glm::vec3 &in ){
+   this->ModelMatrix.at( i ) = glm::rotate( this->ModelMatrix.at( i ), glm::radians( angle ), in );
 }
 
 void Model::Scale( glm::vec3 &in ){
-   this->ModelMatrix = glm::scale( this->ModelMatrix, in );
+   for( this->It = this->ModelMatrix.begin(); this->It != this->ModelMatrix.end(); ++this->It ){
+      *this->It =  glm::scale( *this->It, in );
+   }
+}
+
+void Model::Scale( unsigned int i, glm::vec3 &in ){
+   this->ModelMatrix.at( i ) = glm::scale( this->ModelMatrix.at( i ), in );
+}
+
+void Model::AddMatrix( glm::mat4 &in ){
+   this->ModelMatrix.push_back( in );
+}
+
+void Model::AddMatrix( glm::vec3 &in ){
+   this->ModelMatrix.push_back( glm::translate( glm::mat4( 1.0f ), in ) );
+}
+
+void Model::AddMatrix(){
+   this->ModelMatrix.push_back( glm::mat4( 1.0f ) );
 }

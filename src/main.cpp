@@ -11,6 +11,7 @@
 //glm:
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/vec1.hpp>
 //DevIL:
@@ -68,6 +69,10 @@ private:
    int WindowDisplayIndex = 0;
    SDL_DisplayMode CurrentDisplayMode;
    bool Focus = true;
+//Timer:
+   Uint32 TimerBegin = 0;
+   Uint32 TimerEnd = 0;
+   int FPS = 0;
    //Game:
    inline void Loop();
    inline void Update();
@@ -93,6 +98,13 @@ private:
    GLuint ViewUniformId = 0;
    GLuint ProjectionUniformId = 0;
    GLuint TextureUniformId = 0;
+   GLuint TextureSpecularUniformId = 0;
+   GLuint AmbientUniformId = 0;
+   GLuint DiffuseUniformId = 0;
+   GLuint SpecularUniformId = 0;
+   GLuint ShininessUniformId = 0;
+   GLuint LightPositionUniformId = 0;
+   GLuint ViewPosUniformId = 0;
 //second for drawing light object:
    GLuint LightID = 0;
    //Uniforms:
@@ -110,6 +122,7 @@ private:
    Light Sun;
 //tmp:
    vec3 tmp_vector;
+   GLfloat tmp_float;
 };
 
 Game * PointerGame = NULL;
@@ -168,6 +181,11 @@ Game::~Game(){
    SDL_Log( "Destructor: CLEANING\n" );
    Model::ModelUniformId = NULL;
    Model::TextureUniformId = NULL;
+   Model::TextureSpecularUniformId = NULL;
+   Model::AmbientUniformId = NULL;
+   Model::DiffuseUniformId = NULL;
+   Model::SpecularUniformId = NULL;
+   Model::ShininessUniformId = NULL;
    Light::ModelUniformLight = NULL;
    Light::UniformColorLight = NULL;
    glDeleteProgram( this->ProgramID );
@@ -279,6 +297,9 @@ void Game::Start(){
 
    this->LoadData();
 
+   this->TimerBegin = SDL_GetTicks();
+   this->TimerEnd = this->TimerBegin + 1000;
+
    this->Loop();
 }
 
@@ -315,6 +336,9 @@ void Game::Loop(){
                      break;
                   case SDLK_d:
                      this->camera.MoveRight();
+                     break;
+                  case SDLK_BACKQUOTE:
+                     this->camera.Log();
                      break;
                   //Numpad camera:
                   case SDLK_KP_8:
@@ -398,13 +422,38 @@ void Game::Loop(){
 
 void Game::Update(){
    if( this->Focus ){
+      this->TimerBegin = SDL_GetTicks();
       glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
       this->ProjectionMatrix = this->camera.getProjectionMatrix();
       this->ViewMatrix = this->camera.getViewMatrix();
 
+      //Draw all models:
+      glUseProgram( this->ProgramID );
+      glUniformMatrix4fv( this->ViewUniformId, 1, GL_FALSE, value_ptr( this->ViewMatrix ) );
+      glUniformMatrix4fv( this->ProjectionUniformId, 1, GL_FALSE, value_ptr( this->ProjectionMatrix  ) );
+      glUniform3fv( this->LightPositionUniformId, 1, value_ptr( this->Sun.ReturnPosition() ) );
+      glUniform3fv( this->ViewPosUniformId, 1, value_ptr( this->camera.ReturnPosition() ) );
+
+      for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){
+         this->It->Draw();
+      }
+
+      //Draw lights:
+      glUseProgram( this->LightID );
+      glUniformMatrix4fv( this->ViewUniformLight, 1, GL_FALSE, value_ptr( this->ViewMatrix ) );
+      glUniformMatrix4fv( this->ProjectionUniformLight, 1, GL_FALSE, value_ptr( this->ProjectionMatrix  ) );
+
+      this->Sun.Draw();
+
       glUseProgram( 0 );
       SDL_GL_SwapWindow( this->Window );
+      ++this->FPS;
+      if( this->TimerBegin >= this->TimerEnd ){
+         SDL_Log( "\r[%i] FPS: %i", this->TimerBegin / 1000, this->FPS );
+         this->FPS = 0;
+         this->TimerEnd  = this->TimerBegin + 1000;
+      }
    }
 }
 
@@ -645,6 +694,8 @@ void Game::InitContent(){
       glClear( GL_COLOR_BUFFER_BIT );
       glEnable( GL_DEPTH_TEST );
       glDepthFunc( GL_LESS );
+      // glEnable( GL_CULL_FACE );
+      // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
       SDL_GL_SwapWindow( this->Window );
       SDL_Log( "OpenGL version: %s", glGetString( GL_VERSION ) );
    }
@@ -696,7 +747,16 @@ void Game::InitShaders(){
       this->ViewUniformId = glGetUniformLocation( this->ProgramID, "view" );
       this->ProjectionUniformId = glGetUniformLocation( this->ProgramID, "projection" );
       this->ModelUniformId = glGetUniformLocation( this->ProgramID, "model" );
-   	this->TextureUniformId  = glGetUniformLocation( this->ProgramID, "texture" );
+
+      this->TextureUniformId  = glGetUniformLocation( this->ProgramID, "Texture" );
+      this->TextureSpecularUniformId = glGetUniformLocation( this->ProgramID, "Texture_specular" );
+      this->AmbientUniformId = glGetUniformLocation( this->ProgramID, "Ambient" );
+      this->DiffuseUniformId = glGetUniformLocation( this->ProgramID, "Diffuse" );
+      this->SpecularUniformId = glGetUniformLocation( this->ProgramID, "Specular" );
+      this->ShininessUniformId = glGetUniformLocation( this->ProgramID, "Shininess" );
+
+      this->LightPositionUniformId = glGetUniformLocation( this->ProgramID, "Light_position" );
+      this->ViewPosUniformId = glGetUniformLocation( this->ProgramID, "ViewPos" );
 
       this->ViewUniformLight = glGetUniformLocation( this->LightID, "view" );
       this->ProjectionUniformLight = glGetUniformLocation( this->LightID, "projection" );
@@ -707,6 +767,11 @@ void Game::InitShaders(){
       //Set pointer for Model:
       Model::ModelUniformId = & this->ModelUniformId;
       Model::TextureUniformId = & this->TextureUniformId;
+      Model::TextureSpecularUniformId = & this->TextureSpecularUniformId;
+      Model::AmbientUniformId = & this->AmbientUniformId;
+      Model::DiffuseUniformId = & this->DiffuseUniformId;
+      Model::SpecularUniformId = & this->SpecularUniformId;
+      Model::ShininessUniformId = & this->ShininessUniformId;
 
       Light::ModelUniformLight = & this->ModelUniformLight;
       Light::UniformColorLight = & this->UniformColorLight;
@@ -717,5 +782,63 @@ void Game::InitShaders(){
 void Game::LoadData(){
    SDL_Log( "\n" );
    if( this->CheckInit ){
+      //Load other models from ./data/data.init:
+      fstream DataFile;
+      DataFile.open( "./data/data.init", ios::in );
+      if( DataFile.good() ){
+         SDL_Log( "Open file: ./data/data.init\n" );
+         istringstream Input;
+         string Line;
+         const string Dir = "./data/";
+         string Word;
+         while( getline( DataFile, Line ) ){
+            Input.str( "" );
+            Input.clear();
+            Input.str( Line );
+            Model tmp_model;
+            cout<<Input.str()<<"\n";
+            Input>>Word;
+            tmp_model.SetName( Word );
+            Input>>Word;
+            tmp_model.SetOBJPathFile( Dir + Word );
+            Input>>Word;
+            tmp_model.SetMTLPathFile( Dir + Word );
+            Input>>Word;
+            tmp_model.SetImgPathFile( Dir + Word );
+            Input>>Word;
+            tmp_model.SetImgSpecPathFile( Dir + Word );
+            this->Models.push_back( tmp_model );
+         }
+         DataFile.close();
+      }
+      else{
+         DataFile.close();
+         SDL_Log( "Can't find file: ./data/data.init\n" );
+         this->CheckInit = false;
+         return;
+      }
+
+      //Check is empty:
+      if( this->Models.empty() ){
+         SDL_Log( "Can't load data models from: ./data/data.init\n" );
+         this->CheckInit = false;
+         return;
+      }
+
+      //Check exist file:
+      DataFile.open( "./data/sun.obj", ios::in );
+      if( ! DataFile.good() ){
+         DataFile.close();
+         SDL_Log( "Can't load data models from: ./data/sun.obj\n" );
+         this->CheckInit = false;
+         return;
+      }
+      DataFile.close();
+
+      //Load into memory:
+      for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){
+         this->It->Load();
+      }
+
    }
 }

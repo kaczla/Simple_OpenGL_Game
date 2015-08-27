@@ -35,6 +35,7 @@ public:
    void UnbindTexture();
    void Draw();
    void DrawNoTexture();
+   void DrawCollisionSquare();
    GLuint ReturnTexture();
    void Translate( glm::vec3 &in );
    void Translate( unsigned int i, glm::vec3 &in );
@@ -53,6 +54,9 @@ public:
    static GLuint * DiffuseUniformId;
    static GLuint * SpecularUniformId;
    static GLuint * ShininessUniformId;
+   //for collision:
+   static GLuint * ModelUniformLight;
+   static GLuint * UniformColorLight;
 private:
    std::string Name;
    //VAO:
@@ -83,6 +87,13 @@ private:
    glm::vec3 Diffuse = glm::vec3( 0.5f );
    glm::vec3 Specular = glm::vec3( 0.5f );
    GLfloat Shininess = 32.0f;
+   //Collision:
+   void SetCollision();
+   glm::vec3 CollisionMin, CollisionMax;
+   std::vector <glm::vec3> CollisionSquare;
+   GLuint CollisionSquareVao;
+   GLuint CollisionSquareVertexBuffer;
+   glm::vec3 CollisionColor = glm::vec3( 1.0f );
    //Check:
    bool Init = false;
 };

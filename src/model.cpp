@@ -15,6 +15,9 @@ GLuint * Model::DiffuseUniformId = NULL;
 GLuint * Model::SpecularUniformId = NULL;
 GLuint * Model::ShininessUniformId = NULL;
 
+GLuint * Model::ModelUniformLight = NULL;
+GLuint * Model::UniformColorLight = NULL;
+
 Model::Model(){
    this->VAO = 0;
    this->VertexBuffer = 0;
@@ -22,6 +25,9 @@ Model::Model(){
    this->NormalBuffer = 0;
    this->IndicesBuffer = 0;
    this->Texture = 0;
+
+   this->CollisionSquareVao = 0;
+   this->CollisionSquareVertexBuffer = 0;
 }
 
 Model::Model( std::string path_obj, std::string path_img ){
@@ -31,6 +37,9 @@ Model::Model( std::string path_obj, std::string path_img ){
    this->NormalBuffer = 0;
    this->IndicesBuffer = 0;
    this->Texture = 0;
+
+   this->CollisionSquareVao = 0;
+   this->CollisionSquareVertexBuffer = 0;
 
    this->OBJPathFile = path_obj;
    this->ImgPathFile = path_img;
@@ -67,6 +76,14 @@ Model::Model( const Model &model ){
    this->Shininess = model.Shininess;
 
    this->ModelMatrix = model.ModelMatrix;
+
+   this->CollisionMin = model.CollisionMin;
+   this->CollisionMax = model.CollisionMax;
+   this->CollisionSquare = model.CollisionSquare;
+   this->CollisionSquareVao = model.CollisionSquareVao;
+   this->CollisionSquareVertexBuffer = model.CollisionSquareVertexBuffer;
+   this->CollisionColor = model.CollisionColor;
+
    this->Init = model.Init;
 }
 
@@ -99,6 +116,14 @@ Model & Model::operator=( const Model &model ){
    this->Shininess = model.Shininess;
 
    this->ModelMatrix = model.ModelMatrix;
+
+   this->CollisionMin = model.CollisionMin;
+   this->CollisionMax = model.CollisionMax;
+   this->CollisionSquare = model.CollisionSquare;
+   this->CollisionSquareVao = model.CollisionSquareVao;
+   this->CollisionSquareVertexBuffer = model.CollisionSquareVertexBuffer;
+   this->CollisionColor = model.CollisionColor;
+
    this->Init = model.Init;
 
    return *this;
@@ -111,6 +136,9 @@ Model::~Model(){
    glDeleteBuffers( 1, &this->NormalBuffer );
    glDeleteBuffers( 1, &this->IndicesBuffer );
    glDeleteVertexArrays( 1, &this->VAO );
+
+   glDeleteBuffers( 1, &this->CollisionSquareVertexBuffer );
+   glDeleteVertexArrays( 1, &this->CollisionSquareVao );
 }
 
 void Model::SetName( std::string &in ){
@@ -192,6 +220,7 @@ void Model::Load_OBJ(){
    //faster
    //with Assimp:
    this->Init = LoadAssimp( this->OBJPathFile.c_str(), this->Vertices, this->Uvs, this->Normals, this->Indices );
+   this->SetCollision();
    LoadMTL( this->MTLPathFile.c_str(), this->Ambient, this->Diffuse, this->Specular, this->Shininess );
    if( this->Ambient.x == 0.0f and this->Ambient.y == 0.0f and this->Ambient.z == 0.0f ){
       this->Ambient = glm::vec3( 0.2f );
@@ -232,7 +261,7 @@ void Model::BindVAO(){
       glBufferData( GL_ARRAY_BUFFER, this->Normals.size() * sizeof( glm::vec3 ), &this->Normals[0], GL_STATIC_DRAW );
 
       //VAO:
-      glBindVertexArray( VAO );
+      glBindVertexArray( this->VAO );
 
       //Vertex:
       glBindBuffer( GL_ARRAY_BUFFER, this->VertexBuffer );
@@ -367,4 +396,100 @@ void Model::AddMatrix( glm::vec3 &in ){
 
 void Model::AddMatrix(){
    this->ModelMatrix.push_back( glm::mat4( 1.0f ) );
+}
+
+void Model::SetCollision(){
+   if( this->Init ){
+      this->CollisionMin = this->Vertices[0];
+      this->CollisionMax = this->Vertices[0];
+      std::vector <glm::vec3>::iterator it;
+      for( it = this->Vertices.begin(); it != this->Vertices.end(); ++it ){
+         // CollisionMin:
+         if( it->x < this->CollisionMin.x ){
+            this->CollisionMin.x = it->x;
+         }
+         if( it->y < this->CollisionMin.y ){
+            this->CollisionMin.y = it->y;
+         }
+         if( it->z < this->CollisionMin.z ){
+            this->CollisionMin.z = it->z;
+         }
+         // CollisionMax
+         if( it->x > this->CollisionMax.x ){
+            this->CollisionMax.x = it->x;
+         }
+         if( it->y > this->CollisionMax.y ){
+            this->CollisionMax.y = it->y;
+         }
+         if( it->z > this->CollisionMax.z ){
+            this->CollisionMax.z = it->z;
+         }
+      }
+      
+//two vectors are edge:
+//bottom:
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMin.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMin.y, this->CollisionMin.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMin.y, this->CollisionMin.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMin.y, this->CollisionMax.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMin.y, this->CollisionMax.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMax.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMax.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMin.z ) );
+//top:
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMax.y, this->CollisionMin.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMax.y, this->CollisionMin.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMax.y, this->CollisionMin.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMax.y, this->CollisionMax.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMax.y, this->CollisionMax.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMax.y, this->CollisionMax.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMax.y, this->CollisionMax.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMax.y, this->CollisionMin.z ) );
+//height:
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMin.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMax.y, this->CollisionMin.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMin.y, this->CollisionMin.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMax.y, this->CollisionMin.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMin.y, this->CollisionMax.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMax.x, this->CollisionMax.y, this->CollisionMax.z ) );
+
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMax.z ) );
+      this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMax.y, this->CollisionMax.z ) );
+//end edges;
+
+      glGenVertexArrays( 1, &this->CollisionSquareVao );
+
+      glGenBuffers( 1, &this->CollisionSquareVertexBuffer );
+      glBindBuffer( GL_ARRAY_BUFFER, this->CollisionSquareVertexBuffer );
+      glBufferData( GL_ARRAY_BUFFER, this->CollisionSquare.size() * sizeof( glm::vec3 ), &this->CollisionSquare[0], GL_STATIC_DRAW );
+
+      glBindVertexArray( this->CollisionSquareVao );
+
+      glBindBuffer( GL_ARRAY_BUFFER, this->CollisionSquareVertexBuffer );
+      glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0 );
+      glEnableVertexAttribArray( 0 );
+
+      glBindVertexArray( 0 );
+   }
+}
+
+void Model::DrawCollisionSquare(){
+   glUniform3fv( *Model::UniformColorLight, 1, glm::value_ptr( this->CollisionColor ) );
+
+   glBindVertexArray( this->CollisionSquareVao );
+
+   for( this->It = this->ModelMatrix.begin(); this->It != this->ModelMatrix.end(); ++this->It ){
+      glUniformMatrix4fv( *Model::ModelUniformLight, 1, GL_FALSE, glm::value_ptr( *this->It ) );
+      glDrawArrays( GL_LINES, 0, this->CollisionSquare.size() );
+   }
+
+   glBindVertexArray( 0 );
 }

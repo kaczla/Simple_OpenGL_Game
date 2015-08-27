@@ -99,11 +99,19 @@ void Camera::MoveDown(){
 }
 
 void Camera::MoveForward(){
-   this->Position += this->MovementSpeed.x * this->ViewDirection;
+   this->Position.x += this->MovementSpeed.x * this->ViewDirection.x;
+   this->Position.z += this->MovementSpeed.x * this->ViewDirection.z;
+   if( this->FreeCamera ){
+      this->Position.y += this->MovementSpeed.x * this->ViewDirection.y;
+   }
 }
 
 void Camera::MoveBackward(){
-   this->Position -= this->MovementSpeed.x * this->ViewDirection;
+   this->Position.x -= this->MovementSpeed.x * this->ViewDirection.x;
+   this->Position.z -= this->MovementSpeed.x * this->ViewDirection.z;
+   if( this->FreeCamera ){
+      this->Position.y -= this->MovementSpeed.x * this->ViewDirection.y;
+   }
 }
 
 void Camera::MoveLeft(){
@@ -116,6 +124,23 @@ void Camera::MoveLeft(){
 void Camera::MoveRight(){
    this->MovementDirection = cross( this->ViewDirection, this->Up );//normalize( cross( this->ViewDirection, this->Up ) );
    this->Position += this->MovementSpeed.x * this->MovementDirection;
+}
+
+void Camera::TurnFreeCamera(){
+   if( this->FreeCamera ){
+      SDL_Log( "FreeCamera disable\n" );
+      this->FreeCamera = false;
+   }
+   else{
+      SDL_Log( "FreeCamera enable\n" );
+      this->FreeCamera = true;
+   }
+}
+
+void Camera::SetPositionDefault(){
+   SDL_Log( "Set position default\n" );
+   this->Position = vec3( 0.0f, 1.0f, 0.0f );
+   this->ViewDirection = vec3( 0.0f, 0.0f, -1.0f );
 }
 
 vec3 Camera::ReturnPosition() const{

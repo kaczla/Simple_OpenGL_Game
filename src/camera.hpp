@@ -25,6 +25,8 @@ public:
    void MoveBackward();
    void MoveLeft();
    void MoveRight();
+   void TurnFreeCamera();
+   void SetPositionDefault();
    vec3 ReturnPosition() const;
    void Log() const;
 private:
@@ -32,6 +34,7 @@ private:
    vec3 Position = vec3( 0.0f, 1.0f, 0.0f );
    vec3 ViewDirection = vec3( 0.0f, 0.0f, -1.0f );
    vec3 Up = vec3( 0.0f, 1.0f, 0.0f );
+   vec3 PreviousPosition = vec3( 0.0f, 1.0f, 0.0f );
    //Rotation:
    vec1 RotationSpeed = 0.0005f;
    vec3 RotationAround;
@@ -45,6 +48,8 @@ private:
    vec1 Aspect = 4.0f / 3.0f;
    vec1 Near = 0.1;
    vec1 Far = 100.0f;
+   //Free camera:
+   bool FreeCamera = false;
 };
 
 #endif

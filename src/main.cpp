@@ -186,6 +186,8 @@ Game::~Game(){
    Model::DiffuseUniformId = NULL;
    Model::SpecularUniformId = NULL;
    Model::ShininessUniformId = NULL;
+   Model::ModelUniformLight = NULL;
+   Model::UniformColorLight = NULL;
    Light::ModelUniformLight = NULL;
    Light::UniformColorLight = NULL;
    glDeleteProgram( this->ProgramID );
@@ -337,6 +339,13 @@ void Game::Loop(){
                   case SDLK_d:
                      this->camera.MoveRight();
                      break;
+                  case SDLK_SPACE:
+                     this->camera.MoveUp();
+                     break;
+                  case SDLK_LCTRL:
+                  case SDLK_c:
+                     this->camera.MoveDown();
+                     break;
                   case SDLK_BACKQUOTE:
                      this->camera.Log();
                      break;
@@ -360,6 +369,23 @@ void Game::Loop(){
                      this->Mouse.x = -10;
                      this->Mouse.y = 0;
                      this->camera.MouseUpdate( this->Mouse );
+                     break;
+                  case SDLK_F7:
+                     this->camera.TurnFreeCamera();
+                     break;
+                  case SDLK_F10:
+                     this->camera.SetPositionDefault();
+                     break;
+                  case SDLK_F12:
+                     if( this->FullScreen ){
+                        this->FullScreen = false;
+                        SDL_SetWindowFullscreen( this->Window, 0 );
+                     }
+                     else{
+                        this->FullScreen = true;
+                        SDL_SetWindowFullscreen( this->Window, SDL_WINDOW_FULLSCREEN );
+                        //SDL_SetWindowFullscreen( this->Window, SDL_WINDOW_FULLSCREEN_DESKTOP );
+                     }
                      break;
                   default:
                      break;
@@ -444,6 +470,14 @@ void Game::Update(){
       glUniformMatrix4fv( this->ViewUniformLight, 1, GL_FALSE, value_ptr( this->ViewMatrix ) );
       glUniformMatrix4fv( this->ProjectionUniformLight, 1, GL_FALSE, value_ptr( this->ProjectionMatrix  ) );
 
+      //Draw Collision Square:
+      /*
+      for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){
+         this->It->DrawCollisionSquare();
+      }
+      */
+
+      //Draw light 1:
       this->Sun.Draw();
 
       glUseProgram( 0 );
@@ -772,6 +806,8 @@ void Game::InitShaders(){
       Model::DiffuseUniformId = & this->DiffuseUniformId;
       Model::SpecularUniformId = & this->SpecularUniformId;
       Model::ShininessUniformId = & this->ShininessUniformId;
+      Model::ModelUniformLight = &this->ModelUniformLight;
+      Model::UniformColorLight = & this->UniformColorLight;
 
       Light::ModelUniformLight = & this->ModelUniformLight;
       Light::UniformColorLight = & this->UniformColorLight;

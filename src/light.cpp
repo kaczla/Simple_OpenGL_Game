@@ -108,7 +108,7 @@ void Light::BindVAO(){
       glBufferData( GL_ARRAY_BUFFER, this->Vertices.size() * sizeof( glm::vec3 ), &this->Vertices[0], GL_STATIC_DRAW );
 
       //VAO:
-      glBindVertexArray( VAO );
+      glBindVertexArray( this->VAO );
 
       //Vertex:
       glBindBuffer( GL_ARRAY_BUFFER, this->VertexBuffer );

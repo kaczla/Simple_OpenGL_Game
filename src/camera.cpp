@@ -91,11 +91,15 @@ void Camera::MouseUpdate( const vec2 &Mouse ){
 }
 
 void Camera::MoveUp(){
-   this->Position += this->MovementSpeed.x * this->Up;
+   if( this->FreeCamera ){
+      this->Position += this->MovementSpeed.x * this->Up;
+   }
 }
 
 void Camera::MoveDown(){
-   this->Position -= this->MovementSpeed.x * this->Up;
+   if( this->FreeCamera ){
+      this->Position -= this->MovementSpeed.x * this->Up;
+   }
 }
 
 void Camera::MoveForward(){

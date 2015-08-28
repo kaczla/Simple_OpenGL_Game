@@ -72,6 +72,8 @@ private:
 //Timer:
    Uint32 TimerBegin = 0;
    Uint32 TimerEnd = 0;
+   Uint32 TimerUpdate = 0;
+   Uint32 TimerUpdateTime = 50;
    int FPS = 0;
    //Game:
    inline void Loop();
@@ -123,6 +125,8 @@ private:
 //tmp:
    vec3 tmp_vector;
    GLfloat tmp_float;
+   vec3 RotateVec = vec3( 0.0f, 1.0f, 0.0f );
+   GLfloat RotateFloat = 5;
 };
 
 Game * PointerGame = NULL;
@@ -178,6 +182,7 @@ Game::Game(){
 }
 
 Game::~Game(){
+   this->Map.clear();
    SDL_Log( "Destructor: CLEANING\n" );
    Model::ModelUniformId = NULL;
    Model::TextureUniformId = NULL;
@@ -301,6 +306,9 @@ void Game::Start(){
 
    this->TimerBegin = SDL_GetTicks();
    this->TimerEnd = this->TimerBegin + 1000;
+   this->TimerUpdate = this->TimerBegin;
+
+   this->Exit = this->CheckInit;
 
    this->Loop();
 }
@@ -482,6 +490,12 @@ void Game::Update(){
 
       glUseProgram( 0 );
       SDL_GL_SwapWindow( this->Window );
+
+      if( this->TimerBegin >= this->TimerUpdate ){
+         //Rotate coin:
+         this->Models[1].Rotate( this->RotateFloat, this->RotateVec );
+         this->TimerUpdate = this->TimerBegin + this->TimerUpdateTime;
+      }
       ++this->FPS;
       if( this->TimerBegin >= this->TimerEnd ){
          SDL_Log( "\r[%i] FPS: %i", this->TimerBegin / 1000, this->FPS );
@@ -493,7 +507,7 @@ void Game::Update(){
 
 void Game::InitSDL(){
    if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ){
-      SDL_Log( "SDL_Init: %s\n", SDL_GetError() );
+      SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_Init: %s\n", SDL_GetError() );
       this->CheckInit = false;
    }
    else{
@@ -520,12 +534,12 @@ void Game::InitSDL(){
       SDL_Log( "SDL_GetNumVideoDisplays %i\n", SDL_GetNumVideoDisplays() );
       for( this->i = 0; this->i < SDL_GetNumVideoDisplays() ; ++this->i ){
          if( SDL_GetCurrentDisplayMode( this->i, &this->CurrentDisplayMode ) != 0 ){
-            SDL_Log( "Could not get display mode for video display #%d: %s\n", this->i, SDL_GetError() );
+            SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "Could not get display mode for video display #%d: %s\n", this->i, SDL_GetError() );
          }
          else{
             SDL_Log( " VideoDisplays #%i:\n", this->i );
             if( SDL_GetDisplayName( this->i ) == NULL ){
-               SDL_Log( "SDL_GetDisplayName: %s\n", SDL_GetError() );
+               SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_GetDisplayName: %s\n", SDL_GetError() );
             }
             else{
                SDL_Log( "\tSDL_GetDisplayName: %s\n", SDL_GetDisplayName( this->i ) );
@@ -533,7 +547,7 @@ void Game::InitSDL(){
             SDL_Log( "\tSDL_GetNumDisplayModes: %i\n", SDL_GetNumDisplayModes( this->i ) );
             for( this->j = 0; this->j < SDL_GetNumDisplayModes( this->i ); ++this->j ){
                if( SDL_GetDisplayMode( this->i, this->j, &this->CurrentDisplayMode ) != 0 ){
-                  SDL_Log( "\t\t\tSDL_GetDisplayMode: %s\n", SDL_GetError() );
+                  SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "\t\t\tSDL_GetDisplayMode: %s\n", SDL_GetError() );
                }
                else{
                   SDL_Log( "\t   DisplayMode #%i:\t%s = %ibpp\t%iHz\t%ix%i\n", j,
@@ -577,7 +591,7 @@ void Game::InitWindow(){
          this->WindowFlag
       );
       if( this->Window == NULL ){
-         SDL_Log( "SDL_CreateWindow: %s\n", SDL_GetError() );
+         SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_CreateWindow: %s\n", SDL_GetError() );
          this->CheckInit = false;
       }
       else{
@@ -630,7 +644,7 @@ void Game::InitWindow(){
             SDL_Log( "SDL_GetWindowWMInfo: %s\n", subsystem.c_str() );
          }
          else{
-            SDL_Log( "SDL_GetWindowWMInfo: %s\n", SDL_GetError() );
+            SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_GetWindowWMInfo: %s\n", SDL_GetError() );
          }
       }
          this->WindowDisplayIndex = SDL_GetWindowDisplayIndex( this->Window );
@@ -647,7 +661,7 @@ void Game::InitWindow(){
             this->WindowMinHeight = this->CurrentDisplayMode.h;
          }
          else{
-            SDL_Log( "SDL_GetDisplayMode: %s\n", SDL_GetError() );
+            SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_GetDisplayMode: %s\n", SDL_GetError() );
          }
          //Max resolution
          if( SDL_GetDisplayMode(
@@ -659,7 +673,7 @@ void Game::InitWindow(){
             this->WindowMaxHeight = this->CurrentDisplayMode.h;
          }
          else{
-            SDL_Log( "SDL_GetDisplayMode: %s\n", SDL_GetError() );
+            SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_GetDisplayMode: %s\n", SDL_GetError() );
          }
          SDL_SetWindowMinimumSize( this->Window, WindowMinWidth, WindowMinHeight );
          SDL_Log( "WindowMinimumSize: %ix%i", WindowMinWidth, WindowMinHeight );
@@ -694,7 +708,7 @@ void Game::SetIcon(){
       };
       surface = SDL_CreateRGBSurfaceFrom( pixels, 16, 16, 16, 16*2, 0x0f00, 0x00f0, 0x000f, 0xf000 );
       if( surface == NULL ){
-         SDL_Log( "SDL_SetWindowIcon: %s\n", SDL_GetError() );
+         SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_SetWindowIcon: %s\n", SDL_GetError() );
          this->CheckInit = false;
          return;
       }
@@ -710,14 +724,14 @@ void Game::InitContent(){
    if( this->CheckInit ){
       this->WindowGLContext = SDL_GL_CreateContext( this->Window );
       if( this->WindowGLContext == NULL ){
-         SDL_Log( "SDL_GL_CreateContext: %s\n", SDL_GetError() );
+         SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "SDL_GL_CreateContext: %s\n", SDL_GetError() );
          this->CheckInit = false;
          return;
       }
       SDL_Log( "SDL_GL_CreateContext: SUCCESS\n" );
       this->GL_Error = glewInit();
       if( this->GL_Error != GLEW_OK ){
-         SDL_Log( "glewInit: %s\n", glewGetErrorString( this->GL_Error ) );
+         SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "glewInit: %s\n", glewGetErrorString( this->GL_Error ) );
          this->CheckInit = false;
          return;
       }
@@ -740,7 +754,7 @@ void Game::InitDevIL(){
       if( ( ilGetInteger( IL_VERSION_NUM ) < IL_VERSION ) ||
           ( ilGetInteger( ILU_VERSION_NUM ) < ILU_VERSION )
       ){
-         SDL_Log( "DevIL: version problem!\n" );
+         SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "DevIL: version problem!\n" );
          this->CheckInit = false;
          return;
       }
@@ -749,7 +763,7 @@ void Game::InitDevIL(){
          iluInit();
          this->IL_Error = IL_NO_ERROR;
          while( ( this->IL_Error = ilGetError() ) != IL_NO_ERROR ){
-            SDL_Log( "DevIL: %s\n", iluErrorString( this->IL_Error ) );
+            SDL_LogCritical( SDL_LOG_CATEGORY_SYSTEM, "DevIL: %s\n", iluErrorString( this->IL_Error ) );
          }
          if( this->IL_Error == IL_NO_ERROR ){
             SDL_Log( "ilInit : SUCCESS\n" );
@@ -765,14 +779,14 @@ void Game::InitShaders(){
       SDL_Log( "SHADERS:\n" );
       this->ProgramID = LoadShader( "./data/Shader.vert", "./data/Shader.frag" );
       if( this->ProgramID == 0 ){
-         SDL_Log( "Something wrong with program shaders!\n" );
+         SDL_LogCritical( SDL_LOG_CATEGORY_INPUT, "Something wrong with program shaders!\n" );
          this->CheckInit = false;
          return;
       }
       SDL_Log( "\n" );
       this->LightID = LoadShader( "./data/Light.vert", "./data/Light.frag" );
       if( this->LightID == 0 ){
-         SDL_Log( "Something wrong with light shaders!\n" );
+         SDL_LogCritical( SDL_LOG_CATEGORY_INPUT, "Something wrong with light shaders!\n" );
          this->CheckInit = false;
          return;
       }
@@ -832,7 +846,6 @@ void Game::LoadData(){
             Input.clear();
             Input.str( Line );
             Model tmp_model;
-            cout<<Input.str()<<"\n";
             Input>>Word;
             tmp_model.SetName( Word );
             Input>>Word;
@@ -849,14 +862,14 @@ void Game::LoadData(){
       }
       else{
          DataFile.close();
-         SDL_Log( "Can't find file: ./data/data.init\n" );
+         SDL_LogCritical( SDL_LOG_CATEGORY_INPUT, "Can't find file: ./data/data.init\n" );
          this->CheckInit = false;
          return;
       }
 
       //Check is empty:
       if( this->Models.empty() ){
-         SDL_Log( "Can't load data models from: ./data/data.init\n" );
+         SDL_LogCritical( SDL_LOG_CATEGORY_INPUT, "Can't load data models from: ./data/data.init\n" );
          this->CheckInit = false;
          return;
       }
@@ -865,7 +878,7 @@ void Game::LoadData(){
       DataFile.open( "./data/sun.obj", ios::in );
       if( ! DataFile.good() ){
          DataFile.close();
-         SDL_Log( "Can't load data models from: ./data/sun.obj\n" );
+         SDL_LogCritical( SDL_LOG_CATEGORY_INPUT, "Can't load data models from: ./data/sun.obj\n" );
          this->CheckInit = false;
          return;
       }

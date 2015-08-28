@@ -27,7 +27,7 @@ GLuint LoadShader( const char* vertex_shader_path_file,
       VertexShaderStream.close();
    }
    else{
-      SDL_Log( "Can't find file: %s\n", vertex_shader_path_file );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Can't find file: %s\n", vertex_shader_path_file );
       return 0;
    }
    SDL_Log( "Loaded: %s\n", vertex_shader_path_file );
@@ -44,7 +44,7 @@ GLuint LoadShader( const char* vertex_shader_path_file,
       FragmentShaderStream.close();
    }
    else{
-      SDL_Log( "Can't find file: %s\n", fragment_shader_path_file );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Can't find file: %s\n", fragment_shader_path_file );
       return 0;
    }
    SDL_Log( "Loaded: %s\n", fragment_shader_path_file );
@@ -67,7 +67,7 @@ GLuint LoadShader( const char* vertex_shader_path_file,
       std::vector <GLchar> VertexShaderErrorMessage(InfoLogLength);
       glGetShaderInfoLog( VertexShaderID, InfoLogLength, &InfoLogLength, &VertexShaderErrorMessage[0] );
       Error = std::string( VertexShaderErrorMessage.begin(), VertexShaderErrorMessage.end() );
-      SDL_Log( " Error: %s\n", Error.c_str() );
+      SDL_LogError( SDL_LOG_CATEGORY_ERROR, " Error: %s\n", Error.c_str() );
       glDeleteShader( VertexShaderID );
       return 0;
    }
@@ -88,7 +88,7 @@ GLuint LoadShader( const char* vertex_shader_path_file,
       glGetShaderInfoLog( FragmentShaderID, InfoLogLength, &InfoLogLength, &FragmentShaderErrorMessage[0] );
       Error.clear();
       Error = std::string( FragmentShaderErrorMessage.begin(), FragmentShaderErrorMessage.end() );
-      SDL_Log( " Error: %s\n", Error.c_str() );
+      SDL_LogError( SDL_LOG_CATEGORY_ERROR, " Error: %s\n", Error.c_str() );
       glDeleteShader( VertexShaderID );
       glDeleteShader( FragmentShaderID );
       return 0;
@@ -114,7 +114,7 @@ GLuint LoadShader( const char* vertex_shader_path_file,
       glGetProgramInfoLog( ProgramID, InfoLogLength, &InfoLogLength, &ProgramErrorMessage[0] );
       Error.clear();
       Error = std::string( ProgramErrorMessage.begin(), ProgramErrorMessage.end() );
-      SDL_Log( " Error: %s\n", Error.c_str() );
+      SDL_LogError( SDL_LOG_CATEGORY_ERROR, " Error: %s\n", Error.c_str() );
       glDeleteProgram( ProgramID );
       glDeleteShader( VertexShaderID );
       glDeleteShader( FragmentShaderID );

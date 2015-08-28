@@ -23,12 +23,12 @@ bool LoadImg( const char *img_path_file, GLuint &image ){
    if( ! success ){
       error = ilGetError();
       if( error != IL_NO_ERROR ){
-         SDL_Log( "ilLoadImage: %s\n", iluErrorString( error ) );
+         SDL_LogError( SDL_LOG_CATEGORY_INPUT, "ilLoadImage: %s\n", iluErrorString( error ) );
          image = 0;
          ilDeleteImages( 1, &imgage_id );
          return false;
       }
-      SDL_Log( "ilLoadImage: %d\n", ilGetError() );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "ilLoadImage: %d\n", ilGetError() );
       image = 0;
       ilDeleteImages( 1, &imgage_id );
       return false;
@@ -55,7 +55,7 @@ bool LoadImg( const char *img_path_file, GLuint &image ){
    glTexImage2D( GL_TEXTURE_2D, 0, format, width, height, 0, format, type, ilGetData() );
    error_gl = glGetError();
    if( error_gl != GL_NO_ERROR and error_gl != GL_INVALID_ENUM ){
-      SDL_Log( "glTexImage2D:, %s\n", gluErrorString( error_gl ) );
+      SDL_LogError( SDL_LOG_CATEGORY_ERROR, "glTexImage2D:, %s\n", gluErrorString( error_gl ) );
    }
 
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -79,11 +79,11 @@ GLuint LoadImg( const char *img_path_file ){
    if( ! success ){
       error = ilGetError();
       if( error != IL_NO_ERROR ){
-         SDL_Log( "ilLoadImage: %s\n", iluErrorString( error ) );
+         SDL_LogError( SDL_LOG_CATEGORY_INPUT, "ilLoadImage: %s\n", iluErrorString( error ) );
          ilDeleteImages( 1, &imgage_id );
          return 0;
       }
-      SDL_Log( "ilLoadImage: %d\n", ilGetError() );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "ilLoadImage: %d\n", ilGetError() );
       ilDeleteImages( 1, &imgage_id );
       return 0;
    }
@@ -109,7 +109,7 @@ GLuint LoadImg( const char *img_path_file ){
    glTexImage2D( GL_TEXTURE_2D, 0, format, width, height, 0, format, type, ilGetData() );
    error_gl = glGetError();
    if( error_gl != GL_NO_ERROR and error_gl != GL_INVALID_ENUM ){
-      SDL_Log( "glTexImage2D:, %s\n", gluErrorString( error_gl ) );
+      SDL_LogError( SDL_LOG_CATEGORY_ERROR, "glTexImage2D:, %s\n", gluErrorString( error_gl ) );
    }
 
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );

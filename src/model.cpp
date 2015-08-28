@@ -284,7 +284,7 @@ void Model::BindVAO(){
       SDL_Log( "Binded %s into VAO\n", this->OBJPathFile.c_str() );
    }
    else{
-      SDL_Log( "Before binding, load file and texture!\n" );
+      SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Before binding, load file and texture!\n" );
    }
 }
 

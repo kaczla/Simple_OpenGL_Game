@@ -114,7 +114,7 @@ bool LoadOBJ( const char* obj_path_file,
             vertices.push_back( vertices_tmp.at( tmp_indices -1 ) );
          }
          else if( print_error ){
-            SDL_Log( "Something wrong with: indices of vertices\n" );
+            SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Something wrong with: indices of vertices\n" );
             print_error = false;
          }
       }
@@ -127,7 +127,7 @@ bool LoadOBJ( const char* obj_path_file,
             uvs.push_back( uvs_tmp.at( tmp_indices -1 ) );
          }
          else if( print_error ){
-            SDL_Log( "Something wrong with: indices of uvs\n" );
+            SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Something wrong with: indices of uvs\n" );
             print_error = false;
          }
       }
@@ -140,13 +140,13 @@ bool LoadOBJ( const char* obj_path_file,
             normals.push_back( normals_tmp.at( tmp_indices -1 ) );
          }
          else if( print_error ){
-            SDL_Log( "Something wrong with: indices of normals\n" );
+            SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Something wrong with: indices of normals\n" );
             print_error = false;
          }
       }
    }
    else{
-      SDL_Log( "Can't find file: %s\n", obj_path_file );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Can't find file: %s\n", obj_path_file );
       return false;
    }
    SDL_Log( "vertex:%u   uv:%u   normal:%u\n", vertices.size(), uvs.size(), normals.size() );
@@ -224,7 +224,7 @@ bool LoadAssimp( const char *path_file,
    Assimp::Importer importer;
    const aiScene* scene = importer.ReadFile( path_file, 0 );
    if( !scene ){
-      SDL_Log( "importer.ReadFile: %s\n", importer.GetErrorString() );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "importer.ReadFile: %s\n", importer.GetErrorString() );
       return false;
    }
    const aiMesh* mesh = scene->mMeshes[0];
@@ -298,7 +298,7 @@ void LoadMTL( const char *path_file,
       MTLStream.close();
    }
    else{
-      SDL_Log( "Can't find file: %s\n", path_file );
+      SDL_LogError( SDL_LOG_CATEGORY_INPUT, "Can't find file: %s\n", path_file );
       return;
    }
    SDL_Log( "Ambient: %f %f %f   Diffuse: %f %f %f   Specular: %f %f %f\n",

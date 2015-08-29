@@ -3,7 +3,9 @@
 ### Testowane na:
 
 Ubuntu 15.04
-
+</br>
+x64
+</br>
 g++ (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 </br>
 </br>
@@ -14,6 +16,7 @@ g++ (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 3) **[GLEW](http://www.glew.sourceforge.net)**</br>
 4) **[GLM](http://www.glm.g-truc.net)**</br>
 5) **[DevIL](http://www.openil.sourceforge.net)**</br>
+6) **[Assimp](http://assimp.sourceforge.net)**</br>
 
 #### Pakiety dla Ubuntu:
 sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev libdevil-dev

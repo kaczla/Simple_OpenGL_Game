@@ -60,6 +60,7 @@ bool LoadImg( const char *img_path_file, GLuint &image ){
 
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+   glGenerateMipmap( GL_TEXTURE_2D );
 
    ilDeleteImages( 1, &imgage_id );
    SDL_Log( "Loaded image: %s", img_path_file );

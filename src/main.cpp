@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <sstream>
 //OpenGL:
@@ -80,6 +81,10 @@ private:
    inline void Update();
    bool Exit = true;
    SDL_Event Event;
+   const int MapMax = 30;
+   const int MapMaxHalf = MapMax / 2;
+   vector < vector <int> > Map;
+   vector < vector <int> > MapIndex;
    //Other:
    fstream SettingsFile;
    int i,j;
@@ -170,6 +175,9 @@ void GlobalStop(){
 }
 
 Game::Game(){
+   srand( time( 0 ) );
+   this->Map.resize( this->MapMax, vector <int> ( this->MapMax, -1 ) );
+   this->MapIndex.resize( this->MapMax, vector <int> ( this->MapMax, -1 ) );
    this->LoadSettings();
    SDL_Log( "Constructor: INITIALIZE\n" );
    this->InitSDL();
@@ -183,6 +191,7 @@ Game::Game(){
 
 Game::~Game(){
    this->Map.clear();
+   this->MapIndex.clear();
    SDL_Log( "Destructor: CLEANING\n" );
    Model::ModelUniformId = NULL;
    Model::TextureUniformId = NULL;
@@ -495,6 +504,7 @@ void Game::Update(){
          //Rotate coin:
          this->Models[1].Rotate( this->RotateFloat, this->RotateVec );
          this->TimerUpdate = this->TimerBegin + this->TimerUpdateTime;
+
       }
       ++this->FPS;
       if( this->TimerBegin >= this->TimerEnd ){
@@ -883,6 +893,18 @@ void Game::LoadData(){
          return;
       }
       DataFile.close();
+
+      //Create world:
+      SDL_Log( "Creating world\n" );
+      int X, Y;
+      int Counter = 0;
+      int CounterMax = this->Models.size() - 2;
+      int tmp;
+      while( Counter < CounterMax ){
+         X = rand() % this->MapMax;
+         Y = rand() % this->MapMax;
+      }
+      SDL_Log( "Created world\n" );
 
       //Load into memory:
       for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){

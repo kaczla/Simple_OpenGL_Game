@@ -19,7 +19,7 @@ g++ (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 6) **[Assimp](http://assimp.sourceforge.net)**</br>
 
 #### Pakiety dla Ubuntu:
-sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev libdevil-dev
+sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev libdevil-dev libassimp-dev
 </br>
 </br>
 

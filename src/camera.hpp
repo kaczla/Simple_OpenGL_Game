@@ -2,7 +2,12 @@
 #define camera_hpp
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/detail/setup.hpp>
+#if GLM_VERSION >= 96
+#include <glm/gtc/vec1.hpp>
+#else
 #include <glm/gtx/vec1.hpp>
+#endif
 
 using namespace glm;
 
@@ -36,18 +41,18 @@ private:
    vec3 Up = vec3( 0.0f, 1.0f, 0.0f );
    vec3 PreviousPosition = vec3( 0.0f, 1.0f, 0.0f );
    //Rotation:
-   vec1 RotationSpeed = 0.0005f;
+   vec1 RotationSpeed = vec1( 0.0005f );
    vec3 RotationAround;
    mat4 Rotation;
    //Movement:
-   vec1 MovementSpeed = 0.1f;
+   vec1 MovementSpeed = vec1( 0.1f );
    vec3 MovementDirection;
    //ProjectionMatrix:
    mat4 ProjectionMatrix;
-   vec1 VOF = 45.0f;
-   vec1 Aspect = 4.0f / 3.0f;
-   vec1 Near = 0.1;
-   vec1 Far = 100.0f;
+   vec1 VOF = vec1( 45.0f );
+   vec1 Aspect = vec1( 4.0f / 3.0f );
+   vec1 Near = vec1( 0.1 );
+   vec1 Far = vec1( 100.0f );
    //Free camera:
    bool FreeCamera = false;
 };

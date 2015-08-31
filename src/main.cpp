@@ -14,7 +14,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/detail/setup.hpp>
+#if GLM_VERSION >= 96
+#include <glm/gtc/vec1.hpp>
+#else
 #include <glm/gtx/vec1.hpp>
+#endif
 //DevIL:
 #include <IL/il.h>
 #include <IL/ilu.h>
@@ -355,6 +360,8 @@ void Game::Loop(){
                      break;
                   case SDLK_d:
                      this->camera.MoveRight();
+                     break;
+                  case SDLK_e:
                      break;
                   case SDLK_SPACE:
                      this->camera.MoveUp();

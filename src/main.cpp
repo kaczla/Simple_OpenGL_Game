@@ -899,17 +899,52 @@ void Game::LoadData(){
       int X, Y;
       int Counter = 0;
       int CounterMax = this->Models.size() - 2;
+      int CounterTypeMax = CounterMax;
+      vector <int> CouterType( CounterTypeMax, 0 );
       int tmp;
+      vec3 VecRand;
+      while( ( CounterMax * 2 ) < ( 0.7 * this->MapMax ) ){
+         CounterMax *= 2;
+      }
       while( Counter < CounterMax ){
-         X = rand() % this->MapMax;
-         Y = rand() % this->MapMax;
+         for( tmp = 0; tmp < CounterTypeMax; ++tmp ){
+            do{
+               X = rand() % this->MapMax;
+               Y = rand() % this->MapMax;
+            }while( this->Map[Y][X] != -1 );
+            this->Map[Y][X] = tmp + 2;
+            this->MapIndex[Y][X] = CouterType[tmp];
+            X -= this->MapMaxHalf;
+            Y -= this->MapMaxHalf;
+            ++CouterType[tmp];
+            VecRand = vec3( X, 0, Y );
+            this->Models[tmp+2].AddMatrix( VecRand );
+            ++Counter;
+         }
       }
       SDL_Log( "Created world\n" );
+
+      //Add coin:
+      do{
+         X = rand() % this->MapMax;
+         Y = rand() % this->MapMax;
+      }while( this->Map[Y][X] != -1 );
+      //Coin number in memory is 1 and index 0 (first coin):
+      this->Map[Y][X] = 1;
+      this->MapIndex[Y][X] = 0;
+      X -= this->MapMaxHalf;
+      Y -= this->MapMaxHalf;
+      VecRand = vec3( X, 0, Y );
+      this->Models[1].AddMatrix( VecRand );
 
       //Load into memory:
       for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){
          this->It->Load();
       }
+
+      //Set and load main light:
+      this->Sun.SetPath( "./data/sun.obj" );
+      this->Sun.Load();
 
    }
 }

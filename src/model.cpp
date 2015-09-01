@@ -398,6 +398,13 @@ void Model::AddMatrix(){
    this->ModelMatrix.push_back( glm::mat4( 1.0f ) );
 }
 
+void Model::ChangeMatrix( unsigned int i, glm::vec3 &in ){
+   this->ModelMatrix.at( i ) = glm::translate ( glm::mat4( 1.0f ), in );
+}
+void Model::ChangeMatrix( unsigned int i, glm::mat4 &in ){
+   this->ModelMatrix.at( i ) = in;
+}
+
 void Model::SetCollision(){
    if( this->Init ){
       this->CollisionMin = this->Vertices[0];
@@ -425,7 +432,7 @@ void Model::SetCollision(){
             this->CollisionMax.z = it->z;
          }
       }
-      
+
 //two vectors are edge:
 //bottom:
       this->CollisionSquare.push_back( glm::vec3( this->CollisionMin.x, this->CollisionMin.y, this->CollisionMin.z ) );

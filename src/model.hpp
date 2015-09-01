@@ -46,6 +46,8 @@ public:
    void AddMatrix();
    void AddMatrix( glm::vec3 &in );
    void AddMatrix( glm::mat4 &in );
+   void ChangeMatrix( unsigned int i, glm::vec3 &in );
+   void ChangeMatrix( unsigned int i, glm::mat4 &in );
    //Uniforms:
    static GLuint * ModelUniformId;
    static GLuint * TextureUniformId;

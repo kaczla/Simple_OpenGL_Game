@@ -52,6 +52,8 @@ private:
    void SetIcon();
    void InitShaders();
    void LoadData();
+   inline void RandNewCoin();
+   inline void CheckCoin();
    //Min/Max resolution:
    int WindowMinWidth = 640;
    int WindowMinHeight = 480;
@@ -90,6 +92,7 @@ private:
    const int MapMaxHalf = MapMax / 2;
    vector < vector <int> > Map;
    vector < vector <int> > MapIndex;
+   int Score = 0;
    //Other:
    fstream SettingsFile;
    int i,j;
@@ -137,6 +140,7 @@ private:
    GLfloat tmp_float;
    vec3 RotateVec = vec3( 0.0f, 1.0f, 0.0f );
    GLfloat RotateFloat = 5;
+   int tmp_x, tmp_y, tmp_z;
 };
 
 Game * PointerGame = NULL;
@@ -325,6 +329,8 @@ void Game::Start(){
    this->Exit = this->CheckInit;
 
    this->Loop();
+
+   SDL_Log( "\rYOUR SCORE: %i\n", this->Score );
 }
 
 void Game::Loop(){
@@ -362,6 +368,7 @@ void Game::Loop(){
                      this->camera.MoveRight();
                      break;
                   case SDLK_e:
+                     this->CheckCoin();
                      break;
                   case SDLK_SPACE:
                      this->camera.MoveUp();
@@ -941,8 +948,10 @@ void Game::LoadData(){
       this->MapIndex[Y][X] = 0;
       X -= this->MapMaxHalf;
       Y -= this->MapMaxHalf;
-      VecRand = vec3( X, 0, Y );
+      VecRand = vec3( X, 0.25f, Y );
       this->Models[1].AddMatrix( VecRand );
+      VecRand = vec3( 0.5f );
+      this->Models[1].Scale( VecRand );
 
       //Load into memory:
       for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){
@@ -953,5 +962,198 @@ void Game::LoadData(){
       this->Sun.SetPath( "./data/sun.obj" );
       this->Sun.Load();
 
+   }
+}
+
+void Game::RandNewCoin(){
+   this->Map[this->tmp_z][this->tmp_x] = -1;
+   this->MapIndex[this->tmp_z][this->tmp_x] = -1;
+   do{
+      this->tmp_x = rand() % this->MapMax;
+      this->tmp_z = rand() % this->MapMax;
+   }while( this->Map[this->tmp_z][this->tmp_x] != -1 );
+   this->Map[this->tmp_z][this->tmp_x] = 1;
+   this->MapIndex[this->tmp_z][this->tmp_x] = 0;
+   this->tmp_x -= this->MapMaxHalf;
+   this->tmp_z -= this->MapMaxHalf;
+   this->tmp_vector = vec3( this->tmp_x, 0.0f, this->tmp_z );
+   this->Models[1].ChangeMatrix( 0, this->tmp_vector );
+   ++this->Score;
+}
+
+void Game::CheckCoin(){
+   this->tmp_vector = camera.ReturnPosition();
+   this->tmp_x = (int)( this->tmp_vector.x + this->MapMaxHalf );
+   this->tmp_z = (int)( this->tmp_vector.z + this->MapMaxHalf );
+   if( ( this->tmp_x > 0 ) and ( this->tmp_x < this->MapMax - 1 ) ){
+      if( ( this->tmp_z > 0 ) and ( this->tmp_z < this->MapMax - 1 ) ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+      else if( this->tmp_z == 0 ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+      else if( this->tmp_z == ( this->MapMax - 1 ) ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+   }
+   else if( this->tmp_x == 0 ){
+      if( ( this->tmp_z > 0 ) and ( this->tmp_z < this->MapMax - 1 ) ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+      else if( this->tmp_z == 0 ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+      else if( this->tmp_z == ( this->MapMax - 1 ) ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x+1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+   }
+   else if( this->tmp_x == ( this->MapMax - 1 ) ){
+      if( ( this->tmp_z > 0 ) and ( this->tmp_z < this->MapMax - 1 ) ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+      else if( this->tmp_z == 0 ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z+1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
+      else if( this->tmp_z == ( this->MapMax - 1 ) ){
+         if( this->Map[this->tmp_z][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x] == 1 ){
+            this->RandNewCoin();
+         }
+         else if( this->Map[this->tmp_z-1][this->tmp_x-1] == 1 ){
+            this->RandNewCoin();
+         }
+      }
    }
 }

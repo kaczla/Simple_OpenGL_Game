@@ -24,6 +24,8 @@ public:
    void Translate( glm::vec3 &in );
    void Rotate( GLfloat angle, glm::vec3 &in );
    void Scale( glm::vec3 &in );
+   void ChangePosition( glm::vec3 &in );
+   void Log() const;
    //Uniform:
    static GLuint * ModelUniformLight;
    static GLuint * UniformColorLight;

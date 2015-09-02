@@ -154,3 +154,20 @@ void Light::Rotate( GLfloat angle, glm::vec3 &in ){
 void Light::Scale( glm::vec3 &in ){
    this->ModelMatrix = glm::scale( this->ModelMatrix, in );
 }
+
+void Light::ChangePosition( glm::vec3 &in ){
+   this->ModelMatrix[3][0] = in.x;
+   this->ModelMatrix[3][1] = in.y;
+   this->ModelMatrix[3][2] = in.z;
+}
+
+void Light::Log() const{
+   SDL_Log( "\tPosition: %f %f %f\n\tColor: %f %f %f\n",
+            this->ModelMatrix[3][0],
+            this->ModelMatrix[3][1],
+            this->ModelMatrix[3][2],
+            this->Color.x,
+            this->Color.y,
+            this->Color.z
+   );
+}

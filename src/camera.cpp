@@ -74,6 +74,19 @@ void Camera::SetFar( vec1 &far ){
    this->UpdateProjectionMatrix();
 }
 
+void Camera::SetPositionMin( vec3 &min ){
+   this->PositionMin = min;
+}
+
+void Camera::SetPositionMax( vec3 &max ){
+   this->PositionMax = max;
+}
+
+void Camera::SetPositionMinMax( vec3 &min, vec3 &max ){
+   this->PositionMin = min;
+   this->PositionMax = max;
+}
+
 void Camera::UpdateProjectionMatrix(){
    this->ProjectionMatrix = glm::perspective( this->VOF.x, this->Aspect.x, this->Near.x, this->Far.x );
 }
@@ -92,42 +105,78 @@ void Camera::MouseUpdate( const vec2 &Mouse ){
 
 void Camera::MoveUp(){
    if( this->FreeCamera ){
+      this->PreviousPosition = this->Position;
       this->Position += this->MovementSpeed.x * this->Up;
+      if( any( greaterThanEqual( this->Position, this->PositionMax ) ) or
+          any( lessThanEqual( this->Position, this->PositionMin ) )
+        ){
+         this->Position = this->PreviousPosition;
+      }
    }
 }
 
 void Camera::MoveDown(){
    if( this->FreeCamera ){
+      this->PreviousPosition = this->Position;
       this->Position -= this->MovementSpeed.x * this->Up;
+      if( any( greaterThanEqual( this->Position, this->PositionMax ) ) or
+          any( lessThanEqual( this->Position, this->PositionMin ) )
+        ){
+         this->Position = this->PreviousPosition;
+      }
    }
 }
 
 void Camera::MoveForward(){
+   this->PreviousPosition = this->Position;
    this->Position.x += this->MovementSpeed.x * this->ViewDirection.x;
    this->Position.z += this->MovementSpeed.x * this->ViewDirection.z;
    if( this->FreeCamera ){
       this->Position.y += this->MovementSpeed.x * this->ViewDirection.y;
    }
+   if( any( greaterThanEqual( this->Position, this->PositionMax ) ) or
+       any( lessThanEqual( this->Position, this->PositionMin ) )
+     ){
+      this->Position = this->PreviousPosition;
+   }
 }
 
 void Camera::MoveBackward(){
+   this->PreviousPosition = this->Position;
    this->Position.x -= this->MovementSpeed.x * this->ViewDirection.x;
    this->Position.z -= this->MovementSpeed.x * this->ViewDirection.z;
    if( this->FreeCamera ){
       this->Position.y -= this->MovementSpeed.x * this->ViewDirection.y;
    }
+   if( any( greaterThanEqual( this->Position, this->PositionMax ) ) or
+       any( lessThanEqual( this->Position, this->PositionMin ) )
+     ){
+      this->Position = this->PreviousPosition;
+   }
 }
 
 void Camera::MoveLeft(){
+   this->PreviousPosition = this->Position;
    this->MovementDirection = cross( this->ViewDirection, this->Up );//normalize( cross( this->ViewDirection, this->Up ) );
    this->Position -= this->MovementSpeed.x * this->MovementDirection;
+   if( any( greaterThanEqual( this->Position, this->PositionMax ) ) or
+       any( lessThanEqual( this->Position, this->PositionMin ) )
+     ){
+      this->Position = this->PreviousPosition;
+   }
 }
 
 //normalize( ) or fastNormalize( )
 
 void Camera::MoveRight(){
+   this->PreviousPosition = this->Position;
    this->MovementDirection = cross( this->ViewDirection, this->Up );//normalize( cross( this->ViewDirection, this->Up ) );
    this->Position += this->MovementSpeed.x * this->MovementDirection;
+   if( any( greaterThanEqual( this->Position, this->PositionMax ) ) or
+       any( lessThanEqual( this->Position, this->PositionMin ) )
+     ){
+      this->Position = this->PreviousPosition;
+   }
 }
 
 void Camera::TurnFreeCamera(){
@@ -158,5 +207,9 @@ void Camera::Log() const{
             this->Up.x, this->Up.y, this->Up.z,
             this->VOF.x, this->Aspect.x, this->Near.x, this->Far.x,
             this->RotationSpeed.x, this->MovementSpeed.x
+   );
+   SDL_Log( "\r     \tPositionMin: %f %f %f\n\tPositionMax: %f %f %f\n",
+            this->PositionMin.x, this->PositionMin.y, this->PositionMin.z,
+            this->PositionMax.x, this->PositionMax.y, this->PositionMax.z
    );
 }

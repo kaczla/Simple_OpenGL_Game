@@ -23,6 +23,9 @@ public:
    void SetAspect( vec1 &aspect );
    void SetNear( vec1 &near );
    void SetFar( vec1 &far );
+   void SetPositionMin( vec3 &min );
+   void SetPositionMax( vec3 &max );
+   void SetPositionMinMax( vec3 &min, vec3 &max );
    void MouseUpdate( const vec2 &Mouse );
    void MoveUp();
    void MoveDown();
@@ -40,6 +43,8 @@ private:
    vec3 ViewDirection = vec3( 0.0f, 0.0f, -1.0f );
    vec3 Up = vec3( 0.0f, 1.0f, 0.0f );
    vec3 PreviousPosition = vec3( 0.0f, 1.0f, 0.0f );
+   vec3 PositionMax = vec3( 50.0f, 25.0f, 50.0f );
+   vec3 PositionMin = vec3( -50.0f, -25.0f, -50.0f );
    //Rotation:
    vec1 RotationSpeed = vec1( 0.0005f );
    vec3 RotationAround;

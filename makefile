@@ -2,8 +2,19 @@ SOURCE_DIR = ./src/
 SOURCE = camera.o shader.o model.o light.o
 MAIN = $(SOURCE_DIR)main.cpp
 CXXFLAGS = -std=c++11
+
+ifeq ($(OS),Windows_NT)
+CXXFLAGS += -m32 -D_hypot=hypot
+LFLAGS = -lmingw32 -lSDL2main -lSDL2 -mwindows -lopengl32 -lglew32 -lglu32  -lDevIL -lILU -lassimp
+else
 LFLAGS = -lSDL2 -lGL -lGLU -lGLEW -lIL -lILU -lassimp
+endif
+
+ifeq ($(OS),Windows_NT)
+APP_NAME = game.exe
+else
 APP_NAME = game.app
+endif
 
 .PHONY: all clean
 .DELETE_ON_ERROR: clean

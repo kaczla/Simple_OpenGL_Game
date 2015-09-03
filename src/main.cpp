@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 //OpenGL:
+#define GLEW_STATIC
 #include <GL/glew.h>
 //SDL:
 #include <SDL2/SDL.h>
@@ -135,6 +136,11 @@ private:
    vector <Model>::iterator It;
 //Light:
    Light Sun;
+   Light SunMoving;
+   vec3 SunMovingPosition = vec3( 0.0f, 15.0f, 0.0f );
+   GLfloat SunMovingDegreese = 0.0f;
+   GLfloat SunMovingRadian = 0.0f;
+   GLfloat SunMovingRadius = 15.0f;
 //tmp:
    vec3 tmp_vector;
    GLfloat tmp_float;
@@ -147,7 +153,9 @@ Game * PointerGame = NULL;
 void GlobalStop();
 
 int main( int argc, char* argv[] ){
+   #ifdef SIGTSTP
    signal( SIGTSTP, CaughtSignal );
+   #endif
    signal( SIGINT, CaughtSignal );
    Game game;
    PointerGame = &game;
@@ -157,6 +165,8 @@ int main( int argc, char* argv[] ){
 }
 
 void CaughtSignal( int signal ){
+   #ifdef SIGTSTP
+   //Linux:
    //CTRL+Z
    if( signal == SIGTSTP ){
       cout<<"\n\nCaught signal SIGTSTP\n\n";
@@ -167,10 +177,18 @@ void CaughtSignal( int signal ){
       cout<<"\n\nCaught signal SIGINT\n\n";
       GlobalStop();
    }
+   #else
+   //Windows:
+   if( signal == SIGINT ){
+      cout<<"\n\nCaught signal SIGINT\n\n";
+      GlobalStop();
+   }
+   #endif
    //OTHER
    else{
       cout<<"\n\nCaught signal number: "<<signal<<"\n\n";
    }
+
 }
 
 void GlobalStop(){
@@ -379,6 +397,8 @@ void Game::Loop(){
                      break;
                   case SDLK_BACKQUOTE:
                      this->camera.Log();
+                     this->Sun.Log();
+                     this->SunMoving.Log();
                      break;
                   //Numpad camera:
                   case SDLK_KP_8:
@@ -439,7 +459,7 @@ void Game::Loop(){
                      this->WindowHeight = this->Event.window.data2;
                      this->WindowWidthHalf = this->WindowWidth / 2;
                      this->WindowHeightHalf = this->WindowHeight / 2;
-                     this->Aspect = float( this->WindowWidthHalf ) / float( this->WindowHeightHalf );
+                     this->Aspect = vec1( float( this->WindowWidthHalf ) / float( this->WindowHeightHalf ) );
                      glViewport( 0, 0, (GLsizei)this->WindowWidth, (GLsizei)this->WindowHeight );
                      camera.SetAspect( this->Aspect );
                      break;
@@ -510,6 +530,8 @@ void Game::Update(){
 
       //Draw light 1:
       this->Sun.Draw();
+      //Draw light 2:
+      this->SunMoving.Draw();
 
       glUseProgram( 0 );
       SDL_GL_SwapWindow( this->Window );
@@ -519,6 +541,13 @@ void Game::Update(){
          this->Models[1].Rotate( this->RotateFloat, this->RotateVec );
          this->TimerUpdate = this->TimerBegin + this->TimerUpdateTime;
 
+         //Move second light:
+         this->SunMovingDegreese = fmod( this->SunMovingDegreese, 360.0f );
+         this->SunMovingRadian = this->SunMovingDegreese * ( M_PI / 180 );
+         this->SunMovingPosition.x =  this->SunMovingRadius * sin( this->SunMovingRadian );
+         this->SunMovingPosition.z = this->SunMovingRadius * cos( this->SunMovingRadian );
+         this->SunMoving.ChangePosition( this->SunMovingPosition );
+         this->SunMovingDegreese += 0.25f;
       }
       ++this->FPS;
       if( this->TimerBegin >= this->TimerEnd ){
@@ -658,9 +687,11 @@ void Game::InitWindow(){
                   break;
             #endif
             #if SDL_VERSION_ATLEAST(2, 0, 3)
+            #ifdef SDL_SYSWM_ANDROID
                case SDL_SYSWM_ANDROID:
                   subsystem = "Android";
                   break;
+            #endif
             #endif
                default:
                   break;
@@ -960,8 +991,26 @@ void Game::LoadData(){
 
       //Set and load main light:
       this->Sun.SetPath( "./data/sun.obj" );
+      this->tmp_vector = vec3( 0.0f, 15.0f, 0.0f );
+      this->Sun.Translate( this->tmp_vector );
       this->Sun.Load();
 
+      //Second light:
+      this->SunMoving.SetPath( "./data/sun.obj" );
+      //set defualt position:
+      this->SunMovingDegreese = 0.0f;
+      this->SunMovingRadian = 0.0f;
+      this->SunMovingPosition.x = this->SunMovingRadius * sin( this->SunMovingRadian );
+      this->SunMovingPosition.z = this->SunMovingRadius * cos( this->SunMovingRadian );
+      this->SunMoving.ChangePosition( this->SunMovingPosition );
+      this->SunMovingDegreese += 0.25f;
+      this->SunMoving.Load();
+
+      //Set min/max movement:
+      this->tmp_vector = vec3( -this->MapMaxHalf, -5.0f, -this->MapMaxHalf );
+      this->camera.SetPositionMin( this->tmp_vector );
+      this->tmp_vector = vec3( this->MapMaxHalf, 15.0f, this->MapMaxHalf );
+      this->camera.SetPositionMax( this->tmp_vector );
    }
 }
 

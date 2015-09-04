@@ -90,6 +90,18 @@ void Light::SetColor( glm::vec3 &color ){
    this->Color = color;
 }
 
+void Light::SetAmbient( glm::vec3 &in ){
+   this->Ambient = in;
+}
+
+void Light::SetDiffuse( glm::vec3 &in ){
+   this->Diffuse = in;
+}
+
+void Light::SetSpecular( glm::vec3 &in ){
+   this->Specular = in;
+}
+
 void Light::Load(){
    SDL_Log( "\n" );
    this->Init = LoadAssimp( this->OBJPathFile.c_str(), this->Vertices, this->Uvs, this->Normals, this->Indices );
@@ -141,6 +153,18 @@ void Light::Draw(){
 
 glm::vec3 Light::ReturnPosition(){
    return glm::vec3( this->ModelMatrix[3][0], this->ModelMatrix[3][1], this->ModelMatrix[3][2] );
+}
+
+glm::vec3 Light::ReturnAmbient() const{
+   return this->Ambient;
+}
+
+glm::vec3 Light::ReturnDiffuse() const{
+   return this->Diffuse;
+}
+
+glm::vec3 Light::ReturnSpecular() const{
+   return this->Specular;
 }
 
 void Light::Translate( glm::vec3 &in ){

@@ -36,6 +36,12 @@ using namespace std;
 
 void CaughtSignal( int signal );
 
+#define Max_Point_Light 1
+#if Max_Point_Light < 1
+   #undef Max_Point_Light
+   #define Max_Point_Light 1
+#endif
+
 class Game{
 public:
    Game();
@@ -119,8 +125,19 @@ private:
    GLuint DiffuseUniformId = 0;
    GLuint SpecularUniformId = 0;
    GLuint ShininessUniformId = 0;
+   //Directional Light:
    GLuint LightPositionUniformId = 0;
+   GLuint LightAmbientUniformId = 0;
+   GLuint LightDiffuseUniformId = 0;
+   GLuint LightSpecularUniformId = 0;
+   //Camera Position:
    GLuint ViewPosUniformId = 0;
+   //Point Light:
+   GLuint PointLight_Position_Uniform[Max_Point_Light];
+   GLuint PointLight_Constant_Uniform[Max_Point_Light];
+   GLuint PointLight_Linear_Uniform[Max_Point_Light];
+   GLuint PointLight_Quadratic_Uniform[Max_Point_Light];
+
 //second for drawing light object:
    GLuint LightID = 0;
    //Uniforms:
@@ -507,11 +524,42 @@ void Game::Update(){
 
       //Draw all models:
       glUseProgram( this->ProgramID );
+
+      //Matrix:
       glUniformMatrix4fv( this->ViewUniformId, 1, GL_FALSE, value_ptr( this->ViewMatrix ) );
       glUniformMatrix4fv( this->ProjectionUniformId, 1, GL_FALSE, value_ptr( this->ProjectionMatrix  ) );
+
+      //Directional light:
       glUniform3fv( this->LightPositionUniformId, 1, value_ptr( this->Sun.ReturnPosition() ) );
+      glUniform3fv( this->LightAmbientUniformId , 1, value_ptr( this->Sun.ReturnAmbient() ) );
+      glUniform3fv( this->LightDiffuseUniformId , 1, value_ptr( this->Sun.ReturnDiffuse() ) );
+      glUniform3fv( this->LightSpecularUniformId , 1, value_ptr( this->Sun.ReturnSpecular() ) );
+
+      //Camera position:
       glUniform3fv( this->ViewPosUniformId, 1, value_ptr( this->camera.ReturnPosition() ) );
 
+      //Point light:
+      glUniform3fv( PointLight_Position_Uniform[0], 1, value_ptr( this->SunMoving.ReturnPosition() ) );
+      /*
+      Distance     Constant     Linear     Quadratic
+      7            1.0          0.7        1.8
+      13           1.0          0.35       0.44
+      20           1.0          0.22       0.20
+      32           1.0          0.14       0.07
+      50           1.0          0.09       0.032
+      65           1.0          0.07       0.017
+      100          1.0          0.045      0.0075
+      160          1.0          0.027      0.0028
+      200          1.0          0.022      0.0019
+      325          1.0          0.014      0.0007
+      600          1.0          0.007      0.0002
+      3250         1.0          0.0014     0.000007
+      */
+      glUniform1f( PointLight_Constant_Uniform[0], 1.0f );
+      glUniform1f( PointLight_Linear_Uniform[0], 0.07f );
+      glUniform1f( PointLight_Quadratic_Uniform[0], 0.017f );
+
+      //Draw all objects:
       for( this->It = this->Models.begin();this->It != this->Models.end(); ++this->It ){
          this->It->Draw();
       }
@@ -564,6 +612,7 @@ void Game::InitSDL(){
       this->CheckInit = false;
    }
    else{
+      SDL_LogSetAllPriority( SDL_LOG_PRIORITY_INFO );
       SDL_Log( "SDL_Init: SUCCESS\n" );
       SDL_version compiled, linked;
       SDL_VERSION( &compiled );
@@ -851,15 +900,36 @@ void Game::InitShaders(){
       this->ProjectionUniformId = glGetUniformLocation( this->ProgramID, "projection" );
       this->ModelUniformId = glGetUniformLocation( this->ProgramID, "model" );
 
-      this->TextureUniformId  = glGetUniformLocation( this->ProgramID, "Texture" );
-      this->TextureSpecularUniformId = glGetUniformLocation( this->ProgramID, "Texture_specular" );
-      this->AmbientUniformId = glGetUniformLocation( this->ProgramID, "Ambient" );
-      this->DiffuseUniformId = glGetUniformLocation( this->ProgramID, "Diffuse" );
-      this->SpecularUniformId = glGetUniformLocation( this->ProgramID, "Specular" );
-      this->ShininessUniformId = glGetUniformLocation( this->ProgramID, "Shininess" );
+      //Single object:
+      this->TextureUniformId  = glGetUniformLocation( this->ProgramID, "Material.Texture" );
+      this->TextureSpecularUniformId = glGetUniformLocation( this->ProgramID, "Material.Texture_specular" );
+      this->AmbientUniformId = glGetUniformLocation( this->ProgramID, "Material.Ambient" );
+      this->DiffuseUniformId = glGetUniformLocation( this->ProgramID, "Material.Diffuse" );
+      this->SpecularUniformId = glGetUniformLocation( this->ProgramID, "Material.Specular" );
+      this->ShininessUniformId = glGetUniformLocation( this->ProgramID, "Material.Shininess" );
 
-      this->LightPositionUniformId = glGetUniformLocation( this->ProgramID, "Light_position" );
+      //Directional Light:
+      this->LightPositionUniformId = glGetUniformLocation( this->ProgramID, "DirectionalLight.Position" );
+      this->LightAmbientUniformId = glGetUniformLocation( this->ProgramID, "DirectionalLight.Ambient" );
+      this->LightDiffuseUniformId = glGetUniformLocation( this->ProgramID, "DirectionalLight.Diffuse" );
+      this->LightSpecularUniformId = glGetUniformLocation( this->ProgramID, "DirectionalLight.Specular" );
+
+      //Camera position:
       this->ViewPosUniformId = glGetUniformLocation( this->ProgramID, "ViewPos" );
+
+      //Point Light
+      string i_to_string, uniform_string;
+      for( int i = 0; i < Max_Point_Light; ++i ){
+         i_to_string = to_string( i );
+         uniform_string = "PointLight[" + i_to_string + "].Position";
+         PointLight_Position_Uniform[i] = glGetUniformLocation( this->ProgramID, uniform_string.c_str() );
+         uniform_string = "PointLight[" + i_to_string + "].Constant";
+         PointLight_Constant_Uniform[i] = glGetUniformLocation( this->ProgramID, uniform_string.c_str() );
+         uniform_string = "PointLight[" + i_to_string + "].Linear";
+         PointLight_Linear_Uniform[i] = glGetUniformLocation( this->ProgramID, uniform_string.c_str() );
+         uniform_string = "PointLight[" + i_to_string + "].Quadratic";
+         PointLight_Quadratic_Uniform[i] = glGetUniformLocation( this->ProgramID, uniform_string.c_str() );
+      }
 
       this->ViewUniformLight = glGetUniformLocation( this->LightID, "view" );
       this->ProjectionUniformLight = glGetUniformLocation( this->LightID, "projection" );
@@ -994,13 +1064,23 @@ void Game::LoadData(){
       this->tmp_vector = vec3( 0.0f, 15.0f, 0.0f );
       this->Sun.Translate( this->tmp_vector );
       this->Sun.Load();
+      this->tmp_vector = vec3( 0.25f );
+      this->Sun.SetAmbient( this->tmp_vector );
+      this->tmp_vector = vec3( 0.25f );
+      this->Sun.SetDiffuse( this->tmp_vector );
+      this->tmp_vector = vec3( 0.25f );
+      this->Sun.SetSpecular( this->tmp_vector );
 
       //Second light:
       this->SunMoving.SetPath( "./data/sun.obj" );
+      this->tmp_vector = vec3( 0.5f, 0.5f, 0.5f );
+      this->SunMoving.Scale( this->tmp_vector );
       //set defualt position:
       this->SunMovingDegreese = 0.0f;
       this->SunMovingRadian = 0.0f;
+      this->SunMovingRadius = 15.0f;
       this->SunMovingPosition.x = this->SunMovingRadius * sin( this->SunMovingRadian );
+      this->SunMovingPosition.y = 10.0f;
       this->SunMovingPosition.z = this->SunMovingRadius * cos( this->SunMovingRadian );
       this->SunMoving.ChangePosition( this->SunMovingPosition );
       this->SunMovingDegreese += 0.25f;

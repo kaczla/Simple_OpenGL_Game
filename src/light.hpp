@@ -17,10 +17,16 @@ public:
    void SetPath( std::string path_obj );
    void SetPath( const char *path_obj );
    void SetColor( glm::vec3 &color );
+   void SetAmbient( glm::vec3 &in );
+   void SetDiffuse( glm::vec3 &in );
+   void SetSpecular( glm::vec3 &in );
    void Load();
    void BindVAO();
    void Draw();
    glm::vec3 ReturnPosition();
+   glm::vec3 ReturnAmbient() const;
+   glm::vec3 ReturnDiffuse() const;
+   glm::vec3 ReturnSpecular() const;
    void Translate( glm::vec3 &in );
    void Rotate( GLfloat angle, glm::vec3 &in );
    void Scale( glm::vec3 &in );
@@ -44,6 +50,10 @@ private:
    std::string OBJPathFile;
    //Position light:
    glm::mat4 ModelMatrix = glm::mat4( 1.0f );
+   //Power light:
+   glm::vec3 Ambient = glm::vec3( 0.5f );
+   glm::vec3 Diffuse = glm::vec3( 0.5f );
+   glm::vec3 Specular = glm::vec3( 0.5f );
    //Color light object:
    glm::vec3 Color;
    //Check:

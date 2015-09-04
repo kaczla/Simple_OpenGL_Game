@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera(){
-   this->ProjectionMatrix = glm::perspective( this->VOF.x, this->Aspect.x, this->Near.x, this->Far.x );
+   this->ProjectionMatrix = glm::perspective( glm::radians( this->VOF.x ), this->Aspect.x, this->Near.x, this->Far.x );
 }
 
 Camera::Camera( const Camera &camera ){
@@ -87,8 +87,19 @@ void Camera::SetPositionMinMax( vec3 &min, vec3 &max ){
    this->PositionMax = max;
 }
 
+void Camera::ChangeVOF( glm::vec1 &in ){
+   this->VOF += in;
+   if( this->VOF.x < 1.0f ){
+      this->VOF.x = 1.0f;
+   }
+   if( this->VOF.x > 45.0f ){
+      this->VOF.x = 45.0f;
+   }
+   this->UpdateProjectionMatrix();
+}
+
 void Camera::UpdateProjectionMatrix(){
-   this->ProjectionMatrix = glm::perspective( this->VOF.x, this->Aspect.x, this->Near.x, this->Far.x );
+   this->ProjectionMatrix = glm::perspective( glm::radians( this->VOF.x ), this->Aspect.x, this->Near.x, this->Far.x );
 }
 
 void Camera::MouseUpdate( const vec2 &Mouse ){

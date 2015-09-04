@@ -107,6 +107,7 @@ private:
    ILenum IL_Error;
    //Camera:
    vec2 Mouse;
+   vec1 MouseWheel;
    Camera camera;
    //For change settings camera:
    vec1 Aspect;
@@ -458,6 +459,33 @@ void Game::Loop(){
                   default:
                      break;
                }
+               break;
+            case SDL_MOUSEBUTTONDOWN:
+               switch( this->Event.button.button ){
+                  case SDL_BUTTON_LEFT:
+                     this->CheckCoin();
+                     break;
+                  case SDL_BUTTON_RIGHT:
+                     this->MouseWheel.x = 30.0f;
+                     this->camera.SetVOF( this->MouseWheel );
+                     break;
+                  default:
+                     break;
+               }
+               break;
+            case SDL_MOUSEBUTTONUP:
+               switch( this->Event.button.button ){
+                  case SDL_BUTTON_RIGHT:
+                     this->MouseWheel.x = 45.0f;
+                     this->camera.SetVOF( this->MouseWheel );
+                     break;
+                  default:
+                     break;
+               }
+               break;
+            case SDL_MOUSEWHEEL:
+               this->MouseWheel.x = -this->Event.wheel.y;
+               this->camera.ChangeVOF( this->MouseWheel );
                break;
             case SDL_WINDOWEVENT:
                switch( this->Event.window.event ){

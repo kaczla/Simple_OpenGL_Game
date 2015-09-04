@@ -26,6 +26,7 @@ public:
    void SetPositionMin( vec3 &min );
    void SetPositionMax( vec3 &max );
    void SetPositionMinMax( vec3 &min, vec3 &max );
+   void ChangeVOF( glm::vec1 &in );
    void MouseUpdate( const vec2 &Mouse );
    void MoveUp();
    void MoveDown();

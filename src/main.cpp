@@ -947,8 +947,18 @@ void Game::InitShaders(){
 
       //Point Light
       string i_to_string, uniform_string;
+      #if defined( _WIN32 ) || defined( __MINGW32__ )
+      stringstream a;
+      #endif
       for( int i = 0; i < Max_Point_Light; ++i ){
+         #if defined( _WIN32 ) || defined( __MINGW32__ )
+         a.str( "" );
+         a.clear();
+         a<<i;
+         i_to_string = a.str();
+         #else
          i_to_string = to_string( i );
+         #endif
          uniform_string = "PointLight[" + i_to_string + "].Position";
          PointLight_Position_Uniform[i] = glGetUniformLocation( this->ProgramID, uniform_string.c_str() );
          uniform_string = "PointLight[" + i_to_string + "].Constant";

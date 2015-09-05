@@ -78,7 +78,7 @@ GLuint LoadShader( const char* vertex_shader_path_file,
    const char *FragmentShaderCodePointer = FragmentShaderCode.c_str();
    glShaderSource( FragmentShaderID, 1, &FragmentShaderCodePointer, 0 );
    glCompileShader( FragmentShaderID );
-   //Check vertex_shader:
+   //Check fragment_shader:
    Result = GL_FALSE;
    glGetShaderiv( FragmentShaderID, GL_COMPILE_STATUS, &Result );
    if( Result == GL_FALSE ){

@@ -40,6 +40,9 @@ Light::Light( const Light &light ){
    this->OBJPathFile = light.OBJPathFile;
 
    this->ModelMatrix = light.ModelMatrix;
+   this->Ambient = light.Ambient;
+   this->Diffuse = light.Diffuse;
+   this->Specular = light.Specular;
    this->Color = light.Color;
 
    this->Init = light.Init;
@@ -65,6 +68,9 @@ Light & Light::operator=( const Light &light ){
    this->OBJPathFile = light.OBJPathFile;
 
    this->ModelMatrix = light.ModelMatrix;
+   this->Ambient = light.Ambient;
+   this->Diffuse = light.Diffuse;
+   this->Specular = light.Specular;
    this->Color = light.Color;
 
    this->Init = light.Init;

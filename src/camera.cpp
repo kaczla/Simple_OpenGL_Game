@@ -13,6 +13,9 @@ Camera::Camera( const Camera &camera ){
    this->ViewDirection = camera.ViewDirection;
    this->Up = camera.Up;
 
+   this->PositionMax = camera.PositionMax;
+   this->PositionMin = camera.PositionMin;
+
    this->RotationSpeed = camera.RotationSpeed;
    this->MovementSpeed = camera.MovementSpeed;
 
@@ -32,6 +35,9 @@ Camera & Camera::operator=( const Camera &camera ){
    this->Position = camera.Position;
    this->ViewDirection = camera.ViewDirection;
    this->Up = camera.Up;
+
+   this->PositionMax = camera.PositionMax;
+   this->PositionMin = camera.PositionMin;
 
    this->RotationSpeed = camera.RotationSpeed;
    this->MovementSpeed = camera.MovementSpeed;

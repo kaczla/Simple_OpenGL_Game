@@ -56,6 +56,7 @@ bool LoadImg( const char *img_path_file, GLuint &image ){
    error_gl = glGetError();
    if( error_gl != GL_NO_ERROR and error_gl != GL_INVALID_ENUM ){
       SDL_LogError( SDL_LOG_CATEGORY_ERROR, "glTexImage2D:, %s\n", gluErrorString( error_gl ) );
+      return false;
    }
 
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -111,6 +112,7 @@ GLuint LoadImg( const char *img_path_file ){
    error_gl = glGetError();
    if( error_gl != GL_NO_ERROR and error_gl != GL_INVALID_ENUM ){
       SDL_LogError( SDL_LOG_CATEGORY_ERROR, "glTexImage2D:, %s\n", gluErrorString( error_gl ) );
+      return 0;
    }
 
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );

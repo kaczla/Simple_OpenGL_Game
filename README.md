@@ -7,6 +7,9 @@ Stworzony dla zajęć **Grafika komputerowa i wizualizacja** w 2015 roku.</br>
 Wersja druga, odchudzona znajduje się pod linkiem: [LINK](https://github.com/kaczla/Simple_OpenGL_Slim)
 </br>
 </br>
+Prosta gra, w której zbieramy leżące monety na mapie.
+</br>
+</br>
 
 ### Testowane na:
 
@@ -52,5 +55,41 @@ Zbudować poleceniem **make** w głównym katalogu repozytorium.
 Uruchomić aplikację **game.app**\*\* w głównym katalogu repozytorium ( wcześniej budując ! ).
 </br>
 \*\* Dla systemu Windows, należy uruchomić aplikację **game.exe**.
+</br>
+</br>
+
+### Sterowanie:
+</br>
+**W** / **Strzałka w górę** - Poruszanie się do porzodu (przed siebie)
+</br>
+**S** / **Strzałka w dół** - Poruszanie się do tyłu
+</br>
+**A** / **Strzałka w lewo** - Poruszanie się w lewo
+</br>
+**D** / **Strzałka w prawo** - Poruszanie się w prawo
+</br>
+**E** / **Lewy przycisk myszy** - Zbieranie pobliskich monet
+</br>
+**Prawy przycisk myszy** - Zbliżenie / Zoom
+</br>
+**F7** - Włączenie / Wyłączenie trybu wolnej kamery
+</br>
+**F10** - Powrót na domyślną pozycję
+</br>
+**F12** - Włączenie / Wyłączenie trybu pełnoekranowego
+</br>
+**SPACJA** - Poruszanie się do góry w trybie wolnej kamery
+</br>
+**C** / **Lewy CTRL** - Poruszanie się w dół w trybie wolnej kamery
+</br>
+**8** (na klawiaturze numerycznej) - Rozglądanie się do góry
+</br>
+**2** (na klawiaturze numerycznej) - Rozglądanie się w dół
+</br>
+**4** (na klawiaturze numerycznej) - Rozglądanie się w lewo
+</br>
+**6** (na klawiaturze numerycznej) - Rozglądanie się w prawo
+</br>
+**ESC** - wyjście z gry
 </br>
 </br>

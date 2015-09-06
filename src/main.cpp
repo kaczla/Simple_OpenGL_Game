@@ -391,15 +391,19 @@ void Game::Loop(){
                      this->Exit = false;
                      SDL_Log( "Window closed\n" );
                      break;
+                  case SDLK_UP:
                   case SDLK_w:
                      this->camera.MoveForward();
                      break;
+                  case SDLK_DOWN:
                   case SDLK_s:
                      this->camera.MoveBackward();
                      break;
+                  case SDLK_LEFT:
                   case SDLK_a:
                      this->camera.MoveLeft();
                      break;
+                  case SDLK_RIGHT:
                   case SDLK_d:
                      this->camera.MoveRight();
                      break;

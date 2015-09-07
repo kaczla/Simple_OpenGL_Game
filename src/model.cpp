@@ -25,6 +25,7 @@ Model::Model(){
    this->NormalBuffer = 0;
    this->IndicesBuffer = 0;
    this->Texture = 0;
+   this->TextureSpecular = 0;
 
    this->CollisionSquareVao = 0;
    this->CollisionSquareVertexBuffer = 0;
@@ -37,6 +38,7 @@ Model::Model( std::string path_obj, std::string path_img ){
    this->NormalBuffer = 0;
    this->IndicesBuffer = 0;
    this->Texture = 0;
+   this->TextureSpecular = 0;
 
    this->CollisionSquareVao = 0;
    this->CollisionSquareVertexBuffer = 0;
@@ -131,6 +133,7 @@ Model & Model::operator=( const Model &model ){
 
 Model::~Model(){
    glDeleteTextures( 1, &this->Texture );
+   glDeleteTextures( 1, &this->TextureSpecular );
    glDeleteBuffers( 1, &this->VertexBuffer );
    glDeleteBuffers( 1, &this->UvBuffer );
    glDeleteBuffers( 1, &this->NormalBuffer );

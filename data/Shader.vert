@@ -14,6 +14,9 @@ uniform mat4 projection;
 void main()
 {
    gl_Position = projection * view * model * vec4( position, 1.0f );
+   //This is done because most images have the top y-axis inversed with OpenGL's top y-axis.
+   // UV = vec2( uv.x, 1.0 - uv.y);
+   //otherwise use: (or convert before load into shader)
    UV = uv;
    Normal = mat3( transpose( inverse( model ) ) ) * normal;
    FragPos = vec3( model * vec4( position, 1.0f ) );

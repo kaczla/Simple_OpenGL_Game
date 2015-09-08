@@ -42,16 +42,6 @@ bool LoadImg( const char *img_path_file, GLuint &image ){
    glGenTextures( 1, &image );
    glBindTexture( GL_TEXTURE_2D, image );
 
-   glTexParameteri( image, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( image, GL_TEXTURE_WRAP_T, GL_REPEAT );
-
-   glPixelStorei( GL_UNPACK_SWAP_BYTES, GL_FALSE );
-   glPixelStorei( GL_UNPACK_ROW_LENGTH, 0 );
-   glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0 );
-   glPixelStorei( GL_UNPACK_SKIP_ROWS, 0 );
-   glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-
-
    glTexImage2D( GL_TEXTURE_2D, 0, format, width, height, 0, format, type, ilGetData() );
    error_gl = glGetError();
    if( error_gl != GL_NO_ERROR and error_gl != GL_INVALID_ENUM ){
@@ -59,9 +49,14 @@ bool LoadImg( const char *img_path_file, GLuint &image ){
       return false;
    }
 
-   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
    glGenerateMipmap( GL_TEXTURE_2D );
+
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+   glBindTexture(GL_TEXTURE_2D, 0);
 
    ilDeleteImages( 1, &imgage_id );
    SDL_Log( "Loaded image: %s", img_path_file );
@@ -99,15 +94,6 @@ GLuint LoadImg( const char *img_path_file ){
    glGenTextures( 1, &image );
    glBindTexture( GL_TEXTURE_2D, image );
 
-   glTexParameteri( image, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( image, GL_TEXTURE_WRAP_T, GL_REPEAT );
-
-   glPixelStorei( GL_UNPACK_SWAP_BYTES, GL_FALSE );
-   glPixelStorei( GL_UNPACK_ROW_LENGTH, 0 );
-   glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0 );
-   glPixelStorei( GL_UNPACK_SKIP_ROWS, 0 );
-   glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-
    glTexImage2D( GL_TEXTURE_2D, 0, format, width, height, 0, format, type, ilGetData() );
    error_gl = glGetError();
    if( error_gl != GL_NO_ERROR and error_gl != GL_INVALID_ENUM ){
@@ -115,8 +101,14 @@ GLuint LoadImg( const char *img_path_file ){
       return 0;
    }
 
-   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+   glGenerateMipmap( GL_TEXTURE_2D );
+
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+   glBindTexture(GL_TEXTURE_2D, 0);
 
    ilDeleteImages( 1, &imgage_id );
    SDL_Log( "Loaded image: %s", img_path_file );

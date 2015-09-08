@@ -48,6 +48,10 @@ bool LoadOBJ( const char* obj_path_file,
             iss.str( Line );
             iss>>uv.x;
             iss>>uv.y;
+            //important!
+            //This is done because most images have the top y-axis inversed with OpenGL's top y-axis.
+            //or conver in shader
+            uv.y = 1.0 - uv.y;
             uvs_tmp.push_back( uv );
          }
          else if( Line.substr( 0, 2 ) == "vn" ){
@@ -240,7 +244,10 @@ bool LoadAssimp( const char *path_file,
    uvs.reserve( mesh->mNumVertices );
    for( i = 0; i < mesh->mNumVertices; ++i ){
       tmp = mesh->mTextureCoords[0][i];
-      uvs.push_back( glm::vec2( tmp.x, tmp.y ) );
+      //important!
+      //This is done because most images have the top y-axis inversed with OpenGL's top y-axis.
+      //or conver in shader
+      uvs.push_back( glm::vec2( tmp.x, 1.0 - tmp.y ) );
    }
    //normals:
    normals.reserve( mesh->mNumVertices );

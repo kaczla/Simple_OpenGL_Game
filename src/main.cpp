@@ -1,9 +1,20 @@
+/*!
+   \mainpage Główna strona:
+   Więcej informacji pod adresem: <a href="https://github.com/kaczla/Simple_OpenGL_Game">LINK</a>
+*/
+/*!
+   \file main.cpp
+   \brief Plik główny
+
+   W plik main.cpp znajduje się main() oraz klasa Game.
+*/
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
 #include <sstream>
 //OpenGL:
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 //SDL:
@@ -34,6 +45,9 @@
 
 using namespace std;
 
+/*!
+   \brief Przechwytywanie sygnałów zamknięcia aplikacji.
+*/
 void CaughtSignal( int signal );
 
 #define Max_Point_Light 1
@@ -42,134 +56,541 @@ void CaughtSignal( int signal );
    #define Max_Point_Light 1
 #endif
 
+/*!
+   \brief Główna klasa, w której gromadzone są wszystkich informacje potrzebne do uruchomienia gry.
+*/
 class Game{
 public:
+   /*!
+      \brief Inicjalizuje biblioteki, ustala postawowe informacje, tworzy okno dla aplikacji.
+
+      <b>Więcej:</b>\n
+      Ładuje ustawienia z pliku settings.init ( \link LoadSettings() \endlink ).\n
+      Inicjalizuje biblioteki:\n
+      <ul>
+      <li>SDL2 ( \link InitSDL() \endlink )</li>
+      <li>GLEW ( \link InitContent() \endlink )</li>
+      <li>DevIL ( \link InitDevIL \endlink )</li>
+      </ul>
+      Ustalalenie informacje o oknie i wersji OpenGL dla SDL2 ( \link InitOpenGL() \endlink).\n
+      Tworzy okno ( \link InitWindow() \endlink  ),
+      kontekst dla OpenGL 3.3 ( \link InitContent() \endlink )
+      oraz tworzy ikonkę dla okna ( \link SetIcon() \endlink ).\n
+   */
    Game();
+   /*!
+   \brief Czyści zaalokowaną pamięć.
+
+   <b>Więcej:</b>\n
+   Usuwa niepotrzebnie zaalokowaną pamięć po shaderach, wskaźnikach.\n
+   Deaktywuje aktywne biblioteki.\n
+   Zapisuje ustawienia do plik settings.init.\n
+   */
    ~Game();
+   /*!
+      \brief Wczytuje shadery, obiekty, tekstury oraz urchamia grę.
+
+      <b>Więcej:</b>\n
+      Wczytuje i tworzy shadery ( \link InitShaders() \endlink ).\n
+      Wczytuje pliki .obj (obiekty 3D), tekstury dla obiektów oraz tworzy losowy świat( \link LoadData() \endlink ).\n
+      Uruchamia grę ( \link Loop() \endlink ).\n
+   */
    void Start();
+   /*!
+      \brief Zatrzymuje grę.
+
+      <b>Więcej:</b>\n
+      Gra zostanie zatrzymana po zakończeniu rysowania pojedyńczej sceny (jedna klatka).\n
+   */
    void Stop();
 private:
    //Init:
+   /*!
+      \brief Wczytywanie ustawień z pliku settings.init.
+
+      <b>Więcej:</b>\n
+      Wczytywanie ustawień z pliku settings.init w przeciwnym przypadku ustalenie domyślnych.\n
+   */
    void LoadSettings();
+   /*!
+      \brief Załadowanie biblioteki SDL2.
+
+      <b>Więcej:</b>\n
+      Inicjalizuje bibliotekę SDL2, sprawdza poprawność wersji SDL2 oraz wyświetla dostępne tryby wideo dla każdego ekranu.\n
+   */
    void InitSDL();
+   /*!
+      \brief Ustalenie informacji dla okna SDL2.
+
+      <b>Więcej:</b>\n
+      Ustalenie wersji OpenGL, typ profilu OpenGL, multisampling.
+   */
    void InitOpenGL();
+   /*!
+      \brief Tworzenie okna.
+
+      <b>Więcej:</b>\n
+      Tworzenie okna, sprawdzenie systemu zarządzania oknami, ustalenie minimalnej i maksymalnej wiekości okna.\n
+   */
    void InitWindow();
+   /*!
+      \brief Tworzenie kontekstu OpenGL dla okna oraz inicjalizuje GLEW.
+
+      <b>Więcej:</b>\n
+      worzenie kontekstu OpenGL dla okna, inicjalizacja GLEW, ustalenie koloru czyszczenia oraz uruchomienie bufora głębokości.\n
+   */
    void InitContent();
+   /*!
+      \brief Inicjalizuje DevIL.
+
+      <b>Więcej:</b>\n
+      Inicjalizuje DevIL oraz sprawdza poprawność wersji DevIL.
+   */
    void InitDevIL();
+   /*!
+      \brief Ustalenie ikony dla okna.
+
+      <b>Więcej:</b>\n
+      Ustalenie ikony dla okna (napis c++ na czarnym tle).
+   */
    void SetIcon();
+   /*!
+      \brief Załadowanie shaderów, ustalenie uniformów, wskaźników dla klas \link Model \endlink i \link Light \endlink.
+
+      <b>Więcej:</b>\n
+      Załadowanie shaderów: wierzchołków i fragmentu.\n
+      Ustalenie wszystkich uniformów dla shaderów.\n
+      Ustalenie wskaźników dla klas \link Model \endlink i \link Light \endlink.\n
+   */
    void InitShaders();
+   /*!
+      \brief Wczytanie obiektów, tekstur oraz stworzenie świata.
+
+      <b>Więcej:</b>\n
+      Wczytanie plików .obj (obiektów 3D), tekstur do pamięci oraz dodanie ich do \link Game::Models \endlink.\n
+      Tworzenie losowego świata.\n
+   */
    void LoadData();
+   /*!
+      \brief Losowanie nowej pozycji dla monety.
+
+      <b>Więcej:</b>\n
+      Losowanie nowej pozycji dla monety.\n
+   */
    inline void RandNewCoin();
+   /*!
+      \brief Sprawdzenie czy w pobliżu znajdują się monety.
+
+      <b>Więcej:</b>\n
+      prawdzenie czy w pobliżu znajdują się monety i wylosowania nowej pozycji w przypadku znalezienia.\n
+   */
    inline void CheckCoin();
    //Min/Max resolution:
+   /*!
+      \brief Minimalna szerokość okna, domyślnie 640.
+   */
    int WindowMinWidth = 640;
+   /*!
+      \brief Minimalna wysokość okna, domyślnie 480.
+   */
    int WindowMinHeight = 480;
+   /*!
+      \brief Maksymalna szerokość okna, domyślnie 640.
+   */
    int WindowMaxWidth = 640;
+   /*!
+      \brief Maksymalna wysokość okna, domyślnie 480.
+   */
    int WindowMaxHeight = 480;
    //Window:
+   /*!
+      \brief Wskaźnik dla okna SDL2.
+   */
    SDL_Window *Window = NULL;
+   /*!
+      \brief Poprawność zainicjalizowanych wszystkich elementów. FALSE = Błąd.
+   */
    bool CheckInit = true;
+   /*!
+      \brief Pełen ekran. TRUE = tryb pełnoekranowy.
+   */
    bool FullScreen = false;
+   /*!
+      \brief Tytuł okna.
+   */
    string Title = "Simple OpenGL Game";
+   /*!
+      \brief Pozycja x okna na ekranie/pulpicie. SDL_WINDOWPOS_CENTERED = środek ekranu.
+   */
    int WindowPositionX = SDL_WINDOWPOS_CENTERED;
+   /*!
+      \brief Pozycja x okna na ekranie/pulpicie. SDL_WINDOWPOS_CENTERED = środek ekranu.
+   */
    int WindowPositionY = SDL_WINDOWPOS_CENTERED;
+   /*!
+      \brief Szerokość okna, domyślnie 640.
+   */
    int WindowWidth = 640;
+   /*!
+      \brief Wysokość okna, domyślnie 640.
+   */
    int WindowHeight = 480;
+   /*!
+      \brief Połowa szerokości okna.
+   */
    int WindowWidthHalf = this->WindowWidth / 2;
+   /*!
+      \brief Połowa wysokości okna.
+   */
    int WindowHeightHalf = this->WindowHeight / 2;
+   /*!
+      \brief Rozciągalne okno. FALSE = wyłączone.
+   */
    bool WindowResizable = false;
+   /*!
+      \brief Okno bez krawędzi/obramowania. FALSE = wyłączone.
+   */
    bool WindowBorderless = false;
+   /*!
+      \brief Flagi dla okna SDL2.
+
+      <b>Więcej:</b>\n\n
+      Flagi dla okan w SDL2:
+      <ul>
+      <li>SDL_WINDOW_FULLSCREEN - tryb pełnoekranowy</li>
+      <li>SDL_WINDOW_OPENGL - kontekst OpenGL</li>
+      <li>SDL_WINDOW_BORDERLESS - okno bez ramki/obramowania</li>
+      <li>SDL_WINDOW_RESIZABLE - rozciągalne okno</li>
+      <li>SDL_WINDOW_MINIMIZED - zminimalizowane okno</li>
+      <li>SDL_WINDOW_MAXIMIZED - przywrócenie okna</li>
+      </ul>
+   */
    Uint32 WindowFlag = SDL_WINDOW_OPENGL;
+   /*!
+      \brief Wskaźnik dla kontekstu Opengl dla okna SDL2.
+   */
    SDL_GLContext WindowGLContext = NULL;
+   /*!
+      \brief Aktualny ekran, na którym wyświetlanie jest okno.
+   */
    int WindowDisplayIndex = 0;
+   /*!
+      \brief Aktualny tryb wideo dla ekranu, na którym wyświetlanie jest okno.
+   */
    SDL_DisplayMode CurrentDisplayMode;
+   /*!
+      \brief Skupienie się na oknie, czy myszka jest w okno. FALSE = okno jest nie aktywne.
+   */
    bool Focus = true;
 //Timer:
+   /*!
+      \brief Czas uruchomienia aplikacji potrzebny do przeliczania \link FPS \endlink ( czas przed rysowaniem ).
+   */
    Uint32 TimerBegin = 0;
+   /*!
+      \brief Czas uruchomienia aplikacji potrzebny do przeliczania \link FPS \endlink ( czas po rysowaniu ).
+   */
    Uint32 TimerEnd = 0;
+   /*!
+      \brief Czas uruchomienia aplikacji potrzebny do aktualizacji obiektów.
+   */
    Uint32 TimerUpdate = 0;
+   /*!
+      \brief Różnica czasu, po jakiej jednostce czasu ma nastąpić aktualizacja obiektów, domyślnie.
+   */
    Uint32 TimerUpdateTime = 50;
+   /*!
+      \brief Liczba klatek na sekundę.
+   */
    int FPS = 0;
    //Game:
+   /*!
+      \brief Obsługa zdarzeń.
+
+      <b>Więcej:</b>\n
+      Obługa myszy, klawiatury, zdarzeń okna.
+   */
    inline void Loop();
+   /*!
+      \brief Rysowanie wszystkich obiektów świata.
+
+      <b>Więcej:</b>\n
+      Przekazanie wszystkich wartości do shaderów.\n
+      Rysowanie wszystkich obiektów świata.\n
+      Aktualizacja obiektów i FPS.\n
+   */
    inline void Update();
+   /*!
+      \brief Wyjście z gry. FALSE = koniec gry.
+   */
    bool Exit = true;
+   /*!
+      \brief Typ zdarzenia (SDL2).
+   */
    SDL_Event Event;
+   /*!
+      \brief Wielkość świata liczony według kwadratu 1.0f x 1.0f ( w szerokości i długości ).
+   */
    const int MapMax = 30;
+   /*!
+      \brief Połowa wielkości świata.
+   */
    const int MapMaxHalf = MapMax / 2;
+   /*!
+      \brief Wektor obiektów w świecie/mapa świata.
+   */
    vector < vector <int> > Map;
+   /*!
+      \brief Wektor dla identyfikatora obiektu w świecie.
+   */
    vector < vector <int> > MapIndex;
+   /*!
+      \brief Ilość zebranych monet podczas gry.
+   */
    int Score = 0;
    //Other:
+   /*!
+      \brief Identyfikator dla pliku setting.init.
+   */
    fstream SettingsFile;
+   /*!
+      \var i
+      \brief Tymczasowe zmienna dla pętli for.
+   */
+   /*!
+      \var j
+      \brief Tymczasowe zmienna dla pętli for.
+   */
    int i,j;
+   /*!
+      \brief Kod błędu dla OpenGL.
+   */
    GLenum GL_Error;
+   /*!
+      \brief Kod błędu dla DevIL.
+   */
    ILenum IL_Error;
    //Camera:
+   /*!
+      \brief Aktualne poruszenie myszki, różnica pomiędzy poprzednią, a aktualną pozycją myszki.
+   */
    vec2 Mouse;
+   /*!
+      \brief Aktualne poruszenie dla kółka myszki (góra/dół), różnica pomiędzy poprzednią, a aktualną pozycją kółka myszki.
+   */
    vec1 MouseWheel;
+   /*!
+      \brief Kamera, miejsce z którego będzie przetwarzana cała scena OpenGL.
+   */
    Camera camera;
    //For change settings camera:
+   /*!
+      \brief Współczynnik szerokości do wysokości, obliczany jako szerokość/wysokość.
+   */
    vec1 Aspect;
-   vec1 FOV;
+   /*!
+      \brief Kąt widzenia dla kamery, wyrażony w stopniach.
+   */
+   vec1 VOF;
+   /*!
+      \brief Odległość od jakiej rysowane są obiekty.
+   */
    vec1 Near;
+   /*!
+      \brief Odległość do jakiej rysowane są obiekty.
+   */
    vec1 Far;
 //Shaders:
+   /*!
+      \brief Identyfikator głównego shadera.
+   */
    GLuint ProgramID = 0;
    //Uniforms:
+   /*!
+      \brief Uniform dla macierzy modelu.
+   */
    GLuint ModelUniformId = 0;
+   /*!
+      \brief Uniform dla macierzy widoku.
+   */
    GLuint ViewUniformId = 0;
+   /*!
+      \brief Uniform dla macierzy projekcji.
+   */
    GLuint ProjectionUniformId = 0;
+   /*!
+      \brief Uniform dla tekstury głównej obiektu.
+   */
    GLuint TextureUniformId = 0;
+   /*!
+      \brief Uniform dla tekstury spektralnej obiektu.
+   */
    GLuint TextureSpecularUniformId = 0;
+   /*!
+      \brief Uniform dla materiału obiektu (Ambient).
+   */
    GLuint AmbientUniformId = 0;
+   /*!
+      \brief Uniform dla materiału obiektu (Diffuse).
+   */
    GLuint DiffuseUniformId = 0;
+   /*!
+      \brief Uniform dla materiału obiektu (Specular).
+   */
    GLuint SpecularUniformId = 0;
+   /*!
+      \brief Uniform dla materiału obiektu (jakość odbicia).
+   */
    GLuint ShininessUniformId = 0;
    //Directional Light:
+   /*!
+      \brief Uniform dla głównego oświetlenia (pozycja).
+   */
    GLuint LightPositionUniformId = 0;
+   /*!
+      \brief Uniform dla głównego oświetlenia (Ambient).
+   */
    GLuint LightAmbientUniformId = 0;
+   /*!
+      \brief Uniform dla głównego oświetlenia (Diffuse).
+   */
    GLuint LightDiffuseUniformId = 0;
+   /*!
+      \brief Uniform dla głównego oświetlenia (Specular).
+   */
    GLuint LightSpecularUniformId = 0;
    //Camera Position:
+   /*!
+      \brief Uniform dla pozycji kamery.
+   */
    GLuint ViewPosUniformId = 0;
    //Point Light:
+   /*!
+      \brief Uniform dla oświetlenia punktowego (pozycja).
+   */
    GLuint PointLight_Position_Uniform[Max_Point_Light];
+   /*!
+      \brief Uniform dla oświetlenia punktowego (współczynnik stały).
+   */
    GLuint PointLight_Constant_Uniform[Max_Point_Light];
+   /*!
+      \brief Uniform dla oświetlenia punktowego (współczynnik liniowy).
+   */
    GLuint PointLight_Linear_Uniform[Max_Point_Light];
+   /*!
+      \brief Uniform dla oświetlenia punktowego (współczynnik kwadratowy).
+   */
    GLuint PointLight_Quadratic_Uniform[Max_Point_Light];
 
 //second for drawing light object:
+   /*!
+      \brief Identyfikator shadera do rysowania światła.
+   */
    GLuint LightID = 0;
    //Uniforms:
+   /*!
+      \brief Uniform dla macierzy widoku dla światła.
+   */
    GLuint ViewUniformLight = 0;
+   /*!
+      \brief Uniform dla macierzy projekcji dla światła.
+   */
    GLuint ProjectionUniformLight = 0;
+   /*!
+      \brief Uniform dla macierzy modelu dla światła.
+   */
    GLuint ModelUniformLight = 0;
+   /*!
+      \brief Uniform dla koloru obiektu światła.
+   */
    GLuint UniformColorLight = 0;
 //Matrix:
+   /*!
+      \brief Macierz projekcji.
+   */
    mat4 ProjectionMatrix;
+   /*!
+      \brief Macierz widoku.
+   */
    mat4 ViewMatrix;
 //Models:
+   /*!
+      \brief Wektor wszystkich obiektów świata.
+   */
    vector <Model> Models;
+   /*!
+      \brief Iterator dla wektora wszystkich obiektów świata.
+   */
    vector <Model>::iterator It;
 //Light:
+   /*!
+      \brief Główne światło, słońce.
+   */
    Light Sun;
+   /*!
+      \brief Drugie światło, poruszające się po okręgu.
+   */
    Light SunMoving;
+   /*!
+      \brief Początkowa pozycja światła poruszające się po okręgu.
+   */
    vec3 SunMovingPosition = vec3( 0.0f, 15.0f, 0.0f );
+   /*!
+      \brief Kąt w stopniach pomiędzy początkową a końcową/docelową pozycją oświetlenia.
+   */
    GLfloat SunMovingDegreese = 0.0f;
+   /*!
+      \brief Kąt w radianach pomiędzy początkową a końcową/docelową pozycją oświetlenia.
+   */
    GLfloat SunMovingRadian = 0.0f;
+   /*!
+      \brief Promień okręgu po jakim porusza się oświetlenie.
+   */
    GLfloat SunMovingRadius = 15.0f;
 //tmp:
+   /*!
+      \brief Tymczasowy wektor typu vec3.
+   */
    vec3 tmp_vector;
+   /*!
+      \brief Tymczasowy float typu GLfloat.
+   */
    GLfloat tmp_float;
+   /*!
+      \brief Wektor rotacji dla monety.
+   */
    vec3 RotateVec = vec3( 0.0f, 1.0f, 0.0f );
+   /*!
+      \brief Ilość stopni dla rotacji monety.
+   */
    GLfloat RotateFloat = 5;
+   /*!
+      \var tmp_x
+      \brief Tymczasowe zmienne typu int.
+   */
+   /*!
+      \var tmp_y
+      \brief Tymczasowe zmienne typu int.
+   */
+   /*!
+      \var tmp_z
+      \brief Tymczasowe zmienne typu int.
+   */
    int tmp_x, tmp_y, tmp_z;
 };
 
+/*!
+   \brief Wskaźnik na klasę typu \link Game \endlink służący to zatrzymania rozgrywki po otrzymaniu kodu przerwania aplikacji.
+*/
 Game * PointerGame = NULL;
+/*!
+   \brief Zatrzymanie gry przy pomocy wskaźnika \link PointerGame \endlink.
+*/
 void GlobalStop();
 
+/*!
+   \brief Główna funkcja uruchamiająca całą aplikację.
+*/
 int main( int argc, char* argv[] ){
    #ifdef SIGTSTP
    signal( SIGTSTP, CaughtSignal );

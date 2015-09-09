@@ -2,6 +2,7 @@ SOURCE_DIR = ./src/
 SOURCE = camera.o shader.o model.o light.o
 MAIN = $(SOURCE_DIR)main.cpp
 CXXFLAGS = -std=c++11
+CXXFLAGS += -O3
 
 ifeq ($(OS),Windows_NT)
 CXXFLAGS += -m32 -D_hypot=hypot

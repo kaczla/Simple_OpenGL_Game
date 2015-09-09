@@ -1,3 +1,7 @@
+/*!
+   \file imgloader.cpp
+   \brief Plik źródłowy dla imgloader.hpp.
+*/
 #include "imgloader.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>

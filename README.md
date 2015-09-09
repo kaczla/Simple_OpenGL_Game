@@ -40,6 +40,7 @@ g++ (GCC) 4.8.1
 6) **[Assimp](http://assimp.sourceforge.net)**</br>
 
 #### Pakiety dla Ubuntu:
+
 sudo apt-get install libsdl2-dev glew-utils libglew-dev libglm-dev libdevil-dev libassimp-dev
 </br>
 </br>
@@ -59,7 +60,7 @@ Uruchomić aplikację **game.app**\*\* w głównym katalogu repozytorium ( wcze�
 </br>
 
 ### Sterowanie:
-</br>
+
 **W** / **Strzałka w górę** - Poruszanie się do porzodu (przed siebie)
 </br>
 **S** / **Strzałka w dół** - Poruszanie się do tyłu
@@ -91,5 +92,10 @@ Uruchomić aplikację **game.app**\*\* w głównym katalogu repozytorium ( wcze�
 **6** (na klawiaturze numerycznej) - Rozglądanie się w prawo
 </br>
 **ESC** - wyjście z gry
+</br>
+</br>
+
+### Screenshot:
+
 </br>
 </br>

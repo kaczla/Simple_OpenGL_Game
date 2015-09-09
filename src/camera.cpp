@@ -1,3 +1,7 @@
+/*!
+   \file camera.cpp
+   \brief Plik źródłowy dla camera.hpp.
+*/
 #include "camera.hpp"
 #include <SDL2/SDL.h>
 #define GLM_FORCE_RADIANS

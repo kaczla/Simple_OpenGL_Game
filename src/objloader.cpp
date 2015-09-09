@@ -1,3 +1,7 @@
+/*!
+   \file objloader.cpp
+   \brief Plik źródłowy dla objloader.hpp.
+*/
 #include "objloader.hpp"
 #include <fstream>
 #include <string>

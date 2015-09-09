@@ -1,3 +1,7 @@
+/*!
+   \file shader.cpp
+   \brief Plik źródłowy dla shader.hpp.
+*/
 #include "shader.hpp"
 #include <iostream>
 #include <vector>

@@ -1,3 +1,7 @@
+/*!
+   \file model.cpp
+   \brief Plik źródłowy dla model.hpp.
+*/
 #include "model.hpp"
 #include <SDL2/SDL.h>
 #define GLM_FORCE_RADIANS
@@ -183,11 +187,13 @@ void Model::SetMTLPathFile( const char *path ){
 void Model::SetPath( std::string path_obj, std::string path_img ){
    this->OBJPathFile = path_obj;
    this->ImgPathFile = path_img;
+   this->ImgSpecPathFile = path_img;
 }
 
 void Model::SetPath( const char *path_obj, const char *path_img ){
    this->OBJPathFile = path_obj;
    this->ImgPathFile = path_img;
+   this->ImgSpecPathFile = path_img;
 }
 
 void Model::SetAmbient( glm::vec3 &in ){
@@ -357,6 +363,14 @@ void Model::DrawNoTexture(){
       glDrawElements( GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, (GLvoid *)0 );
    }
    glBindVertexArray( 0 );
+}
+
+GLuint Model::ReturnTexture(){
+   return this->Texture;
+}
+
+GLuint Model::ReturnTextureSpecular(){
+   return this->TextureSpecular;
 }
 
 void Model::Translate( glm::vec3 &in ){

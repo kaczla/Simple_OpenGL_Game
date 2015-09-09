@@ -1,3 +1,7 @@
+/*!
+   \file light.cpp
+   \brief Plik źródłowy dla light.hpp.
+*/
 #include "light.hpp"
 #include <SDL2/SDL.h>
 #define GLM_FORCE_RADIANS

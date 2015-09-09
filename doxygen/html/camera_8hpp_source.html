@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9.1"/>
+<title>Simple OpenGL Game: Plik źródłowy src/camera.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Simple OpenGL Game
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano przez Doxygen 1.8.9.1 -->
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Strona&#160;główna</span></a></li>
+      <li><a href="annotated.html"><span>Klasy</span></a></li>
+      <li class="current"><a href="files.html"><span>Pliki</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Lista&#160;plików</span></a></li>
+      <li><a href="globals.html"><span>Składowe&#160;plików</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">camera.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="camera_8hpp.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef camera_hpp</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define camera_hpp</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;GL/glew.h&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;glm/detail/setup.hpp&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#if GLM_VERSION &gt;= 96</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;glm/gtc/vec1.hpp&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;glm/gtx/vec1.hpp&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespaceglm.html">glm</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="class_camera.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_camera.html">Camera</a>{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;   <a class="code" href="class_camera.html">Camera</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;   <a class="code" href="class_camera.html">Camera</a>( <span class="keyword">const</span> <a class="code" href="class_camera.html">Camera</a> &amp;camera );</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;   ~<a class="code" href="class_camera.html">Camera</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;   <a class="code" href="class_camera.html">Camera</a> &amp; operator=( <span class="keyword">const</span> <a class="code" href="class_camera.html">Camera</a> &amp;camera );</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;   mat4 getViewMatrix() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;   mat4 getProjectionMatrix() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;   <span class="keywordtype">void</span> SetVOF( vec1 &amp;vof );</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;   <span class="keywordtype">void</span> SetAspect( vec1 &amp;aspect );</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;   <span class="keywordtype">void</span> SetNear( vec1 &amp;near );</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;   <span class="keywordtype">void</span> SetFar( vec1 &amp;far );</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;   <span class="keywordtype">void</span> SetPositionMin( vec3 &amp;min );</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;   <span class="keywordtype">void</span> SetPositionMax( vec3 &amp;max );</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;   <span class="keywordtype">void</span> SetPositionMinMax( vec3 &amp;min, vec3 &amp;max );</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;   <span class="keywordtype">void</span> ChangeVOF( glm::vec1 &amp;in );</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;   <span class="keywordtype">void</span> MouseUpdate( <span class="keyword">const</span> vec2 &amp;Mouse );</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;   <span class="keywordtype">void</span> MoveUp();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;   <span class="keywordtype">void</span> MoveDown();</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;   <span class="keywordtype">void</span> MoveForward();</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;   <span class="keywordtype">void</span> MoveBackward();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;   <span class="keywordtype">void</span> MoveLeft();</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;   <span class="keywordtype">void</span> MoveRight();</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;   <span class="keywordtype">void</span> TurnFreeCamera();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;   <span class="keywordtype">void</span> SetPositionDefault();</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;   vec3 ReturnPosition() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;   <span class="keywordtype">void</span> Log() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;   <span class="keywordtype">void</span> UpdateProjectionMatrix();</div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="class_camera.html#a28ae256428afe91a894b99584bdcfe4f">  166</a></span>&#160;   vec3 Position = vec3( 0.0f, 1.0f, 0.0f );</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="class_camera.html#a1755868016351825f550cee6a480f9e0">  170</a></span>&#160;   vec3 ViewDirection = vec3( 0.0f, 0.0f, -1.0f );</div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="class_camera.html#a17c45b2bf09c165a4cf1aff793f628d7">  174</a></span>&#160;   vec3 Up = vec3( 0.0f, 1.0f, 0.0f );</div>
+<div class="line"><a name="l00178"></a><span class="lineno"><a class="line" href="class_camera.html#a30d792ced136c64404929daccc2ec846">  178</a></span>&#160;   vec3 PreviousPosition = vec3( 0.0f, 1.0f, 0.0f );</div>
+<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="class_camera.html#af04095d9fc070730921054c9d4f79834">  182</a></span>&#160;   vec3 PositionMax = vec3( 50.0f, 25.0f, 50.0f );</div>
+<div class="line"><a name="l00186"></a><span class="lineno"><a class="line" href="class_camera.html#a520aa65148f705838050ea6dae7610cb">  186</a></span>&#160;   vec3 PositionMin = vec3( -50.0f, -25.0f, -50.0f );</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;   <span class="comment">//Rotation:</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="class_camera.html#a1ca04b9e9f19c3652ad1b724285a7d46">  191</a></span>&#160;<span class="comment"></span>   vec1 RotationSpeed = vec1( 0.0005f );</div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="class_camera.html#a7c7399bef506ef389d3b6b0eb987daea">  195</a></span>&#160;   vec3 <a class="code" href="class_camera.html#a7c7399bef506ef389d3b6b0eb987daea">RotationAround</a>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="class_camera.html#a1597454b5ad42f081b85719169cd8592">  199</a></span>&#160;   mat4 <a class="code" href="class_camera.html#a1597454b5ad42f081b85719169cd8592">Rotation</a>;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;   <span class="comment">//Movement:</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno"><a class="line" href="class_camera.html#a5ef3ef5785a819e35dd9538372a4ebb7">  204</a></span>&#160;<span class="comment"></span>   vec1 MovementSpeed = vec1( 0.1f );</div>
+<div class="line"><a name="l00208"></a><span class="lineno"><a class="line" href="class_camera.html#a421c1ecc8c809bfa8bf1d78ced54dd4c">  208</a></span>&#160;   vec3 <a class="code" href="class_camera.html#a421c1ecc8c809bfa8bf1d78ced54dd4c">MovementDirection</a>;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;   <span class="comment">//ProjectionMatrix:</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno"><a class="line" href="class_camera.html#a379f603f9acf65267e90c3ad87bfce3b">  213</a></span>&#160;<span class="comment"></span>   mat4 <a class="code" href="class_camera.html#a379f603f9acf65267e90c3ad87bfce3b">ProjectionMatrix</a>;</div>
+<div class="line"><a name="l00217"></a><span class="lineno"><a class="line" href="class_camera.html#a187d5e8fa267e4b02d33bc889db9f68a">  217</a></span>&#160;   vec1 VOF = vec1( 45.0f );</div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="class_camera.html#a2f6dec6fa114d17b845da148545cd85e">  221</a></span>&#160;   vec1 Aspect = vec1( 4.0f / 3.0f );</div>
+<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="class_camera.html#a03bd8edbf0b314adb7019f4b92bd3145">  225</a></span>&#160;   vec1 Near = vec1( 0.1 );</div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="class_camera.html#a0dcef9429c52a585e0d41174d1b1ef94">  229</a></span>&#160;   vec1 Far = vec1( 100.0f );</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;   <span class="comment">//Free camera:</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="class_camera.html#ab8292590671641a5dc5bb51dc8692155">  234</a></span>&#160;<span class="comment"></span>   <span class="keywordtype">bool</span> FreeCamera = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;};</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="namespaceglm_html"><div class="ttname"><a href="namespaceglm.html">glm</a></div></div>
+<div class="ttc" id="class_camera_html"><div class="ttname"><a href="class_camera.html">Camera</a></div><div class="ttdoc">Klasa odpowiedzialna za zarządzaniem kamerą gracza. </div><div class="ttdef"><b>Definition:</b> <a href="camera_8hpp_source.html#l00021">camera.hpp:21</a></div></div>
+<div class="ttc" id="class_camera_html_a379f603f9acf65267e90c3ad87bfce3b"><div class="ttname"><a href="class_camera.html#a379f603f9acf65267e90c3ad87bfce3b">Camera::ProjectionMatrix</a></div><div class="ttdeci">mat4 ProjectionMatrix</div><div class="ttdoc">Macierz projekcji. </div><div class="ttdef"><b>Definition:</b> <a href="camera_8hpp_source.html#l00213">camera.hpp:213</a></div></div>
+<div class="ttc" id="class_camera_html_a7c7399bef506ef389d3b6b0eb987daea"><div class="ttname"><a href="class_camera.html#a7c7399bef506ef389d3b6b0eb987daea">Camera::RotationAround</a></div><div class="ttdeci">vec3 RotationAround</div><div class="ttdoc">Tymczasowy dla obrotu kamery. </div><div class="ttdef"><b>Definition:</b> <a href="camera_8hpp_source.html#l00195">camera.hpp:195</a></div></div>
+<div class="ttc" id="class_camera_html_a421c1ecc8c809bfa8bf1d78ced54dd4c"><div class="ttname"><a href="class_camera.html#a421c1ecc8c809bfa8bf1d78ced54dd4c">Camera::MovementDirection</a></div><div class="ttdeci">vec3 MovementDirection</div><div class="ttdoc">Tymczasowy dla poruszania się kamery. </div><div class="ttdef"><b>Definition:</b> <a href="camera_8hpp_source.html#l00208">camera.hpp:208</a></div></div>
+<div class="ttc" id="class_camera_html_a1597454b5ad42f081b85719169cd8592"><div class="ttname"><a href="class_camera.html#a1597454b5ad42f081b85719169cd8592">Camera::Rotation</a></div><div class="ttdeci">mat4 Rotation</div><div class="ttdoc">Tymczasowy dla obrotu kamery. </div><div class="ttdef"><b>Definition:</b> <a href="camera_8hpp_source.html#l00199">camera.hpp:199</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<html>
+   <body>
+   </body>
+</html>

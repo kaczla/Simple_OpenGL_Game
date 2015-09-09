@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9.1"/>
+<title>Simple OpenGL Game: Plik źródłowy src/light.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Simple OpenGL Game
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano przez Doxygen 1.8.9.1 -->
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Strona&#160;główna</span></a></li>
+      <li><a href="annotated.html"><span>Klasy</span></a></li>
+      <li class="current"><a href="files.html"><span>Pliki</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Lista&#160;plików</span></a></li>
+      <li><a href="globals.html"><span>Składowe&#160;plików</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">light.cpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="light_8cpp.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="light_8hpp.html">light.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;SDL2/SDL.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#define GLM_FORCE_RADIANS</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;glm/gtc/matrix_transform.hpp&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;glm/gtc/type_ptr.hpp&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="objloader_8hpp.html">objloader.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;GLuint * <a class="code" href="class_light.html#a6e064825a8bc41aca00296197166ab62">Light::ModelUniformLight</a> = NULL;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;GLuint * <a class="code" href="class_light.html#a56fa627cf337ea43f1d702f53ff22b38">Light::UniformColorLight</a> = NULL;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="class_light.html#aeb5df09a25a32f19fdffa761268ba24f">   15</a></span>&#160;<a class="code" href="class_light.html#aeb5df09a25a32f19fdffa761268ba24f">Light::Light</a>(){</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;   this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> = 0;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;   this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> = 0;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;   this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> = 0;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;   this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a> = glm::vec3( 1.0f, 1.0f, 1.0f );</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;}</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="class_light.html#a17bbd8c0e46429fa1c7abcca4f6db8df">   23</a></span>&#160;<a class="code" href="class_light.html#aeb5df09a25a32f19fdffa761268ba24f">Light::Light</a>( std::string path_obj ){</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;   this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> = 0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;   this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> = 0;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;   this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> = 0;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;   this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a> = glm::vec3( 1.0f, 1.0f, 1.0f );</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = path_obj;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="class_light.html#a16d405c2f98f14cadffe8908e687a4f2">   33</a></span>&#160;<a class="code" href="class_light.html#aeb5df09a25a32f19fdffa761268ba24f">Light::Light</a>( <span class="keyword">const</span> <a class="code" href="class_light.html">Light</a> &amp;light ){</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;   this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> = light.<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;   this-&gt;<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a> = light.<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;   this-&gt;<a class="code" href="class_light.html#a289a604a7bbd6d3ea3e9ae7a2a5a16d9">Uvs</a> = light.<a class="code" href="class_light.html#a289a604a7bbd6d3ea3e9ae7a2a5a16d9">Uvs</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;   this-&gt;<a class="code" href="class_light.html#a5dee9095dc48582d5de927ac8e35cf5f">Normals</a> = light.<a class="code" href="class_light.html#a5dee9095dc48582d5de927ac8e35cf5f">Normals</a>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;   this-&gt;<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a> = light.<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;   this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> = light.<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;   this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> = light.<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = light.<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a> = light.<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;   this-&gt;<a class="code" href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Ambient</a> = light.<a class="code" href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Ambient</a>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;   this-&gt;<a class="code" href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Diffuse</a> = light.<a class="code" href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Diffuse</a>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;   this-&gt;<a class="code" href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Specular</a> = light.<a class="code" href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Specular</a>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;   this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a> = light.<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;   this-&gt;<a class="code" href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Init</a> = light.<a class="code" href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Init</a>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="class_light.html#ad0e59fad13bb6cfadc25b2c477e9ddc7">   55</a></span>&#160;<a class="code" href="class_light.html#ad0e59fad13bb6cfadc25b2c477e9ddc7">Light::~Light</a>(){</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;   glDeleteBuffers( 1, &amp;this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> );</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;   glDeleteBuffers( 1, &amp;this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> );</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;   glDeleteVertexArrays( 1, &amp;this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> );</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_light.html#a538854e01937341894ed5f57d3e16166">   61</a></span>&#160;<a class="code" href="class_light.html">Light</a> &amp; <a class="code" href="class_light.html#a538854e01937341894ed5f57d3e16166">Light::operator=</a>( <span class="keyword">const</span> <a class="code" href="class_light.html">Light</a> &amp;light ){</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;   this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> = light.<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;   this-&gt;<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a> = light.<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;   this-&gt;<a class="code" href="class_light.html#a289a604a7bbd6d3ea3e9ae7a2a5a16d9">Uvs</a> = light.<a class="code" href="class_light.html#a289a604a7bbd6d3ea3e9ae7a2a5a16d9">Uvs</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;   this-&gt;<a class="code" href="class_light.html#a5dee9095dc48582d5de927ac8e35cf5f">Normals</a> = light.<a class="code" href="class_light.html#a5dee9095dc48582d5de927ac8e35cf5f">Normals</a>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;   this-&gt;<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a> = light.<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;   this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> = light.<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;   this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> = light.<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = light.<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a> = light.<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;   this-&gt;<a class="code" href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Ambient</a> = light.<a class="code" href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Ambient</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;   this-&gt;<a class="code" href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Diffuse</a> = light.<a class="code" href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Diffuse</a>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;   this-&gt;<a class="code" href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Specular</a> = light.<a class="code" href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Specular</a>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;   this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a> = light.<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;   this-&gt;<a class="code" href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Init</a> = light.<a class="code" href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Init</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="class_light.html#ace8c60bdf9dd941cbadeeed1fe92322d">   83</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#ace8c60bdf9dd941cbadeeed1fe92322d">Light::SetOBJPathFile</a>( std::string path ){</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = path;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="class_light.html#a6ecf980b2ffe844ac6693302db483da0">   87</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#ace8c60bdf9dd941cbadeeed1fe92322d">Light::SetOBJPathFile</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *path ){</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = path;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_light.html#ab9baed04c8050fdbc33a4672dd90a71d">   91</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#ab9baed04c8050fdbc33a4672dd90a71d">Light::SetPath</a>( std::string path_obj ){</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = path_obj;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="class_light.html#a73521c772dff1c4eaf4cb301bda7118f">   95</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#ab9baed04c8050fdbc33a4672dd90a71d">Light::SetPath</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *path_obj ){</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;   this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a> = path_obj;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="class_light.html#a22047a9e4fb0b36c14d787c965e3ee47">   99</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a22047a9e4fb0b36c14d787c965e3ee47">Light::SetColor</a>( glm::vec3 &amp;color ){</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;   this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a> = color;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;}</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="class_light.html#a03a6278a13bb4cae6cc2b22deac4d92d">  103</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a03a6278a13bb4cae6cc2b22deac4d92d">Light::SetAmbient</a>( glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;   this-&gt;<a class="code" href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Ambient</a> = in;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="class_light.html#a4ece2fc7507216e03b0aae7bb11950a8">  107</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a4ece2fc7507216e03b0aae7bb11950a8">Light::SetDiffuse</a>( glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;   this-&gt;<a class="code" href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Diffuse</a> = in;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;}</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="class_light.html#a5b2fc075b511d4f453fe80b99edf9f19">  111</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a5b2fc075b511d4f453fe80b99edf9f19">Light::SetSpecular</a>( glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;   this-&gt;<a class="code" href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Specular</a> = in;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="class_light.html#abf29373a95c5b2b28303e28819d0a3e1">  115</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#abf29373a95c5b2b28303e28819d0a3e1">Light::Load</a>(){</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;   SDL_Log( <span class="stringliteral">&quot;\n&quot;</span> );</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;   this-&gt;<a class="code" href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Init</a> = <a class="code" href="objloader_8cpp.html#a1d575ddbf50cc2ee9b220ca8e4ccb3ac">LoadAssimp</a>( this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a>.c_str(), this-&gt;<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a>, this-&gt;<a class="code" href="class_light.html#a289a604a7bbd6d3ea3e9ae7a2a5a16d9">Uvs</a>, this-&gt;<a class="code" href="class_light.html#a5dee9095dc48582d5de927ac8e35cf5f">Normals</a>, this-&gt;<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a> );</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;   this-&gt;<a class="code" href="class_light.html#aa833b23c9ce69b8140976733807ca137">BindVAO</a>();</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;}</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="class_light.html#aa833b23c9ce69b8140976733807ca137">  121</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#aa833b23c9ce69b8140976733807ca137">Light::BindVAO</a>(){</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;   <span class="keywordflow">if</span>( this-&gt;<a class="code" href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Init</a> ){</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      SDL_Log( <span class="stringliteral">&quot;Binding %s into VAO\n&quot;</span>, this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a>.c_str() );</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      glGenVertexArrays( 1, &amp;this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> );</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      glGenBuffers( 1, &amp;this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> );</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      glGenBuffers( 1, &amp;this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> );</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      <span class="comment">//Vertex:</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      glBindBuffer( GL_ARRAY_BUFFER, this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> );</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      glBufferData( GL_ARRAY_BUFFER, this-&gt;<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a>.size() * <span class="keyword">sizeof</span>( glm::vec3 ), &amp;this-&gt;<a class="code" href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Vertices</a>[0], GL_STATIC_DRAW );</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <span class="comment">//VAO:</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      glBindVertexArray( this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> );</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <span class="comment">//Vertex:</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      glBindBuffer( GL_ARRAY_BUFFER, this-&gt;<a class="code" href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">VertexBuffer</a> );</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0 );</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      glEnableVertexAttribArray( 0 );</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      <span class="comment">//Indicies:</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this-&gt;<a class="code" href="class_light.html#a203455075a09c6200708bd18de503ff0">IndicesBuffer</a> );</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      glBufferData( GL_ELEMENT_ARRAY_BUFFER, this-&gt;<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a>.size() * <span class="keyword">sizeof</span>(GLuint), &amp;this-&gt;<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a>[0], GL_STATIC_DRAW );</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      glBindVertexArray( 0 );</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      SDL_Log( <span class="stringliteral">&quot;Binded %s into VAO\n&quot;</span>, this-&gt;<a class="code" href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">OBJPathFile</a>.c_str() );</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;   }</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;   <span class="keywordflow">else</span>{</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      SDL_LogError( SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Before binding, load file and texture!\n&quot;</span> );</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;   }</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;}</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="class_light.html#a9ed6241cd62c61ce61249b9bc2958fdd">  152</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a9ed6241cd62c61ce61249b9bc2958fdd">Light::Draw</a>(){</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;   glUniformMatrix4fv( *<a class="code" href="class_light.html#a6e064825a8bc41aca00296197166ab62">Light::ModelUniformLight</a>, 1, GL_FALSE, glm::value_ptr( this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a> ) );</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;   glUniform3fv( *<a class="code" href="class_light.html#a56fa627cf337ea43f1d702f53ff22b38">Light::UniformColorLight</a>, 1, glm::value_ptr( this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a> ) );</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;   <span class="comment">//Bind VAO:</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;   glBindVertexArray( this-&gt;<a class="code" href="class_light.html#a792a2c95e0978a772912fef4e809bc89">VAO</a> );</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;   <span class="comment">//Draw:</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;   glDrawElements( GL_TRIANGLES, this-&gt;<a class="code" href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Indices</a>.size(), GL_UNSIGNED_INT, (GLvoid *)0 );</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;   <span class="comment">//Unbind VAO:</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;   glBindVertexArray( 0 );</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;}</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
+<div class="line"><a name="l00164"></a><span class="lineno"><a class="line" href="class_light.html#a60488157359e07dd44f1544cb58680b7">  164</a></span>&#160;glm::vec3 <a class="code" href="class_light.html#a60488157359e07dd44f1544cb58680b7">Light::ReturnPosition</a>(){</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;   <span class="keywordflow">return</span> glm::vec3( this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][0], this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][1], this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][2] );</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;}</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="class_light.html#a90f8c561d1d7fa9fe895c5ec5dce8872">  168</a></span>&#160;glm::vec3 <a class="code" href="class_light.html#a90f8c561d1d7fa9fe895c5ec5dce8872">Light::ReturnAmbient</a>()<span class="keyword"> const</span>{</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;   <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Ambient</a>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;}</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
+<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="class_light.html#a3b26a3303d0013266a43bd9f207fb841">  172</a></span>&#160;glm::vec3 <a class="code" href="class_light.html#a3b26a3303d0013266a43bd9f207fb841">Light::ReturnDiffuse</a>()<span class="keyword"> const</span>{</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;   <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Diffuse</a>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;}</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
+<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="class_light.html#a75ce2cb9792243cc3056747636b97ae7">  176</a></span>&#160;glm::vec3 <a class="code" href="class_light.html#a75ce2cb9792243cc3056747636b97ae7">Light::ReturnSpecular</a>()<span class="keyword"> const</span>{</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;   <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Specular</a>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;}</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno"><a class="line" href="class_light.html#ae218bf18a77d140b2a7f95fb9a3e650e">  180</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#ae218bf18a77d140b2a7f95fb9a3e650e">Light::Translate</a>( glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a> = glm::translate( this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>, in );</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;}</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="class_light.html#a04da0589d02a041c2cc32b4ba7bdaff9">  184</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a04da0589d02a041c2cc32b4ba7bdaff9">Light::Rotate</a>( GLfloat angle, glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a> = glm::rotate( this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>, glm::radians( angle ), in );</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;}</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="class_light.html#aee9ad1e936a080322e014eb971db2429">  188</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#aee9ad1e936a080322e014eb971db2429">Light::Scale</a>( glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a> = glm::scale( this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>, in );</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;}</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
+<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="class_light.html#a96687ccc9ed57e05611f54e4ba33d104">  192</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a96687ccc9ed57e05611f54e4ba33d104">Light::ChangePosition</a>( glm::vec3 &amp;in ){</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][0] = in.x;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][1] = in.y;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;   this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][2] = in.z;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;}</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div>
+<div class="line"><a name="l00198"></a><span class="lineno"><a class="line" href="class_light.html#a225a84af5f6b5a6509fb215b7c7eeada">  198</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_light.html#a225a84af5f6b5a6509fb215b7c7eeada">Light::Log</a>()<span class="keyword"> const</span>{</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;   SDL_Log( <span class="stringliteral">&quot;\tPosition: %f %f %f\n\tColor: %f %f %f\n&quot;</span>,</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][0],</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][1],</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            this-&gt;<a class="code" href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">ModelMatrix</a>[3][2],</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            this-&gt;<a class="code" href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Color</a>.x,</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            this-&gt;Color.y,</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            this-&gt;Color.z</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;   );</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;}</div>
+<div class="ttc" id="class_light_html_aa833b23c9ce69b8140976733807ca137"><div class="ttname"><a href="class_light.html#aa833b23c9ce69b8140976733807ca137">Light::BindVAO</a></div><div class="ttdeci">void BindVAO()</div><div class="ttdoc">Tworzy VAO (Vertex Array Object). </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00121">light.cpp:121</a></div></div>
+<div class="ttc" id="class_light_html_ab9baed04c8050fdbc33a4672dd90a71d"><div class="ttname"><a href="class_light.html#ab9baed04c8050fdbc33a4672dd90a71d">Light::SetPath</a></div><div class="ttdeci">void SetPath(std::string path_obj)</div><div class="ttdoc">Ustala nową ścieżkę dla pliku .obj. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00091">light.cpp:91</a></div></div>
+<div class="ttc" id="class_light_html_a56fa627cf337ea43f1d702f53ff22b38"><div class="ttname"><a href="class_light.html#a56fa627cf337ea43f1d702f53ff22b38">Light::UniformColorLight</a></div><div class="ttdeci">static GLuint * UniformColorLight</div><div class="ttdoc">Wskaźnik do uniformu koloru obiektu. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00162">light.hpp:162</a></div></div>
+<div class="ttc" id="objloader_8hpp_html"><div class="ttname"><a href="objloader_8hpp.html">objloader.hpp</a></div><div class="ttdoc">Plik odpowiedzialny za ładowanie plików .obj oraz .mtl. </div></div>
+<div class="ttc" id="class_light_html"><div class="ttname"><a href="class_light.html">Light</a></div><div class="ttdoc">Klasa odpowiedzialna za zarządzaniem obiektem oświetlenia. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00015">light.hpp:15</a></div></div>
+<div class="ttc" id="class_light_html_a538854e01937341894ed5f57d3e16166"><div class="ttname"><a href="class_light.html#a538854e01937341894ed5f57d3e16166">Light::operator=</a></div><div class="ttdeci">Light &amp; operator=(const Light &amp;light)</div><div class="ttdoc">Operator przypisania. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00061">light.cpp:61</a></div></div>
+<div class="ttc" id="class_light_html_a0c4b173cba0e0f40bc5c70e00003cbc6"><div class="ttname"><a href="class_light.html#a0c4b173cba0e0f40bc5c70e00003cbc6">Light::ModelMatrix</a></div><div class="ttdeci">glm::mat4 ModelMatrix</div><div class="ttdoc">Macierz modelu. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00204">light.hpp:204</a></div></div>
+<div class="ttc" id="class_light_html_a75ce2cb9792243cc3056747636b97ae7"><div class="ttname"><a href="class_light.html#a75ce2cb9792243cc3056747636b97ae7">Light::ReturnSpecular</a></div><div class="ttdeci">glm::vec3 ReturnSpecular() const </div><div class="ttdoc">Zwraca aktualną wartość zmiennej Specular. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00176">light.cpp:176</a></div></div>
+<div class="ttc" id="class_light_html_a5dee9095dc48582d5de927ac8e35cf5f"><div class="ttname"><a href="class_light.html#a5dee9095dc48582d5de927ac8e35cf5f">Light::Normals</a></div><div class="ttdeci">std::vector&lt; glm::vec3 &gt; Normals</div><div class="ttdoc">Wektor Normalnych. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00181">light.hpp:181</a></div></div>
+<div class="ttc" id="objloader_8cpp_html_a1d575ddbf50cc2ee9b220ca8e4ccb3ac"><div class="ttname"><a href="objloader_8cpp.html#a1d575ddbf50cc2ee9b220ca8e4ccb3ac">LoadAssimp</a></div><div class="ttdeci">bool LoadAssimp(const char *path_file, std::vector&lt; glm::vec3 &gt; &amp;vertices, std::vector&lt; glm::vec2 &gt; &amp;uvs, std::vector&lt; glm::vec3 &gt; &amp;normals, std::vector&lt; GLuint &gt; &amp;indices)</div><div class="ttdoc">Ładuje plik .obj do pamięci. </div><div class="ttdef"><b>Definition:</b> <a href="objloader_8cpp_source.html#l00221">objloader.cpp:221</a></div></div>
+<div class="ttc" id="class_light_html_a03a6278a13bb4cae6cc2b22deac4d92d"><div class="ttname"><a href="class_light.html#a03a6278a13bb4cae6cc2b22deac4d92d">Light::SetAmbient</a></div><div class="ttdeci">void SetAmbient(glm::vec3 &amp;in)</div><div class="ttdoc">Ustala nową wartość dla Ambient. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00103">light.cpp:103</a></div></div>
+<div class="ttc" id="class_light_html_a6e064825a8bc41aca00296197166ab62"><div class="ttname"><a href="class_light.html#a6e064825a8bc41aca00296197166ab62">Light::ModelUniformLight</a></div><div class="ttdeci">static GLuint * ModelUniformLight</div><div class="ttdoc">Wskaźnik do uniformu macierzy modelu. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00158">light.hpp:158</a></div></div>
+<div class="ttc" id="class_light_html_a792a2c95e0978a772912fef4e809bc89"><div class="ttname"><a href="class_light.html#a792a2c95e0978a772912fef4e809bc89">Light::VAO</a></div><div class="ttdeci">GLuint VAO</div><div class="ttdoc">Identyfikator VAO (Vertex Array Object). </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00168">light.hpp:168</a></div></div>
+<div class="ttc" id="class_light_html_abf29373a95c5b2b28303e28819d0a3e1"><div class="ttname"><a href="class_light.html#abf29373a95c5b2b28303e28819d0a3e1">Light::Load</a></div><div class="ttdeci">void Load()</div><div class="ttdoc">Wczytuje dane obiektu z pliku .obj. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00115">light.cpp:115</a></div></div>
+<div class="ttc" id="class_light_html_ad0e59fad13bb6cfadc25b2c477e9ddc7"><div class="ttname"><a href="class_light.html#ad0e59fad13bb6cfadc25b2c477e9ddc7">Light::~Light</a></div><div class="ttdeci">~Light()</div><div class="ttdoc">Destruktor. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00055">light.cpp:55</a></div></div>
+<div class="ttc" id="class_light_html_ade3830cd9f23a6eda328c875b7305008"><div class="ttname"><a href="class_light.html#ade3830cd9f23a6eda328c875b7305008">Light::Indices</a></div><div class="ttdeci">std::vector&lt; GLuint &gt; Indices</div><div class="ttdoc">Wektor Indeksów Wierzchołków. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00185">light.hpp:185</a></div></div>
+<div class="ttc" id="class_light_html_ace8c60bdf9dd941cbadeeed1fe92322d"><div class="ttname"><a href="class_light.html#ace8c60bdf9dd941cbadeeed1fe92322d">Light::SetOBJPathFile</a></div><div class="ttdeci">void SetOBJPathFile(std::string path)</div><div class="ttdoc">Ustala nową ścieżkę dla pliku .obj. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00083">light.cpp:83</a></div></div>
+<div class="ttc" id="class_light_html_a3b26a3303d0013266a43bd9f207fb841"><div class="ttname"><a href="class_light.html#a3b26a3303d0013266a43bd9f207fb841">Light::ReturnDiffuse</a></div><div class="ttdeci">glm::vec3 ReturnDiffuse() const </div><div class="ttdoc">Zwraca aktualną wartość zmiennej Diffuse. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00172">light.cpp:172</a></div></div>
+<div class="ttc" id="class_light_html_a4f88921104c72236acf6fdef0f996d2f"><div class="ttname"><a href="class_light.html#a4f88921104c72236acf6fdef0f996d2f">Light::Vertices</a></div><div class="ttdeci">std::vector&lt; glm::vec3 &gt; Vertices</div><div class="ttdoc">Wektor Wierzchołków. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00173">light.hpp:173</a></div></div>
+<div class="ttc" id="light_8hpp_html"><div class="ttname"><a href="light_8hpp.html">light.hpp</a></div><div class="ttdoc">Plik odpowiedzialny zarządzanie obiektem światła. </div></div>
+<div class="ttc" id="class_light_html_ae5e1e9cb633cea9ad892e644354bd6d1"><div class="ttname"><a href="class_light.html#ae5e1e9cb633cea9ad892e644354bd6d1">Light::Color</a></div><div class="ttdeci">glm::vec3 Color</div><div class="ttdoc">Kolor obiektu. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00222">light.hpp:222</a></div></div>
+<div class="ttc" id="class_light_html_a203455075a09c6200708bd18de503ff0"><div class="ttname"><a href="class_light.html#a203455075a09c6200708bd18de503ff0">Light::IndicesBuffer</a></div><div class="ttdeci">GLuint IndicesBuffer</div><div class="ttdoc">Identyfikator Indeksów Wierzchołków. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00194">light.hpp:194</a></div></div>
+<div class="ttc" id="class_light_html_aeb5df09a25a32f19fdffa761268ba24f"><div class="ttname"><a href="class_light.html#aeb5df09a25a32f19fdffa761268ba24f">Light::Light</a></div><div class="ttdeci">Light()</div><div class="ttdoc">Konstruktor domyślny. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00015">light.cpp:15</a></div></div>
+<div class="ttc" id="class_light_html_a5b2fc075b511d4f453fe80b99edf9f19"><div class="ttname"><a href="class_light.html#a5b2fc075b511d4f453fe80b99edf9f19">Light::SetSpecular</a></div><div class="ttdeci">void SetSpecular(glm::vec3 &amp;in)</div><div class="ttdoc">Ustala nową wartość dla Specular. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00111">light.cpp:111</a></div></div>
+<div class="ttc" id="class_light_html_a4ece2fc7507216e03b0aae7bb11950a8"><div class="ttname"><a href="class_light.html#a4ece2fc7507216e03b0aae7bb11950a8">Light::SetDiffuse</a></div><div class="ttdeci">void SetDiffuse(glm::vec3 &amp;in)</div><div class="ttdoc">Ustala nową wartość dla Diffuse. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00107">light.cpp:107</a></div></div>
+<div class="ttc" id="class_light_html_a54960118c530c4f68edaa29eb9a64ff1"><div class="ttname"><a href="class_light.html#a54960118c530c4f68edaa29eb9a64ff1">Light::VertexBuffer</a></div><div class="ttdeci">GLuint VertexBuffer</div><div class="ttdoc">Identyfikator Wierzchołków. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00190">light.hpp:190</a></div></div>
+<div class="ttc" id="class_light_html_a22047a9e4fb0b36c14d787c965e3ee47"><div class="ttname"><a href="class_light.html#a22047a9e4fb0b36c14d787c965e3ee47">Light::SetColor</a></div><div class="ttdeci">void SetColor(glm::vec3 &amp;color)</div><div class="ttdoc">Ustala nowy kolor dla obiektu oświetlenia. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00099">light.cpp:99</a></div></div>
+<div class="ttc" id="class_light_html_a90f8c561d1d7fa9fe895c5ec5dce8872"><div class="ttname"><a href="class_light.html#a90f8c561d1d7fa9fe895c5ec5dce8872">Light::ReturnAmbient</a></div><div class="ttdeci">glm::vec3 ReturnAmbient() const </div><div class="ttdoc">Zwraca aktualną wartość zmiennej Ambient. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00168">light.cpp:168</a></div></div>
+<div class="ttc" id="class_light_html_a36bb811be370e44ec5cad78e0a72bd78"><div class="ttname"><a href="class_light.html#a36bb811be370e44ec5cad78e0a72bd78">Light::Ambient</a></div><div class="ttdeci">glm::vec3 Ambient</div><div class="ttdoc">Wartość Ambient. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00209">light.hpp:209</a></div></div>
+<div class="ttc" id="class_light_html_ace81b552ca6dab3280c7e8a1f6a6f81e"><div class="ttname"><a href="class_light.html#ace81b552ca6dab3280c7e8a1f6a6f81e">Light::OBJPathFile</a></div><div class="ttdeci">std::string OBJPathFile</div><div class="ttdoc">Ścieżka do pliku .obj. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00199">light.hpp:199</a></div></div>
+<div class="ttc" id="class_light_html_aee9ad1e936a080322e014eb971db2429"><div class="ttname"><a href="class_light.html#aee9ad1e936a080322e014eb971db2429">Light::Scale</a></div><div class="ttdeci">void Scale(glm::vec3 &amp;in)</div><div class="ttdoc">Skalowanie macierzy modelu ( ModelMatrix ). </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00188">light.cpp:188</a></div></div>
+<div class="ttc" id="class_light_html_a225a84af5f6b5a6509fb215b7c7eeada"><div class="ttname"><a href="class_light.html#a225a84af5f6b5a6509fb215b7c7eeada">Light::Log</a></div><div class="ttdeci">void Log() const </div><div class="ttdoc">Wyświetla informacje o oświetleniu. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00198">light.cpp:198</a></div></div>
+<div class="ttc" id="class_light_html_a60488157359e07dd44f1544cb58680b7"><div class="ttname"><a href="class_light.html#a60488157359e07dd44f1544cb58680b7">Light::ReturnPosition</a></div><div class="ttdeci">glm::vec3 ReturnPosition()</div><div class="ttdoc">Zwraca aktualną pozycję obiektu oświetlenia. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00164">light.cpp:164</a></div></div>
+<div class="ttc" id="class_light_html_a96687ccc9ed57e05611f54e4ba33d104"><div class="ttname"><a href="class_light.html#a96687ccc9ed57e05611f54e4ba33d104">Light::ChangePosition</a></div><div class="ttdeci">void ChangePosition(glm::vec3 &amp;in)</div><div class="ttdoc">Zmiana aktualnej pozycji obiektu oświetlenia. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00192">light.cpp:192</a></div></div>
+<div class="ttc" id="class_light_html_a8e43b92c0517f3e1cdfcaceea76172b0"><div class="ttname"><a href="class_light.html#a8e43b92c0517f3e1cdfcaceea76172b0">Light::Init</a></div><div class="ttdeci">bool Init</div><div class="ttdoc">Poprawność zainicjalizowanych wszystkich elementów. FALSE = Błąd. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00227">light.hpp:227</a></div></div>
+<div class="ttc" id="class_light_html_a3f068d7d0a01941afccb38c0136b2d5a"><div class="ttname"><a href="class_light.html#a3f068d7d0a01941afccb38c0136b2d5a">Light::Diffuse</a></div><div class="ttdeci">glm::vec3 Diffuse</div><div class="ttdoc">Wartość Diffuse. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00213">light.hpp:213</a></div></div>
+<div class="ttc" id="class_light_html_ae218bf18a77d140b2a7f95fb9a3e650e"><div class="ttname"><a href="class_light.html#ae218bf18a77d140b2a7f95fb9a3e650e">Light::Translate</a></div><div class="ttdeci">void Translate(glm::vec3 &amp;in)</div><div class="ttdoc">Translacja macierzy modelu ( ModelMatrix ). </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00180">light.cpp:180</a></div></div>
+<div class="ttc" id="class_light_html_a8931370ea2db087d465c38c38cb1e15f"><div class="ttname"><a href="class_light.html#a8931370ea2db087d465c38c38cb1e15f">Light::Specular</a></div><div class="ttdeci">glm::vec3 Specular</div><div class="ttdoc">Wartość Specular. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00217">light.hpp:217</a></div></div>
+<div class="ttc" id="class_light_html_a9ed6241cd62c61ce61249b9bc2958fdd"><div class="ttname"><a href="class_light.html#a9ed6241cd62c61ce61249b9bc2958fdd">Light::Draw</a></div><div class="ttdeci">void Draw()</div><div class="ttdoc">Rysuje obiekt oświetlenia. </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00152">light.cpp:152</a></div></div>
+<div class="ttc" id="class_light_html_a04da0589d02a041c2cc32b4ba7bdaff9"><div class="ttname"><a href="class_light.html#a04da0589d02a041c2cc32b4ba7bdaff9">Light::Rotate</a></div><div class="ttdeci">void Rotate(GLfloat angle, glm::vec3 &amp;in)</div><div class="ttdoc">Rotacja macierzy modelu ( ModelMatrix ). </div><div class="ttdef"><b>Definition:</b> <a href="light_8cpp_source.html#l00184">light.cpp:184</a></div></div>
+<div class="ttc" id="class_light_html_a289a604a7bbd6d3ea3e9ae7a2a5a16d9"><div class="ttname"><a href="class_light.html#a289a604a7bbd6d3ea3e9ae7a2a5a16d9">Light::Uvs</a></div><div class="ttdeci">std::vector&lt; glm::vec2 &gt; Uvs</div><div class="ttdoc">Wektor UV Map. </div><div class="ttdef"><b>Definition:</b> <a href="light_8hpp_source.html#l00177">light.hpp:177</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<html>
+   <body>
+   </body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9.1"/>
+<title>Simple OpenGL Game: Dokumentacja pliku src/objloader.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Simple OpenGL Game
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano przez Doxygen 1.8.9.1 -->
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Strona&#160;główna</span></a></li>
+      <li><a href="annotated.html"><span>Klasy</span></a></li>
+      <li class="current"><a href="files.html"><span>Pliki</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Lista&#160;plików</span></a></li>
+      <li><a href="globals.html"><span>Składowe&#160;plików</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Funkcje</a>  </div>
+  <div class="headertitle">
+<div class="title">Dokumentacja pliku objloader.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Plik odpowiedzialny za ładowanie plików .obj oraz .mtl.  
+<a href="#details">Więcej...</a></p>
+
+<p><a href="objloader_8hpp_source.html">Idź do kodu źródłowego tego pliku.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Funkcje</h2></td></tr>
+<tr class="memitem:ab6d6f59f82e029f9e86ba88c64d60e16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="objloader_8hpp.html#ab6d6f59f82e029f9e86ba88c64d60e16">LoadOBJ</a> (const char *obj_path_file, std::vector&lt; glm::vec3 &gt; &amp;vertices, std::vector&lt; glm::vec2 &gt; &amp;uvs, std::vector&lt; glm::vec3 &gt; &amp;normals)</td></tr>
+<tr class="memdesc:ab6d6f59f82e029f9e86ba88c64d60e16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ładuje plik .obj do pamięci.  <a href="#ab6d6f59f82e029f9e86ba88c64d60e16">Więcej...</a><br /></td></tr>
+<tr class="separator:ab6d6f59f82e029f9e86ba88c64d60e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d575ddbf50cc2ee9b220ca8e4ccb3ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="objloader_8hpp.html#a1d575ddbf50cc2ee9b220ca8e4ccb3ac">LoadAssimp</a> (const char *path_file, std::vector&lt; glm::vec3 &gt; &amp;vertices, std::vector&lt; glm::vec2 &gt; &amp;uvs, std::vector&lt; glm::vec3 &gt; &amp;normals, std::vector&lt; GLuint &gt; &amp;indices)</td></tr>
+<tr class="memdesc:a1d575ddbf50cc2ee9b220ca8e4ccb3ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ładuje plik .obj do pamięci.  <a href="#a1d575ddbf50cc2ee9b220ca8e4ccb3ac">Więcej...</a><br /></td></tr>
+<tr class="separator:a1d575ddbf50cc2ee9b220ca8e4ccb3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a845114059cc8ca30d6b20461b896e110"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="objloader_8hpp.html#a845114059cc8ca30d6b20461b896e110">IndexVBO</a> (std::vector&lt; glm::vec3 &gt; &amp;in_vertices, std::vector&lt; glm::vec2 &gt; &amp;in_uvs, std::vector&lt; glm::vec3 &gt; &amp;in_normals, std::vector&lt; GLuint &gt; &amp;out_indices, std::vector&lt; glm::vec3 &gt; &amp;out_vertices, std::vector&lt; glm::vec2 &gt; &amp;out_uvs, std::vector&lt; glm::vec3 &gt; &amp;out_normals)</td></tr>
+<tr class="memdesc:a845114059cc8ca30d6b20461b896e110"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy Indeks Wierzchołków.  <a href="#a845114059cc8ca30d6b20461b896e110">Więcej...</a><br /></td></tr>
+<tr class="separator:a845114059cc8ca30d6b20461b896e110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8d1d3086cad5759c0d840bc063ddfa0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="objloader_8hpp.html#ab8d1d3086cad5759c0d840bc063ddfa0">LoadMTL</a> (const char *path_file, glm::vec3 &amp;ambient, glm::vec3 &amp;diffuse, glm::vec3 &amp;specular, GLfloat &amp;shininess)</td></tr>
+<tr class="memdesc:ab8d1d3086cad5759c0d840bc063ddfa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ładuje plik .mtl do pamięci.  <a href="#ab8d1d3086cad5759c0d840bc063ddfa0">Więcej...</a><br /></td></tr>
+<tr class="separator:ab8d1d3086cad5759c0d840bc063ddfa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>Plik odpowiedzialny za ładowanie plików .obj oraz .mtl. </p>
+
+<p>Definicja w pliku <a class="el" href="objloader_8hpp_source.html">objloader.hpp</a>.</p>
+</div><h2 class="groupheader">Dokumentacja funkcji</h2>
+<a class="anchor" id="a845114059cc8ca30d6b20461b896e110"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void IndexVBO </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in_vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec2 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in_uvs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in_normals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; GLuint &gt; &amp;&#160;</td>
+          <td class="paramname"><em>out_indices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>out_vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec2 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>out_uvs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>out_normals</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tworzy Indeks Wierzchołków. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in_vertices</td><td>- wektor Wierzchołków wejściowych </td></tr>
+    <tr><td class="paramname">in_uvs</td><td>- wektor UV Map wejściowych </td></tr>
+    <tr><td class="paramname">in_normals</td><td>- wektor Normalnych wejściowych </td></tr>
+    <tr><td class="paramname">out_indices</td><td>- wektor Indeksów Wierzchołków wyjściowy </td></tr>
+    <tr><td class="paramname">out_vertices</td><td>- wektor Wierzchołków wyjściowy </td></tr>
+    <tr><td class="paramname">out_uvs</td><td>- wektor UV Map wyjściowy </td></tr>
+    <tr><td class="paramname">out_normals</td><td>- wektor Normalnych wyjściowy</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Nie wykorzystuje zewnętrznych bibliotek.<br />
+Wykorzystać, gdy nie otrzymano z pliku Indeksów Wierzchołków.<br />
+</p>
+
+<p>Definicja w linii <a class="el" href="objloader_8cpp_source.html#l00189">189</a> pliku <a class="el" href="objloader_8cpp_source.html">objloader.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1d575ddbf50cc2ee9b220ca8e4ccb3ac"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LoadAssimp </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec2 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>uvs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>normals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; GLuint &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indices</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ładuje plik .obj do pamięci. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path_file</td><td>- ścieżka do pliku .obj </td></tr>
+    <tr><td class="paramname">vertices</td><td>- wektor Wierzchołków </td></tr>
+    <tr><td class="paramname">uvs</td><td>- wektor UV Map </td></tr>
+    <tr><td class="paramname">normals</td><td>- wektor Normalnych </td></tr>
+    <tr><td class="paramname">indices</td><td>- wektor Indeksów Wierzchołków </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd>- wartość logiczną dla ładowania pliku .obj, FALSE = błąd</dd></dl>
+<p>Wczytuje z plikuWykorzystuje bibliotekę assimp. </p>
+
+<p>Definicja w linii <a class="el" href="objloader_8cpp_source.html#l00221">221</a> pliku <a class="el" href="objloader_8cpp_source.html">objloader.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8d1d3086cad5759c0d840bc063ddfa0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LoadMTL </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>ambient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>diffuse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>specular</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLfloat &amp;&#160;</td>
+          <td class="paramname"><em>shininess</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ładuje plik .mtl do pamięci. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path_file</td><td>- ścieżka do pliku .mtl </td></tr>
+    <tr><td class="paramname">ambient</td><td>- wartość Ambient </td></tr>
+    <tr><td class="paramname">diffuse</td><td>- wartość Diffuse </td></tr>
+    <tr><td class="paramname">specular</td><td>- wartość Specular </td></tr>
+    <tr><td class="paramname">shininess</td><td>- wartość Shininess (jakość odbicia)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Nie wykorzystuje zewnętrznych bibliotek.<br />
+</p>
+
+<p>Definicja w linii <a class="el" href="objloader_8cpp_source.html#l00274">274</a> pliku <a class="el" href="objloader_8cpp_source.html">objloader.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6d6f59f82e029f9e86ba88c64d60e16"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LoadOBJ </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>obj_path_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec2 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>uvs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>normals</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ładuje plik .obj do pamięci. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj_path_file</td><td>- ścieżka do pliku .obj </td></tr>
+    <tr><td class="paramname">vertices</td><td>- wektor Wierzchołków </td></tr>
+    <tr><td class="paramname">uvs</td><td>- wektor UV Map </td></tr>
+    <tr><td class="paramname">normals</td><td>- wektor Normalnych </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd>- wartość logiczną dla ładowania pliku .obj, FALSE = błąd</dd></dl>
+<p>Nie wykorzystuje zewnętrznych bibliotek. </p>
+
+<p>Definicja w linii <a class="el" href="objloader_8cpp_source.html#l00016">16</a> pliku <a class="el" href="objloader_8cpp_source.html">objloader.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+<html>
+   <body>
+   </body>
+</html>

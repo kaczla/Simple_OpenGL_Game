@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9.1"/>
+<title>Simple OpenGL Game: Plik źródłowy src/objloader.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Simple OpenGL Game
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano przez Doxygen 1.8.9.1 -->
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Strona&#160;główna</span></a></li>
+      <li><a href="annotated.html"><span>Klasy</span></a></li>
+      <li class="current"><a href="files.html"><span>Pliki</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Lista&#160;plików</span></a></li>
+      <li><a href="globals.html"><span>Składowe&#160;plików</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">objloader.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="objloader_8hpp.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef objloader_hpp</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define objloader_hpp</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="objloader_8hpp.html#ab6d6f59f82e029f9e86ba88c64d60e16">LoadOBJ</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *obj_path_file,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;vertices,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;   std::vector &lt;glm::vec2&gt; &amp;uvs,</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;normals</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="objloader_8hpp.html#a1d575ddbf50cc2ee9b220ca8e4ccb3ac">LoadAssimp</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *path_file,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;vertices,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;   std::vector &lt;glm::vec2&gt; &amp;uvs,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;normals,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;   std::vector &lt;GLuint&gt; &amp;indices</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keywordtype">void</span> <a class="code" href="objloader_8hpp.html#a845114059cc8ca30d6b20461b896e110">IndexVBO</a>( std::vector &lt;glm::vec3&gt; &amp;in_vertices,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;   std::vector &lt;glm::vec2&gt; &amp;in_uvs,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;in_normals,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;   std::vector &lt;GLuint&gt; &amp;out_indices,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;out_vertices,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;   std::vector &lt;glm::vec2&gt; &amp;out_uvs,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;   std::vector &lt;glm::vec3&gt; &amp;out_normals</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keywordtype">void</span> <a class="code" href="objloader_8hpp.html#ab8d1d3086cad5759c0d840bc063ddfa0">LoadMTL</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *path_file,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;   glm::vec3 &amp;ambient,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;   glm::vec3 &amp;diffuse,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;   glm::vec3 &amp;specular,</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;   GLfloat &amp;shininess</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="objloader_8hpp_html_ab6d6f59f82e029f9e86ba88c64d60e16"><div class="ttname"><a href="objloader_8hpp.html#ab6d6f59f82e029f9e86ba88c64d60e16">LoadOBJ</a></div><div class="ttdeci">bool LoadOBJ(const char *obj_path_file, std::vector&lt; glm::vec3 &gt; &amp;vertices, std::vector&lt; glm::vec2 &gt; &amp;uvs, std::vector&lt; glm::vec3 &gt; &amp;normals)</div><div class="ttdoc">Ładuje plik .obj do pamięci. </div><div class="ttdef"><b>Definition:</b> <a href="objloader_8cpp_source.html#l00016">objloader.cpp:16</a></div></div>
+<div class="ttc" id="objloader_8hpp_html_ab8d1d3086cad5759c0d840bc063ddfa0"><div class="ttname"><a href="objloader_8hpp.html#ab8d1d3086cad5759c0d840bc063ddfa0">LoadMTL</a></div><div class="ttdeci">void LoadMTL(const char *path_file, glm::vec3 &amp;ambient, glm::vec3 &amp;diffuse, glm::vec3 &amp;specular, GLfloat &amp;shininess)</div><div class="ttdoc">Ładuje plik .mtl do pamięci. </div><div class="ttdef"><b>Definition:</b> <a href="objloader_8cpp_source.html#l00274">objloader.cpp:274</a></div></div>
+<div class="ttc" id="objloader_8hpp_html_a845114059cc8ca30d6b20461b896e110"><div class="ttname"><a href="objloader_8hpp.html#a845114059cc8ca30d6b20461b896e110">IndexVBO</a></div><div class="ttdeci">void IndexVBO(std::vector&lt; glm::vec3 &gt; &amp;in_vertices, std::vector&lt; glm::vec2 &gt; &amp;in_uvs, std::vector&lt; glm::vec3 &gt; &amp;in_normals, std::vector&lt; GLuint &gt; &amp;out_indices, std::vector&lt; glm::vec3 &gt; &amp;out_vertices, std::vector&lt; glm::vec2 &gt; &amp;out_uvs, std::vector&lt; glm::vec3 &gt; &amp;out_normals)</div><div class="ttdoc">Tworzy Indeks Wierzchołków. </div><div class="ttdef"><b>Definition:</b> <a href="objloader_8cpp_source.html#l00189">objloader.cpp:189</a></div></div>
+<div class="ttc" id="objloader_8hpp_html_a1d575ddbf50cc2ee9b220ca8e4ccb3ac"><div class="ttname"><a href="objloader_8hpp.html#a1d575ddbf50cc2ee9b220ca8e4ccb3ac">LoadAssimp</a></div><div class="ttdeci">bool LoadAssimp(const char *path_file, std::vector&lt; glm::vec3 &gt; &amp;vertices, std::vector&lt; glm::vec2 &gt; &amp;uvs, std::vector&lt; glm::vec3 &gt; &amp;normals, std::vector&lt; GLuint &gt; &amp;indices)</div><div class="ttdoc">Ładuje plik .obj do pamięci. </div><div class="ttdef"><b>Definition:</b> <a href="objloader_8cpp_source.html#l00221">objloader.cpp:221</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<html>
+   <body>
+   </body>
+</html>

@@ -212,7 +212,7 @@ public:
       \brief Rotacja wszystkich macierzy modelu ( \link ModelMatrix \endlink ).
 
       \param angle - wartość kąta w stopniach o jaki zostaną obrócone wszystkie macierze modelu ( \link ModelMatrix \endlink )
-      \param in - wartość wektora o jaki zostaną obrócone wszystkie macierz modelu ( \link ModelMatrix \endlink )
+      \param in - wartość wektora o jaki zostaną obrócone wszystkie macierze modelu ( \link ModelMatrix \endlink )
    */
    void Rotate( GLfloat angle, glm::vec3 &in );
    /*!

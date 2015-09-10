@@ -34,7 +34,7 @@ bool LoadOBJ( const char *obj_path_file,
    \param indices - wektor Indeksów Wierzchołków
    \return - wartość logiczną dla ładowania pliku .obj, FALSE = błąd
 
-   Wczytuje z plikuWykorzystuje bibliotekę assimp.
+   Wykorzystuje bibliotekę assimp.
 */
 bool LoadAssimp( const char *path_file,
    std::vector <glm::vec3> &vertices,

@@ -1,7 +1,4 @@
-# Blender v2.72 (sub 0) OBJ File: 'grass.blend'
-# www.blender.org
 mtllib grass.mtl
-o Plane
 v 5.000000 0.000000 -5.000000
 v 15.000000 0.000000 -5.000000
 v 5.000000 0.000000 -15.000000

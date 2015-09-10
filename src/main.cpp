@@ -6,7 +6,7 @@
    \file main.cpp
    \brief Plik główny
 
-   W plik main.cpp znajduje się main() oraz klasa Game.
+   W plik main.cpp znajduje się \link main() \endlink oraz klasa \link Game \endlink.
 */
 #include <iostream>
 #include <cstdlib>
@@ -62,7 +62,7 @@ void CaughtSignal( int signal );
 class Game{
 public:
    /*!
-      \brief Inicjalizuje biblioteki, ustala postawowe informacje, tworzy okno dla aplikacji.
+      \brief Inicjalizuje biblioteki, ustala postawowe informacje, tworzy okno aplikacji.
 
       <b>Więcej:</b>\n
       Ładuje ustawienia z pliku settings.init ( \link LoadSettings() \endlink ).\n
@@ -282,7 +282,7 @@ private:
       \brief Skupienie się na oknie, czy myszka jest w okno. FALSE = okno jest nie aktywne.
    */
    bool Focus = true;
-//Timer:
+   //Timer:
    /*!
       \brief Czas uruchomienia aplikacji potrzebny do przeliczania \link FPS \endlink ( czas przed rysowaniem ).
    */
@@ -400,7 +400,7 @@ private:
       \brief Odległość do jakiej rysowane są obiekty.
    */
    vec1 Far;
-//Shaders:
+   //Shaders:
    /*!
       \brief Identyfikator głównego shadera.
    */
@@ -482,7 +482,7 @@ private:
    */
    GLuint PointLight_Quadratic_Uniform[Max_Point_Light];
 
-//second for drawing light object:
+   //second for drawing light object:
    /*!
       \brief Identyfikator shadera do rysowania światła.
    */
@@ -504,7 +504,7 @@ private:
       \brief Uniform dla koloru obiektu światła.
    */
    GLuint UniformColorLight = 0;
-//Matrix:
+   //Matrix:
    /*!
       \brief Macierz projekcji.
    */
@@ -513,7 +513,7 @@ private:
       \brief Macierz widoku.
    */
    mat4 ViewMatrix;
-//Models:
+   //Models:
    /*!
       \brief Wektor wszystkich obiektów świata.
    */
@@ -522,7 +522,7 @@ private:
       \brief Iterator dla wektora wszystkich obiektów świata.
    */
    vector <Model>::iterator It;
-//Light:
+   //Light:
    /*!
       \brief Główne światło, słońce.
    */
@@ -547,7 +547,7 @@ private:
       \brief Promień okręgu po jakim porusza się oświetlenie.
    */
    GLfloat SunMovingRadius = 15.0f;
-//tmp:
+   //tmp:
    /*!
       \brief Tymczasowy wektor typu vec3.
    */
@@ -1481,9 +1481,10 @@ void Game::LoadData(){
       vector <int> CouterType( CounterTypeMax, 0 );
       int tmp;
       vec3 VecRand;
-      while( ( CounterMax * 2 ) < ( 0.7 * this->MapMax ) ){
+      while( ( CounterMax * 2 ) < ( this->MapMax * this->MapMaxHalf * 0.25 ) ){
          CounterMax *= 2;
       }
+      SDL_Log( "Items on map: %i\n", CounterMax );
       while( Counter < CounterMax ){
          for( tmp = 0; tmp < CounterTypeMax; ++tmp ){
             do{

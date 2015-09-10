@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 
 /*!
-   \brief Ładuje shader fragmentu i werzchołków do pamięci.
+   \brief Ładuje shader fragmentu i wierzchołków do pamięci.
 
    \param vertex_shader_path_file - ścieżka do pliku z shaderem wierzchołków
    \param fragment_shader_path_file - ścieżka do pliku z shaderem fragmentu

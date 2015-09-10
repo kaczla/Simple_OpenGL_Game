@@ -1,2 +1,6 @@
 grass grass.obj grass.mtl grass.jpg grass_spec.jpg
 coin coin.obj coin.mtl coin.jpg coin_spec.jpg
+tree tree.obj tree.mtl tree.jpg tree_spec.jpg
+tree2 tree2.obj tree2.mtl tree2.jpg tree2_spec.jpg
+rock rock.obj rock.obj stone4.jpg stone4_spec.jpg
+rock2 rock2.obj rock2.obj stone2.jpg stone2_spec.jpg

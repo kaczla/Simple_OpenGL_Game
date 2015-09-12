@@ -136,6 +136,8 @@ np.
 
 ### Uwagi:
 
+Pierwsze zetknięcie z OpenGL.
+</br>
 Część plików .obj i tekstur zostało pobranych z [tf3dm.com](http://tf3dm.com).
 </br>
 </br>

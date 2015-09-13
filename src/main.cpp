@@ -891,8 +891,8 @@ void Game::Loop(){
                      this->CheckCoin();
                      break;
                   case SDL_BUTTON_RIGHT:
-                     this->MouseWheel.x = 30.0f;
-                     this->camera.SetVOF( this->MouseWheel );
+                     this->VOF.x = 30.0f;
+                     this->camera.SetVOF( this->VOF );
                      break;
                   default:
                      break;
@@ -901,8 +901,8 @@ void Game::Loop(){
             case SDL_MOUSEBUTTONUP:
                switch( this->Event.button.button ){
                   case SDL_BUTTON_RIGHT:
-                     this->MouseWheel.x = 45.0f;
-                     this->camera.SetVOF( this->MouseWheel );
+                     this->VOF.x = 45.0f;
+                     this->camera.SetVOF( this->VOF );
                      break;
                   default:
                      break;

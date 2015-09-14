@@ -1303,6 +1303,9 @@ void Game::InitContent(){
       // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
       SDL_GL_SwapWindow( this->Window );
       SDL_Log( "OpenGL version: %s", glGetString( GL_VERSION ) );
+      SDL_Log( "GLSL   version: %s\n", glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+      SDL_Log( "Drivers       : %s\n", glGetString( GL_VENDOR ) );
+      // SDL_LogSetPriority( SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN );
    }
 }
 

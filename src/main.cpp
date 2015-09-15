@@ -1081,8 +1081,29 @@ void Game::InitSDL(){
          linked.patch
       );
       if( compiled.major < 2 or linked.major < 2  ){
+         this->CheckInit = false;
          return;
       }
+      SDL_Log( "System: %s\n", SDL_GetPlatform() );
+      SDL_Log( "RAM: %i MB\n", SDL_GetSystemRAM() );
+      SDL_Log( "CPU CORES: %i\n", SDL_GetCPUCount() );
+      switch( SDL_GetPowerInfo( NULL, NULL ) ){
+         case SDL_POWERSTATE_ON_BATTERY:
+            SDL_Log( "ON BATTERY\n" );
+            break;
+         case SDL_POWERSTATE_NO_BATTERY:
+            SDL_Log( "NO BATTERY\n" );
+            break;
+         case SDL_POWERSTATE_CHARGING:
+            SDL_Log( "CHARGING\n" );
+            break;
+         case SDL_POWERSTATE_CHARGED:
+            SDL_Log( "CHARGED\n" );
+            break;
+         default:
+            break;
+      }
+
       //Check max resolution:
       SDL_Log( "Video and Mode Display info:\n" );
       SDL_Log( "SDL_GetCurrentVideoDriver: %s\n", SDL_GetCurrentVideoDriver() );
@@ -1295,6 +1316,7 @@ void Game::InitContent(){
       else{
          SDL_Log( "glewInit: SUCCESS\n");
       }
+      //glViewport is in SDL2 loaded
       glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
       glClear( GL_COLOR_BUFFER_BIT );
       glEnable( GL_DEPTH_TEST );
